@@ -9,8 +9,17 @@ import HelpCenter from "./pages/HelpCenter"
 import TermsConditions from "./pages/TermsConditions"
 import ShippingPolicy from "./pages/ShippingPolicy"
 import PrivacyPolicy from "./pages/PrivacyPolicy"
+import Infants from "./pages/Infants"
+import Toys from "./pages/Toys"
+import Sports from "./pages/Sports"
+import SchoolItems from "./pages/SchoolItems"
+import Electronics from "./pages/Electronics"
+
+
+
 
 function App() {
+
   return(
     <div>
      <Navbar/>
@@ -24,6 +33,11 @@ function App() {
       <Route path="/shipping-policy" element={<ShippingPolicy />} />
       <Route path='/privacy-policy' element={<PrivacyPolicy />} />
       <Route path="/blog" element={<Blog/>}/>
+      <Route path="/infants" element={<Infants/>}/>
+      <Route path="/sports" element={<Sports/>}/>
+      <Route path="/toys" element={<Toys/>}/>
+      <Route path="/school-items" element={<SchoolItems/>}/>
+      <Route path="/electronics" element={<Electronics/>}/>
       <Route path="/contact" element={<Contact/>}/>
      </Routes>
      
