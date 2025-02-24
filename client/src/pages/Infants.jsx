@@ -12,7 +12,7 @@ const Infants = () => {
     useEffect(() => {
       const fetchBlogImage = async () => {
         try {
-          const { data } = await axios.get("http://localhost:5000/api/blog-image/infants");
+          const { data } = await axios.get("http://localhost:5000/api/blog-image");
           setBlogPosts(data);
         } catch (error) {
           console.log("Error fetching blog data:", error.message);
@@ -21,11 +21,10 @@ const Infants = () => {
       fetchBlogImage();
     }, []);
   
-    // Filter blog posts to show only those in the "infants" category.
-    // Adjust the property name ("category_slug") as needed.
+
     const infantsPosts = blogPosts.filter(
       (post) =>
-        post.category_slug && post.category_slug.toLowerCase() === "infants"
+        post.category_name  === "Infants"
     );
   
     return (
