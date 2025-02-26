@@ -210,7 +210,7 @@ function Navbar() {
 
       <div className="flex justify-center gap-14 border-b-4 pb-5 border-gray-100 p-8">
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full " href="#">
+          <a className="bg-red-600 text-white px-8 py-2 rounded-full " href="/">
             Home
           </a>
         </div>

@@ -15,6 +15,12 @@ import WriteForUs from "./pages/WriteForUs";
 import ColoringBooks from "./pages/ColoringBooks";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
+import Infants from "./pages/Infants";
+import Toys from "./pages/Toys";
+import Sports from "./pages/Sports";
+import SchoolItems from "./pages/SchoolItems";
+import Electronics from "./pages/Electronics";
+import BlogContent from "./pages/BlogContent";
 
 function App() {
   return (
@@ -33,29 +39,21 @@ function App() {
         <Route path="/write-for-us" element={<WriteForUs />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/* <Route
-          path="/dashboard"
-          element={
-            <div>
-              <Sidebar />
-              <Books />
-            </div>
-          }
-        /> */}
+        <Route path="/infants" element={<Infants />} />
+        <Route path="/sports" element={<Sports />} />
+        <Route path="/toys" element={<Toys />} />
+        <Route path="/school-items" element={<SchoolItems />} />
+        <Route path="/electronics" element={<Electronics />} />
+        <Route path="/blog/:category_slug/:id" element={<BlogContent />} />
+
         <Route
           path="/books"
           element={
             <div>
-              {/* <Sidebar /> */}
               <Books />
             </div>
           }
         />
-
-
-
-
-
         <Route
           path="/books/colouring-books"
           element={
@@ -65,9 +63,6 @@ function App() {
             </div>
           }
         />
-
-
-
       </Routes>
 
       <Footer />
