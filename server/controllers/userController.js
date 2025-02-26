@@ -38,7 +38,7 @@ const blogContent = async (req, res) => {
         const connection = await connectToDatabase();
         const [rows] = await connection.execute(`SELECT bc.name as category_name, bc.slug as category_slug,bp.id,bp.image_default, bp.content from blog_posts bp INNER JOIN blog_categories bc ON bp.category_id = bc.id WHERE bp.id=? AND bc.slug=? ORDER BY bp.created_at DESC`,[id , category_slug]);
 
-        console.log(rows[0])
+
 
         if(rows.length === 0){
             return res.status(404).json({error:"No blog found"})
@@ -53,9 +53,29 @@ const blogContent = async (req, res) => {
 
 };
 
+const relatedBlog = async (req, res) => {
+    try {
+        const {id, category_slug} = req.params;
+        const connection = await connectToDatabase();
+        const [rows] = await connection.execute(`SELECT bc.name as category_name, bc.slug as category_slug, bp.* from blog_posts bp INNER JOIN blog_categories bc ON bp.category_id = bc.id ORDER BY RAND() LIMIT 3`)
 
 
-export {getAllSliders, blogImages, blogContent}
+        if(rows.length === 0){
+            return res.status(404).json({error:"No blog found"})
+        }
+
+        res.json(rows)
+
+    } catch (error) {
+        console.error("Error in fetching content:", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+
+};
+
+
+
+export {getAllSliders, blogImages, blogContent, relatedBlog}
 
 
 // SELECT * from blog_images WHERE id BETWEEN 1 AND 10 OR ID BETWEEN 11 AND 13 OR ID BETWEEN 14 AND 16 OR ID BETWEEN 19 AND 20 OR ID BETWEEN 63 AND 71 OR ID=60 ORDER BY id DESC

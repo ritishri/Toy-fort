@@ -1,47 +1,11 @@
-// import React, { useState, useEffect  } from 'react'
-// import Comments from '../components/Comments'
-// import { useParams } from 'react-router-dom'
-
-// const BlogContent = () => {
-
-//     const [blogPosts, setBlogPosts] = useState(null)
-//     const [blogPostFilter, setBlogPostsFilter] = useState([])
-//     const {category_slug, id} = useParams()
-
-//     const applyFilter = () =>{
-//         if(id){
-//             setBlogPostsFilter(blogPosts.filter((post)=> post.id === id && post.category_slug === category_slug))
-//         }else{
-//             setBlogPostsFilter(blogPosts)
-//         }
-//     }
-
-//     useEffect(() => {
-//         applyFilter();
-//       }, [blogPosts, id]);
-
-
-//   return (
-//     <div>
-//         {
-//             blogPostFilter.map((ele,index)=>(
-//                 <div key={index}>
-//                    {ele.content}
-//                 </div>
-//             ))
-//         }
-//         <Comments />
-//     </div>
-//   )
-// }
-
-// export default BlogContent
-
 
 import React, { useState, useEffect } from 'react';
 import Comments from '../components/Comments';
+import RelatedBlogs from '../components/RelatedBlogs';
+import SocialMedia from '../components/socialMedia';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import "@fontsource/open-sans";
 
 const BlogContent = () => {
   const [blogPost, setBlogPost] = useState("");
@@ -76,6 +40,8 @@ console.log(blogPost)
       {/* <h1 className="text-3xl font-bold mb-4">{blogPost.title}</h1> */}
       {/* <div className="mb-4">{blogPost.content}</div> */}
       <div className='m-6' dangerouslySetInnerHTML={{ __html: blogPost.content }}/>
+      <SocialMedia/>
+      <RelatedBlogs/>
       <Comments />
 
     </div>

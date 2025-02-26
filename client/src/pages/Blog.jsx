@@ -78,6 +78,7 @@ function Blog() {
                   }
                 </p>
               </div>
+              
             </div>
           ))}
         </div>
