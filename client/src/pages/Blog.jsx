@@ -4,23 +4,24 @@ import axios from "axios";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import Pagination from "../components/Pagination";
 import CategoryLinks from "../components/CategoryLinks";
+import { Link } from "react-router-dom";
 
 function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const postsPerPage  = 12
 
-  const handlePageChange = (page) =>{
-    setCurrentPage(page)
-  }
+  const postsPerPage = 12;
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  }; 
 
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentBlogPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
-
 
   const imgUrl = import.meta.env.VITE_IMAGE_URL;
 
@@ -40,17 +41,20 @@ function Blog() {
 
   return (
     <div style={{ fontFamily: "Open Sans" }}>
-      <CategoryLinks/>
+      <CategoryLinks />
 
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 p-6">
           {currentBlogPosts.map((post) => (
             <div key={post.id}>
-              <img
-                src={`${imgUrl}${post.image_default}`}
-                alt="blog_images"
-                className="w-full h-80 object-cover p-2"
-              />
+              <Link to={`${post.category_slug}/${post.id}`}>
+                <img
+                  src={`${imgUrl}${post.image_default}`}
+                  alt="blog_images"
+                  className="w-full h-80 object-cover p-2"
+                />
+              </Link>
+
               <div className="mt-3">
                 <a
                   href="#"
@@ -60,16 +64,18 @@ function Blog() {
                 </a>
 
                 <div className="w-full flex flex-row text-left ml-2">
-                  <FolderOpenIcon className=" text-gray-400" fontSize="small"/>
+                  <FolderOpenIcon className=" text-gray-400" fontSize="small" />
                   <p className="w-full border-gray-300 text-xs text-left ml-2 hover:text-red-400 text-gray-400 cursor-pointer pb-2">
                     {post.category_name}
                   </p>
                 </div>
 
                 <p className="text-gray-400 font-thin text-sm p-2">
-                  {post.summary.length > 100
+                  {
+                  post.summary.length > 100
                     ? `${post.summary.slice(0, 104)}...`
-                    : post.summary}
+                    : post.summary
+                  }
                 </p>
               </div>
             </div>
@@ -77,10 +83,11 @@ function Blog() {
         </div>
       </div>
 
-      <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange}/>
-
-
-
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

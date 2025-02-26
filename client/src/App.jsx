@@ -14,6 +14,7 @@ import Toys from "./pages/Toys"
 import Sports from "./pages/Sports"
 import SchoolItems from "./pages/SchoolItems"
 import Electronics from "./pages/Electronics"
+import BlogContent from "./pages/BlogContent"
 
 
 
@@ -39,6 +40,7 @@ function App() {
       <Route path="/school-items" element={<SchoolItems/>}/>
       <Route path="/electronics" element={<Electronics/>}/>
       <Route path="/contact" element={<Contact/>}/>
+      <Route path="/blog/:category_slug/:id" element={<BlogContent />} />
      </Routes>
      
 
