@@ -35,10 +35,10 @@ function Footer() {
           <p className="text-bold text-black text-lg">Quick Links</p>
           <div>
             <ul className="text-gray-500 mt-4">
-              <li className="m-2">Home </li>
-              <li className="m-2">Contact</li>
+              <a href="home"><li className="m-2">Home </li></a>
+              <a href="contact"><li className="m-2">Contact</li></a>
              <a href='/blog'> <li className="m-2">Blog</li></a>
-              <li className="m-2">Write for us</li>
+             <a href="/write-for-us" ><li className="m-2">Write for us</li></a>
             </ul>
           </div>
         </div>

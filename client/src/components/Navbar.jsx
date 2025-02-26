@@ -9,9 +9,17 @@ import {
   faLinkedin,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon,EyeIcon} from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 function Navbar() {
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [passwordVisible,setPasswordVisible] = useState(false);
+
+  const toggleLoginForm = () => {
+    setShowLoginForm(!showLoginForm);
+  };
+
   return (
     <div className="">
       <div className="bg-red-500 h-10 flex flex-row space-x-4 p-2 text-white font-semibold text-lg">
@@ -107,9 +115,98 @@ function Navbar() {
               d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
             />
           </svg>
-          <p className="text-lg text-gray-500 ">Sign in</p>
+          <p
+            className="text-lg text-gray-500 cursor-pointer"
+            onClick={toggleLoginForm}
+          >
+            Sign in
+          </p>
         </div>
       </div>
+
+
+
+
+      {showLoginForm && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="bg-white p-8 rounded-md shadow-lg w-96 relative">
+      {/* Manual Close Icon (X) */}
+      <button
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-2xl"
+        onClick={() => setShowLoginForm(false)} // Close login form
+      >
+        &times; {/* HTML entity for X (times symbol) */}
+      </button>
+
+      <h2 className="text-3xl font-medium mb-10 text-center">Login</h2>
+      <form>
+        <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-medium mb-2"
+          ></label>
+          <input
+            type="email"
+            id="email"
+            className="w-full border border-gray-300 p-3"
+            placeholder="Email Address"
+            required
+          />
+        </div>
+        <div className="mb-4 relative">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 font-medium mb-2"
+          ></label>
+          <input
+            type="password"
+            id="password"
+            className="w-full border border-gray-300 p-3"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <div className="text-right mb-2">
+          <a href="/forgot-password" className="text-right">
+            Forgot Password?
+          </a>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full text-white py-2 rounded-md"
+          style={{ backgroundColor: "black" }}
+        >
+          Login
+        </button>
+
+        <div className="text-center mt-4">
+          <p className="text-gray-500 inline-block mr-1">
+            Don't have an account?
+          </p>
+          <a href="/register" className="text-black font-medium">
+            Register
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <div className="flex justify-center gap-14 border-b-4 pb-5 border-gray-100 p-8">
         <div className="relative group">
@@ -337,7 +434,9 @@ function Navbar() {
             <div className="flex">
               {/* Left Side  */}
               <div className="w-2/3 grid grid-cols-2 gap-4">
-                <p className="font-semibold text-black">Colouring Books</p>
+                <a href="/books/colouring-books">
+                  <p className="font-semibold text-black">Colouring Books</p>
+                </a>
                 <p className="font-semibold text-black">Sticker Books</p>
                 <p className="font-semibold text-black">Activity Books</p>
                 <p className="font-semibold text-black">Musical Books</p>

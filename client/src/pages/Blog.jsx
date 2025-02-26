@@ -7,6 +7,7 @@ import { faFolder } from "@fortawesome/free-solid-svg-icons";
 function Blog() {
   const [blogImage, setBlogImage] = useState([]);
   const [blogContent, setBlogContent] = useState([]);
+  const [booksImages,setBooksImages] = useState([]);
 
   const imgUrl = import.meta.env.VITE_IMAGE_URL;
 
@@ -37,6 +38,23 @@ function Blog() {
     };
     fetchBlogContent();
   }, []);
+
+  useEffect(() =>
+  {
+    const fetchBooksImages = async() =>
+    {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:5000/api/books-images"
+        );
+        setBooksImages(data);
+      }catch(error)
+      {
+        console.log("Error in fetching the Books Images", error.message);
+      }
+    };
+    fetchBooksImages();
+  },[])
 
   return (
     <div style={{ fontFamily: "Open Sans" }}>

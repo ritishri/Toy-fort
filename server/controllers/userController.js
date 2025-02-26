@@ -1,11 +1,9 @@
 import { connectToDatabase } from "../config/db.js";
 
-
-
 const getAllSliders = async (req, res) => {
     try {
         const connection = await connectToDatabase();
-        const [rows] = await connection.execute("SELECT id, link, image FROM slider WHERE id BETWEEN 29 AND 37");
+        const [rows] = await connection.execute("SELECT id, link, image FROM slider");      
 
         res.json(rows);
     } catch (error) {
@@ -13,6 +11,21 @@ const getAllSliders = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+const booksImages = async(req,res) => {
+    try
+    {
+        const connection = await connectToDatabase();
+        const [rows] = await connection.execute("SELECT product_id, image_default FROM images");
+
+        res.json(rows);
+
+    }catch(error)
+    {
+        console.log("Error in fetching the books images:",error.message);
+        res.status(500).json({error: "Internal Server Error"});
+    }
+}
 
 
 const blogImages = async (req, res) => {
@@ -44,5 +57,4 @@ const blogContent = async (req, res) => {
 };
 
 
-
-export {getAllSliders, blogImages, blogContent}
+export {getAllSliders,booksImages, blogImages, blogContent}
