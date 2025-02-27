@@ -27,11 +27,12 @@ const RelatedPosts = () => {
   return (
     <div className="mt-8 ">
       <div className="mb-7">
-      <h2 className="relative mt-6 font-semibold p-4">RELATED POSTS
-      <span className="absolute left-4 bottom-0 w-24 h-[2px] tracking-widest bg-black"></span>
-      </h2>
+        <h2 className="relative mt-6 font-semibold p-4">
+          RELATED POSTS
+          <span className="absolute left-4 bottom-0 w-24 h-[2px] tracking-widest bg-black"></span>
+        </h2>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {relatedPosts.map((post) => (
           <div key={post.id}>
@@ -44,28 +45,26 @@ const RelatedPosts = () => {
             </Link>
 
             <div className="mt-3">
-                <a
-                  href="#"
-                  className="w-full flex relative font-semibold font-lg text-left ml-2 hover:text-red-500 cursor-pointer pb-2"
-                >
-                  {post.title}
-                </a>
+              <a
+                href="#"
+                className="w-full flex relative font-semibold font-lg text-left ml-2 hover:text-red-500 cursor-pointer pb-2"
+              >
+                {post.title}
+              </a>
 
-                <div className="w-full flex flex-row text-left ml-2">
-                  <FolderOpenIcon className=" text-gray-400" fontSize="small" />
-                  <p className="w-full border-gray-300 text-xs text-left ml-2 hover:text-red-400 text-gray-400 cursor-pointer pb-2">
-                    {post.category_name}
-                  </p>
-                </div>
-
-                <p className="text-gray-400 font-thin text-sm p-2">
-                  {
-                  post.summary.length > 100
-                    ? `${post.summary.slice(0, 104)}...`
-                    : post.summary
-                  }
+              <div className="w-full flex flex-row text-left ml-2">
+                <FolderOpenIcon className=" text-gray-400" fontSize="small" />
+                <p className="w-full border-gray-300 text-xs text-left ml-2 hover:text-red-400 text-gray-400 cursor-pointer pb-2">
+                  {post.category_name}
                 </p>
               </div>
+
+              <p className="text-gray-400 font-thin text-sm p-2">
+                {post.summary.length > 100
+                  ? `${post.summary.slice(0, 104)}...`
+                  : post.summary}
+              </p>
+            </div>
           </div>
         ))}
       </div>

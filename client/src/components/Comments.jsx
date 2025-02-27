@@ -5,7 +5,6 @@ const Comments = () => {
     <div className="ml-6">
       <h2 className=" relative border-b-2 w-2/3 border-gray-400 p-4 text-gray-600">
         COMMENTS
-
         <span className="absolute left-0 bottom-0 w-32 h-[1px] bg-black"></span>
       </h2>
 

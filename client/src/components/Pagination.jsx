@@ -1,5 +1,3 @@
-
-
 const Pagination = ({ totalPages, currentPage, onPageChange }) => {
   return (
     <div className="flex items-center justify-center space-x-2">
@@ -9,7 +7,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
       >
-        «       
+        «
       </button>
       <button
         className="px-4 py-2 border hover:bg-gray-200"
@@ -20,8 +18,8 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
       </button>
 
       {/* Page Numbers */}
-      
-      {[...Array(totalPages)].map((ele , index) => (
+
+      {[...Array(totalPages)].map((ele, index) => (
         <button
           key={index}
           className={`px-4 py-2 border rounded-md ${
@@ -53,6 +51,5 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
     </div>
   );
 };
-  
 
-export default Pagination
+export default Pagination;

@@ -9,16 +9,15 @@ import { Link } from "react-router-dom";
 function Blog() {
   const [blogImage, setBlogImage] = useState([]);
   const [blogContent, setBlogContent] = useState([]);
-  const [booksImages,setBooksImages] = useState([]);
+  const [booksImages, setBooksImages] = useState([]);
   const [blogPosts, setBlogPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
 
   const postsPerPage = 12;
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  }; 
+  };
 
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
 
@@ -42,7 +41,6 @@ function Blog() {
     fetchBlogImage();
   }, []);
 
-
   useEffect(() => {
     const fetchBlogContent = async () => {
       try {
@@ -57,22 +55,19 @@ function Blog() {
     fetchBlogContent();
   }, []);
 
-  useEffect(() =>
-  {
-    const fetchBooksImages = async() =>
-    {
+  useEffect(() => {
+    const fetchBooksImages = async () => {
       try {
         const { data } = await axios.get(
           "http://localhost:5000/api/books-images"
         );
         setBooksImages(data);
-      }catch(error)
-      {
+      } catch (error) {
         console.log("Error in fetching the Books Images", error.message);
       }
     };
     fetchBooksImages();
-  },[])
+  }, []);
 
   return (
     <div style={{ fontFamily: "Open Sans" }}>
@@ -106,14 +101,11 @@ function Blog() {
                 </div>
 
                 <p className="text-gray-400 font-thin text-sm p-2">
-                  {
-                  post.summary.length > 100
+                  {post.summary.length > 100
                     ? `${post.summary.slice(0, 104)}...`
-                    : post.summary
-                  }
+                    : post.summary}
                 </p>
               </div>
-              
             </div>
           ))}
         </div>

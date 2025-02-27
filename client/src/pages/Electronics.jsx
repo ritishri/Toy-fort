@@ -4,7 +4,6 @@ import axios from "axios";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CategoryLinks from "../components/CategoryLinks";
 
-
 const Electronics = () => {
   const [blogPosts, setBlogPosts] = useState([]);
 
