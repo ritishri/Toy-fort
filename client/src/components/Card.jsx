@@ -1,8 +1,8 @@
 import React from "react";
 
-const Card = ({ imageUrl, title, originalPrice, discountedPrice }) => {
+const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick }) => {
   return (
-    <div className="w-64 p-4 border rounded shadow-lg">
+    <div className={`p-4 shadow-lg cursor-pointer`} onClick={onClick}>
       <div className="relative">
         <div className="absolute top-2 left-2 w-8 h-8 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
           10%
@@ -18,7 +18,7 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice }) => {
 
       {/* Book details */}
       <div className="mt-4">
-        <h2 className="text-base text-gray-800 truncate">
+        <h2 className="text-base text-gray-800 truncate hover:text-red-600">
           {title || "Unknown Book Title"} {/* Fallback in case title is undefined */}
         </h2>
 

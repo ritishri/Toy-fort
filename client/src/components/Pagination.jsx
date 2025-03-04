@@ -6,6 +6,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         className="px-4 py-2 border hover:bg-gray-200"
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
+        hidden={currentPage === 1}
       >
         «
       </button>
@@ -13,6 +14,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         className="px-4 py-2 border hover:bg-gray-200"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        hidden={currentPage === 1}
       >
         ‹
       </button>
@@ -38,6 +40,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         className="px-4 py-2  border hover:bg-gray-200"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        hidden={currentPage === totalPages}
       >
         ›
       </button>
@@ -45,6 +48,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
         className="px-4 py-2  border hover:bg-gray-200"
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
+        hidden={currentPage === totalPages}
       >
         »
       </button>

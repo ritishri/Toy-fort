@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Slider from './Slider';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Link } from "react-router-dom"
 
 const brandImages = [
   "https://toyfort.s3.ap-south-1.amazonaws.com/smartivity-8.png",
@@ -26,7 +27,10 @@ const brandImages = [
   "https://toyfort.s3.ap-south-1.amazonaws.com/step-2-17.png",
   "https://toyfort.s3.ap-south-1.amazonaws.com/joie-19.png",
   "https://toyfort.s3.ap-south-1.amazonaws.com/graco-20.png",
-];
+]
+
+
+
 
 const categories = [
   {
@@ -169,14 +173,19 @@ function Home() {
           {/* Images */}
 
           <div className="flex">
-            {sliderImages.map((img, index) => (
-              <img
-                key={index}
-                className="w-48 h-48 m-5 rounded-2xl transition-transform duration-300"
-                src={img}
-                alt=""
-              />
-            ))}
+            {sliderImages.map((img, index) => {
+              const brandName = img.split("/").pop().split("-")[0]; 
+
+              return (
+                <Link key={index} to={`/products?brand=${brandName}`}>
+                  <img
+                    className="w-48 h-48 m-5 rounded-2xl transition-transform duration-300 cursor-pointer hover:scale-105"
+                    src={img}
+                    alt={brandName}
+                  />
+                </Link>
+              );
+             })}
           </div>
 
           <button onClick={rightSlide}>

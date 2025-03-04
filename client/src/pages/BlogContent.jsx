@@ -20,7 +20,7 @@ const BlogContent = () => {
         const { data } = await axios.get(
           `http://localhost:5000/api/blog-image/${category_slug}/${id}`
         );
-        console.log(data);
+        // console.log(data);
         setBlogPost(data);
       } catch (error) {
         console.error("Error fetching blog content:", error.message);

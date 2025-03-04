@@ -21,6 +21,9 @@ import Sports from "./pages/Sports";
 import SchoolItems from "./pages/SchoolItems";
 import Electronics from "./pages/Electronics";
 import BlogContent from "./pages/BlogContent";
+import BrandProducts from "./pages/BrandProducts";
+import ProductDetails from "./pages/ProductDetails";
+
 
 function App() {
   return (
@@ -45,6 +48,10 @@ function App() {
         <Route path="/school-items" element={<SchoolItems />} />
         <Route path="/electronics" element={<Electronics />} />
         <Route path="/blog/:category_slug/:id" element={<BlogContent />} />
+        <Route path="/products" element={<BrandProducts />} />
+        <Route path="/:slug" element={<ProductDetails/>}/>
+        
+
 
         <Route
           path="/books"

@@ -1,24 +1,11 @@
-
 import { useState, useEffect } from "react";
 import { Carousel } from "flowbite-react";
 import axios from "axios";
 
-// const brandImages = [
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f6be1a7f4349-76985966-11120591.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f2885a1d9360-71514268-52607569.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f1a89f900df4-71886973-81790150.webp",
-//   "https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/slider_66f6be1a7f4349-76985966-11120591.webp",
-// ];
 
 // **Grouping images into sets of 3**
 function Slider() {
   const [slides, setSlides] = useState([]);
-  
 
   useEffect(() => {
     const fetchSlider = async () => {
@@ -34,7 +21,7 @@ function Slider() {
   }, []);
 
   const groupedSlides = [];
-  for (let i = 0; i < slides.length; i += 3) {
+  for (let i = 3; i < slides.length; i += 3) {
     groupedSlides.push(slides.slice(i, i + 3));
   }
 
