@@ -53,23 +53,21 @@ const RelatedPosts = () => {
                 {post.title}
               </a>
 
-              <div className="w-full flex items-center gap-x-1 ml-2 text-left">
-                <FolderOpenIcon className="text-gray-400" fontSize="small" />
-                <p className="text-xs text-gray-400 hover:text-red-400 gap-x-1 cursor-pointer">
-                  {post.category_name}
-                </p>
-                <AccessTimeIcon className="text-gray-400" fontSize="small" />
-                <p className="text-xs text-gray-400">
-                  {post.month_val} months ago
+                <div className="w-full flex flex-row text-left ml-2">
+                  <FolderOpenIcon className=" text-gray-400" fontSize="small" />
+                  <p className="w-full border-gray-300 text-xs text-left ml-2 hover:text-red-400 text-gray-400 cursor-pointer pb-2">
+                    {post.category_name}
+                  </p>
+                </div>
+
+                <p className="text-gray-400 font-thin text-sm p-2">
+                  {
+                  post.summary.length > 100
+                    ? `${post.summary.slice(0, 104)}...`
+                    : post.summary
+                  }
                 </p>
               </div>
-
-              <p className="text-gray-400 font-thin text-sm p-2">
-                {post.summary.length > 100
-                  ? `${post.summary.slice(0, 104)}...`
-                  : post.summary}
-              </p>
-            </div>
           </div>
         ))}
       </div>
