@@ -1,9 +1,5 @@
 import { connectToDatabase } from "../config/db.js";
 
-
-
-
-
 const getAllSliders = async (req, res) => {
   try {
     const connection = await connectToDatabase();
