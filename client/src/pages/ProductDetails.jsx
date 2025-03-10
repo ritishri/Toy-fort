@@ -23,9 +23,18 @@ import {
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 
+
 const ProductDetails = () => {
   const [products, setProducts] = useState([]);
   const [state, setState] = useState(1);
+  const [activeTab, setActiveTab] = useState("description");
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedState, setSelectedState] = useState(null);
+
+  const handleCountryChange = (selectedOption) => {
+    setSelectedCountry(selectedOption);
+    setSelectedState(null);
+  };
 
   const [copied, setCopied] = useState(false);
   const couponCode = "TFSILVER5";
@@ -36,7 +45,7 @@ const ProductDetails = () => {
     setTimeout(() => setCopied(false), 1000);
   };
 
-  const { attribute2_value, slug } = useParams();
+  const { slug } = useParams();
 
   const addProduct = () => {
     setState(state + 1);
@@ -65,7 +74,7 @@ const ProductDetails = () => {
   }, [slug]);
 
   return (
-    <div className="m-6" style={{ fontFamily: "Open Sans" }}>
+    <div className="" style={{ fontFamily: "Open Sans" }}>
       <div className="text-gray-600 text-sm mt-6 ml-6  ">
         <a
           className="hover:text-red-500 mr-1 cursor-pointer text-gray-400"
@@ -106,7 +115,7 @@ const ProductDetails = () => {
         </div>
 
         {/*Right section  */}
-        <div className="">
+        <div className="w-[48%]">
           {products.length > 0 && (
             <div>
               <h1 className="text-2xl font-semibold tracking-wider ">
@@ -313,6 +322,230 @@ const ProductDetails = () => {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="w-full mt-10 container ml-3 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Tabs */}
+        <div className="flex flex-wrap border-b-slate-500 space-x-2 text-black sm:w-full">
+          {["description", "shipping", "reviews", "comments", "faqs"].map(
+            (tab) => (
+              <button
+                key={tab}
+                className={`py-3 px-8 text-sm border-t border-l border-r border-gray-300 font-normal hover:text-red-500 ${
+                  activeTab === tab ? "" : "bg-slate-50"
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab === "description" && "Description"}
+                {tab === "shipping" && "Shipping & Location"}
+                {tab === "reviews" && "Reviews (0)"}
+                {tab === "comments" && "Comments (0)"}
+                {tab === "faqs" && "FAQs"}
+              </button>
+            )
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          {activeTab === "description" && (
+            <div className="mt-4">
+              <h2 className="text-2xl font-bold">
+                Skillmatics Animal Kingdom - Fun & Educational Animal Game for
+                Kids
+              </h2>
+              <ul className="mt-3 space-y-2 list-disc list-inside">
+                <li>
+                  <strong>Skillmatics Animal Kingdom</strong> is an interactive
+                  and educational board game that takes children on a fun-filled
+                  adventure through the animal world.
+                </li>
+                <li>
+                  Designed for kids aged 3 to 6, this game introduces young
+                  learners to various animals, their habitats, and unique
+                  characteristics.
+                </li>
+                <li>
+                  Through engaging gameplay, children develop essential skills
+                  like observation, logical thinking, memory, and knowledge
+                  about nature.
+                </li>
+                <li>
+                  Made with child-safe, non-toxic materials, ensuring a safe and
+                  enriching experience for young minds.
+                </li>
+                <li>
+                  The game balances learning and fun, making it ideal for early
+                  childhood education.
+                </li>
+                <li>
+                  Whether played independently or with adult supervision, it
+                  provides hours of educational entertainment.
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {activeTab === "shipping" && (
+            <div className="p-4 w-full bg-white shadow-lg rounded-md">
+            {/* Shipping Cost & Select Location */}
+            <div className="grid grid-cols-2 gap-4 border-b pb-4">
+              <div className="font-semibold text-lg">Shipping Cost</div>
+              <div>
+                <span className="font-semibold text-lg">Select Your Location</span>
+                {/* <div className="flex gap-4 mt-2">
+                  <select
+                    options={countryOptions}
+                    placeholder="Country"
+                    onChange={handleCountryChange}
+                    className="w-1/2"
+                  />
+                  <select
+                    options={[]} // Add state options dynamically based on country
+                    placeholder="State"
+                    isDisabled={!selectedCountry}
+                    className="w-1/2"
+                  /> */}
+                {/* </div> */}
+              </div>
+            </div>
+      
+            {/* Shop Location */}
+            <div className="mt-4">
+              <h2 className=" w-full font-semibold text-lg">Shop Location</h2>
+              <iframe
+                className="mt-2 w-full h-72 rounded-lg"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434508616!2d144.96305791531582!3d-37.81410797975154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df82dfc4f%3A0x5045675218ce6e0!2sMelbourne!5e0!3m2!1sen!2sin!4v1645023491203"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+          )}
+
+          {activeTab === "reviews" && (
+            <div className="mt-4">
+              <h2 className="text-sm font-semibold">Reviews (0)</h2>
+              <p className="mt-10 text-gray-500">No reviews found!</p>
+            </div>
+          )}
+
+          {activeTab === "comments" && (
+            <div className="flex flex-col lg:flex-row gap-6 mt-4 w-full">
+              <div className="w-full lg:w-1/2">
+                <h2 className="text-sm font-semibold text-gray-700">
+                  Comments (0)
+                </h2>
+                <p className="text-gray-500">
+                  No comments found for this product. Be the first to comment!
+                </p>
+              </div>
+
+              {/* Add Comment Section */}
+              <div className="w-full lg:w-1/2 p-4 border-l mt-2">
+                <h2 className="text-sm font-bold text-black mb-10 ml-5">
+                  Add a comment
+                </h2>
+                <form className="flex flex-col space-y-4 w-full ml-5">
+                  <div className="flex flex-col sm:flex-row gap-4 w-full">
+                    <input
+                      className="w-full sm:w-1/2 border border-gray-300 p-2 outline-none focus:ring-2 focus:ring-black"
+                      type="text"
+                      placeholder="Name"
+                    />
+                    <input
+                      className="w-full sm:w-1/2 border border-gray-300 p-2 outline-none focus:ring-2 focus:ring-black"
+                      type="email"
+                      placeholder="Email Address"
+                    />
+                  </div>
+
+                  {/* Comment Box */}
+                  <textarea
+                    className="w-full h-28 border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-black"
+                    placeholder="Write your comment here..."
+                  />
+
+                  {/* Submit Button */}
+                  <button className="w-24 p-2 bg-black text-white font-medium hover:bg-gray-800 transition">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "faqs" && (
+            <div className="mt-4">
+              <ul className="mt-2 space-y-4 list-disc pl-5">
+                <li>
+                  <span className="font-bold text-sm">
+                    What is Skillmatics Animal Kingdom?
+                  </span>
+                  <ul className="list-none pl-5">
+                    <li className="ml-2 mt-6 text-sm">
+                      Skillmatics Animal Kingdom is an educational board game
+                      designed to teach children about different animals, their
+                      habitats, and characteristics through engaging gameplay.
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <span className="font-bold text-sm">
+                    What age group is Skillmatics Animal Kingdom suitable for?
+                  </span>
+                  <ul className="list-none pl-5">
+                    <li className="ml-2 mt-6 text-sm">
+                      Skillmatics Animal Kingdom is suitable for children aged 3
+                      to 6 years, making it a perfect tool for early learning
+                      and development.
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <span className="font-bold text-sm">
+                    What skills can kids develop with Skillmatics Animal
+                    Kingdom?
+                  </span>
+                  <ul className="list-none pl-5">
+                    <li className="ml-2 mt-6 text-sm">
+                      This game helps children develop observational skills,
+                      logical thinking, memory, and knowledge about animals and
+                      their habitats.
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <span className="font-bold text-sm">
+                    Is Skillmatics Animal Kingdom safe for children?
+                  </span>
+                  <ul className="list-none pl-5">
+                    <li className="ml-2 mt-6 text-sm">
+                      Yes, Skillmatics Animal Kingdom is made from child-safe,
+                      non-toxic materials and follows strict safety standards to
+                      ensure a safe and enjoyable learning experience.
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <span className="font-bold text-sm">
+                    Does Skillmatics Animal Kingdom require adult supervision?
+                  </span>
+                  <ul className="list-none pl-5">
+                    <li className="ml-2 mt-6 text-sm">
+                      While the game is designed for independent play, adult
+                      supervision can enhance the learning experience and help
+                      guide younger children through the game.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
           )}
         </div>
