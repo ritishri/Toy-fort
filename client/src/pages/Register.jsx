@@ -1,31 +1,129 @@
-import React from 'react'
+import React, { useContext } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AppContext } from "../context/AppContext";
 
 const Register = () => {
+  const [values, setValues] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    password: "",
+    confirm_password: "",
+  });
+
+  const {user,setUser} = useContext(AppContext)
+
+  const navigate = useNavigate();
+
+  const handleChanges = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (values.password !== values.confirm_password) {
+      console.log("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/register",
+        values
+      );
+
+      // console.log(values.first_name)
+
+      // console.log('Register Val',values)
+      if (response.status === 201) {
+        console.log("Registration successful:", response.data.message);
+        setUser(values.first_name)
+        localStorage.setItem("user", values.first_name);
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
-    <div className='flex flex-col items-center'>
-      <p className='text-red-600 text-2xl mb-12 text-center'>
-        We are asking you to Register as it will help to track the status of the shipping of your order.
+    <div className="flex flex-col items-center">
+      <p className="text-red-600 text-2xl mb-12 text-center">
+        We are asking you to Register as it will help to track the status of the
+        shipping of your order.
       </p>
 
-      <h1 className='text-center text-2xl text-black font-medium mb-4'>
+      <h1 className="text-center text-2xl text-black font-medium mb-4">
         Register
       </h1>
 
-      <form>
-        <input className="mb-3 w-full p-3 border border-gray-300" type="text" placeholder='First Name' required />
+      <form onSubmit={handleRegister}>
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="text"
+          name="first_name"
+          placeholder="First Name"
+          required
+          onChange={handleChanges}
+        />
         <br />
-        <input className="mb-3 w-full p-3 border border-gray-300" type="text" placeholder='Last Name' required />
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="text"
+          name="last_name"
+          placeholder="Last Name"
+          required
+          onChange={handleChanges}
+        />
         <br />
-        <input  className="mb-3 w-full p-3 border border-gray-300" type="email" placeholder='Email Address' required />
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          required
+          onChange={handleChanges}
+        />
         <br />
-        <input className="mb-3 w-full p-3 border border-gray-300" type="tel" placeholder='Phone Number' required/>
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="tel"
+          name="phone_number"
+          placeholder="Phone Number"
+          required
+          onChange={handleChanges}
+        />
         <br />
-        <input className="mb-3 w-full p-3 border border-gray-300" type="password" placeholder='Password' required />
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          onChange={handleChanges}
+        />
         <br />
-        <input className="mb-3 w-full p-3 border border-gray-300" type="password" placeholder='Confirm Password' required />
+        <input
+          className="mb-3 w-full p-3 border border-gray-300"
+          type="password"
+          name="confirm_password"
+          placeholder="Confirm Password"
+          required
+          onChange={handleChanges}
+        />
         <br />
         <input type="checkbox" id="check" />
-        <label htmlFor="check" className='ml-2'>I have read and agree to the <u><a href="/terms-conditions" target="_blank">Terms & Conditions</a></u></label>
+        <label htmlFor="check" className="ml-2">
+          I have read and agree to the{" "}
+          <u>
+            <a href="/terms-conditions" target="_blank">
+              Terms & Conditions
+            </a>
+          </u>
+        </label>
         <br />
         <button
           type="submit"
@@ -36,17 +134,14 @@ const Register = () => {
         </button>
         <br />
         <div className="text-center mt-4">
-          <p className="text-gray-500 inline-block mr-1">
-            Have an account?
-          </p>
+          <p className="text-gray-500 inline-block mr-1">Have an account?</p>
           <a href="/register" className="text-black font-medium">
             Login
           </a>
         </div>
       </form>
-
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

@@ -9,12 +9,53 @@ import {
   faLinkedin,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
-import { ShoppingCartIcon,EyeIcon} from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 function Navbar() {
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [passwordVisible,setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const {user, setUser} = useContext(AppContext)
+  
+
+  const [values, setValues] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    password: "",
+    confirm_password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChanges = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/login",
+        values
+      );
+      console.log(values)
+      if (response.status === 201) {
+        localStorage.setItem("token", response.data.token);
+        setShowLoginForm(!showLoginForm);
+        navigate('/')
+        setUser(response.data.first_name)
+        
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const toggleLoginForm = () => {
     setShowLoginForm(!showLoginForm);
@@ -119,94 +160,81 @@ function Navbar() {
             className="text-lg text-gray-500 cursor-pointer"
             onClick={toggleLoginForm}
           >
-            Sign in
+            {user}
           </p>
         </div>
       </div>
 
-
-
-
       {showLoginForm && (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    <div className="bg-white p-8 rounded-md shadow-lg w-96 relative">
-      {/* Manual Close Icon (X) */}
-      <button
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-2xl"
-        onClick={() => setShowLoginForm(false)} // Close login form
-      >
-        &times; {/* HTML entity for X (times symbol) */}
-      </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-md shadow-lg w-96 relative">
+            {/* Manual Close Icon (X) */}
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-2xl"
+              onClick={() => setShowLoginForm(false)} // Close login form
+            >
+              &times; {/* HTML entity for X (times symbol) */}
+            </button>
 
-      <h2 className="text-3xl font-medium mb-10 text-center">Login</h2>
-      <form>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 font-medium mb-2"
-          ></label>
-          <input
-            type="email"
-            id="email"
-            className="w-full border border-gray-300 p-3"
-            placeholder="Email Address"
-            required
-          />
+            <h2 className="text-3xl font-medium mb-10 text-center">Login</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-gray-700 font-medium mb-2"
+                ></label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full border border-gray-300 p-3"
+                  placeholder="Email Address"
+                  name="email"
+                  required
+                  onChange={handleChanges}
+                />
+              </div>
+              <div className="mb-4 relative">
+                <label
+                  htmlFor="password"
+                  className="block text-gray-700 font-medium mb-2"
+                ></label>
+                <input
+                  type="password"
+                  id="password"
+                  className="w-full border border-gray-300 p-3"
+                  placeholder="Password"
+                  name="password"
+                  required
+                  onChange={handleChanges}
+                />
+              </div>
+
+              <div className="text-right mb-2">
+                <a href="/forgot-password" className="text-right">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full text-white py-2 rounded-md"
+                style={{ backgroundColor: "black" }}
+              >
+                Login
+              </button>
+
+              <div className="text-center mt-4">
+                <p className="text-gray-500 inline-block mr-1">
+                  Don't have an account?
+                </p>
+                <a href="/register" className="text-black font-medium">
+                  Register
+                </a>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className="mb-4 relative">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-medium mb-2"
-          ></label>
-          <input
-            type="password"
-            id="password"
-            className="w-full border border-gray-300 p-3"
-            placeholder="Password"
-            required
-          />
-        </div>
-
-        <div className="text-right mb-2">
-          <a href="/forgot-password" className="text-right">
-            Forgot Password?
-          </a>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full text-white py-2 rounded-md"
-          style={{ backgroundColor: "black" }}
-        >
-          Login
-        </button>
-
-        <div className="text-center mt-4">
-          <p className="text-gray-500 inline-block mr-1">
-            Don't have an account?
-          </p>
-          <a href="/register" className="text-black font-medium">
-            Register
-          </a>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      )}
 
       <div className="flex justify-center gap-14 border-b-4 pb-5 border-gray-100 p-8">
         <div className="relative group">
