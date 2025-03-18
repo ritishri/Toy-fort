@@ -32,6 +32,8 @@ const productsDetails = async (req, res) => {
       [slug]
     )
 
+    // console.log(rows[0]);
+    
     res.json(rows)
   } catch (error) {
     console.log("Error in fetching the products:", error.message)

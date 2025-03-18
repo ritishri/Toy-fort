@@ -23,6 +23,9 @@ import Electronics from "./pages/Electronics";
 import BlogContent from "./pages/BlogContent";
 import BrandProducts from "./pages/BrandProducts";
 import ProductDetails from "./pages/ProductDetails";
+import UpdateProfile from './pages/UpdateSideBar'
+import ShippingAddress from "./pages/ShippingAddress";
+import ChangePassword from "./pages/ChangePassword";
 
 
 function App() {
@@ -50,6 +53,9 @@ function App() {
         <Route path="/blog/:category_slug/:id" element={<BlogContent />} />
         <Route path="/products" element={<BrandProducts />} />
         <Route path="/:slug" element={<ProductDetails/>}/>
+        <Route path="/settings/edit-profile" element={<UpdateProfile/>}/>
+        <Route path="/settings/shipping-address" element={<ShippingAddress/>}/>
+        <Route path="/settings/change-password" element={<ChangePassword/>}/>
         
 
 

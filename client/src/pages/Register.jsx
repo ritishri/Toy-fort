@@ -36,15 +36,19 @@ const Register = () => {
         values
       );
 
-      // console.log(values.first_name)
+      console.log(values.first_name)
+      console.log('Register Val',values)
+      
 
-      // console.log('Register Val',values)
       if (response.status === 201) {
+        localStorage.setItem("token", response.data.token);
+        if (response.data.user) {
+          setUser(response.data.user); 
         console.log("Registration successful:", response.data.message);
-        setUser(values.first_name)
-        localStorage.setItem("user", values.first_name);
-        navigate('/')
+        localStorage.setItem("user", values.first_name)
+        navigate('/settings/edit-profile')
       }
+    }
     } catch (error) {
       console.log(error.message);
     }

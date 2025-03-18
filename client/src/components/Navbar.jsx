@@ -20,40 +20,47 @@ function Navbar() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const {user, setUser} = useContext(AppContext)
-  
+  const { user, setUser } = useContext(AppContext);
 
   const [values, setValues] = useState({
-    first_name: "",
-    last_name: "",
     email: "",
-    phone_number: "",
     password: "",
-    confirm_password: "",
   });
 
-  const navigate = useNavigate();
 
   const handleChanges = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/login",
         values
       );
-      console.log(values)
+
+      // console.log("Login response:", response.data)
+
+      // console.log(response.status);
+
       if (response.status === 201) {
-        localStorage.setItem("token", response.data.token);
+        // // console.log("Login successful:", response.data);
+        // console.log("Before updating state, user:", user)
+
+        if (response.data.user) {
+          // console.log("Setting user state:", response.data.user);
+          setUser(response.data.user);
+        }
+
         setShowLoginForm(!showLoginForm);
-        navigate('/')
-        setUser(response.data.first_name)
-        
       }
     } catch (err) {
-      console.log(err.message);
+      console.log(
+        "Login error:",
+        err.response ? err.response.data : err.message
+      );
     }
   };
 
@@ -149,6 +156,7 @@ function Navbar() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="size-8 text-gray-500"
+            onClick={toggleLoginForm}
           >
             <path
               strokeLinecap="round"
@@ -160,7 +168,7 @@ function Navbar() {
             className="text-lg text-gray-500 cursor-pointer"
             onClick={toggleLoginForm}
           >
-            {user}
+            {user ? user.first_name : "Sign In"}
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { connectToDatabase } from "../config/db.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 const getAllSliders = async (req, res) => {
   try {
@@ -85,7 +85,7 @@ const relatedBlog = async (req, res) => {
 
 const register = async (req, res) => {
   const { first_name, last_name, email, password, phone_number } = req.body;
-  // console.log(req.body);
+  console.log("Registration", req.body);
 
   try {
     const connection = await connectToDatabase();
@@ -93,6 +93,8 @@ const register = async (req, res) => {
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
+
+    const user = rows[0];
 
     if (rows.length > 0) {
       return res.status(409).json({ message: "User already exist" });
@@ -105,42 +107,143 @@ const register = async (req, res) => {
       [first_name, last_name, email, hashedPassword, phone_number]
     );
 
-    res.status(201).json({ message: "User created" });
+    const [newUser] = await connection.query(
+      "SELECT first_name, last_name, email, phone_number FROM users WHERE email = ?",
+      [email]
+    );
+
+    console.log("New user", newUser);
+
+    const token = jwt.sign(
+      { id: newUser[0].id, email: newUser[0].email },
+      process.env.JWT_KEY,
+      { expiresIn: "5h" }
+    );
+
+    res.status(201).json({
+      message: "User created",
+      token,
+      user: newUser[0],
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const login = async(req,res) =>{
-    const {email, password,first_name} = req.body
-    console.log("Login", req.body);
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  console.log("Login", req.body);
 
-    try {
-       const db = await connectToDatabase()
-       const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
-      //  console.log(rows)
+  try {
+    const db = await connectToDatabase();
+    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+    console.log(rows[0]);
 
-       if(rows.length === 0){
-        return res.status(404).json({message:"User not existed"})
-       }
-    
-        const isMatch = await bcrypt.compare(password,rows[0].password)
-
-        if(!isMatch){
-            return res.status(401).json({message:"Wrong Password"})
-        }
-
-        // If password is correct generate the token and return to the frontend
-
-        const token = jwt.sign({ id: rows[0].id, email: rows[0].email },process.env.JWT_KEY,{expiresIn:'5h'})
-        // console.log(token)
-
-       
-       res.status(201).json({token: token})
-    } catch (error) {
-       res.status(500).json({error:error.message})  
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not existed" });
     }
-}
+
+    const user = rows[0];
+    console.log("Details", user);
+
+    const isMatch = await bcrypt.compare(password, rows[0].password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Wrong Password" });
+    }
+
+    res.status(201).json({
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+      },
+    });
+    // res.status(201).json({token: token})
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const { old_password, password, confirm_password } = req.body;
+    console.log(req.body);
+
+    // Get userId from authentication middleware
+    const userId = req.user.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Fetch user by userId
+    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = rows[0];
+
+    // Compare old password with hashed password in DB
+    const isMatch = await bcrypt.compare(old_password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect old password" });
+    }
+
+    // Check if new password and confirm password match
+    if (password !== confirm_password) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.query("UPDATE users SET password = ? WHERE id = ?", [
+      hashedPassword,
+      userId,
+    ]);
+
+    return res.json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getProfile = async (req, res) => {
+  console.log("Profile API called");
+
+  try {
+    const db = await connectToDatabase();
+    console.log(req.body);
+
+    const userId = req.user.id;
+    console.log(userId);
+
+    const rows = await db.query(
+      "SELECT first_name, last_name,email,phone_number FROM users WHERE id = ?",
+      [userId]
+    );
+
+    console.log(rows[0]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.log(error.message);
+
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export {
   getAllSliders,
@@ -149,7 +252,9 @@ export {
   blogContent,
   relatedBlog,
   register,
-  login
+  login,
+  changePassword,
+  getProfile,
 };
 
 // SELECT * from blog_images WHERE id BETWEEN 1 AND 10 OR ID BETWEEN 11 AND 13 OR ID BETWEEN 14 AND 16 OR ID BETWEEN 19 AND 20 OR ID BETWEEN 63 AND 71 OR ID=60 ORDER BY id DESC
