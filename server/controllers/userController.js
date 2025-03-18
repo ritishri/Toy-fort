@@ -229,21 +229,19 @@ const changePassword = async (req, res) => {
 
 
 const getProfile = async (req, res) => {
-  console.log("Profile API called");
 
   try {
     const db = await connectToDatabase();
-    console.log(req.body);
 
-    const userId = req.user.id;
-    console.log(userId);
+    const userEmail = req.user.email;
+    // console.log(userEmail);
 
     const rows = await db.query(
-      "SELECT first_name, last_name,email,phone_number FROM users WHERE id = ?",
-      [userId]
+      "SELECT first_name, last_name,email,phone_number FROM users WHERE email = ?",
+      [userEmail]
     );
 
-    console.log(rows[0]);
+    // console.log(rows[0]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not found" });

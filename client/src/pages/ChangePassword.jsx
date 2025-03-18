@@ -12,23 +12,6 @@ const ChangePassword = () => {
     confirm_password: "",
   });
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5000/api/settings/change-password",
-  //       values
-  //     );
-  //     console.log(values);
-  //     if (response.status === 201) {
-  //       localStorage.setItem("token", response.data.token);
-  //       console.log("Password changed successfully");
-  //     }
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +27,7 @@ const ChangePassword = () => {
         values,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include token in the request headers
+            Authorization: `Bearer ${token}`
           },
         }
       );

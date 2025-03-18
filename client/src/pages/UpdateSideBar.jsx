@@ -6,38 +6,42 @@ function UpdateSideBar() {
   const [menu, setMenu] = useState("Update Profile");
 
   const [data, setData] = useState({
-    email:"",
+    email: "",
     first_name: "",
-    last_name:"",
-    phone_number:""
-  })
+    last_name: "",
+    phone_number: "",
+  });
 
-  useEffect(()=>{
-
-    const fetchUserData = async()=>{
-
+  useEffect(() => {
+    const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = localStorage.getItem("token");
         if (!token) {
-        console.log("No token found");
-        return;
-      }
-        const {data} = await axios.get("http://localhost:5000/api/user/profile")
+          console.log("No token found");
+          return;
+        }
+        const response = await axios.get(
+          "http://localhost:5000/api/user/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        if(data.success){
-          setData(data)
+        if (response.data.length > 0) {
+          const userData = response.data[0];
+          setData(userData);
+        } else {
+          console.log("No user data found in response");
         }
       } catch (error) {
-        console.log("Error in fetching data",error);
-        
+        console.log("Error in fetching data", error);
       }
-    }
+    };
 
-    fetchUserData()
-
-  },[])
-
-
+    fetchUserData();
+  }, []);
 
   return (
     <div>
@@ -72,9 +76,7 @@ function UpdateSideBar() {
             <Link
               onClick={() => setMenu("Update Profile")}
               className={`block p-3 rounded-md ${
-                menu === "Update Profile"
-                  ? "bg-gray-100 "
-                  : ""
+                menu === "Update Profile" ? "bg-gray-100 " : ""
               } hover:bg-gray-200 transition-all`}
             >
               Update Profile
@@ -96,9 +98,7 @@ function UpdateSideBar() {
               to="/settings/change-password"
               onClick={() => setMenu("Change Password")}
               className={`block p-3 rounded-md ${
-                menu === "Change Password"
-                  ? "bg-gray-100"
-                  : "hover:bg-gray-100"
+                menu === "Change Password" ? "bg-gray-100" : "hover:bg-gray-100"
               } transition-all`}
             >
               Change Password
@@ -116,7 +116,7 @@ function UpdateSideBar() {
                 type="email"
                 value={data.email}
                 className="w-full p-2 border border-gray-300 rounded-sm"
-                disabled 
+                onChange={(e) => setData({ ...data, email: e.target.value })}
               />
             </div>
             <div>
@@ -127,8 +127,9 @@ function UpdateSideBar() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-sm"
                 value={data.first_name}
-                onChange={(e) => setUser({ ...user, first_name: e.target.value })}
-
+                onChange={(e) =>
+                  setData((prev) => ({ ...prev, first_name: e.target.value }))
+                }
               />
             </div>
             <div>
@@ -139,7 +140,9 @@ function UpdateSideBar() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-sm"
                 value={data.last_name}
-                onChange={(e) => setUser({ ...user, last_name: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, last_name: e.target.value })
+                }
               />
             </div>
             <div>
@@ -150,14 +153,20 @@ function UpdateSideBar() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-sm"
                 value={data.phone_number}
-                onChange={(e) => setUser({ ...user, phone_number: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, phone_number: e.target.value })
+                }
               />
             </div>
             <div className="flex space-x-4">
               <button
-               type="submit"
-               style={{backgroundColor:"black", color:"white" , padding:"8px"}}
-             >
+                type="submit"
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "8px",
+                }}
+              >
                 Save Changes
               </button>
               <button className="bg-black text-white px-4 py-2">Next</button>
