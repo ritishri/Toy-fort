@@ -117,18 +117,21 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: newUser[0].id, email: newUser[0].email },
       process.env.JWT_KEY,
-      { expiresIn: "5h" }
-    );
+     
+    )
+
+    console.log(token.split(" ")[1])
+    
 
     res.status(201).json({
       message: "User created",
       token,
       user: newUser[0],
-    });
+    })
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -138,7 +141,7 @@ const login = async (req, res) => {
     const db = await connectToDatabase();
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
       email,
-    ]);
+    ])
     console.log(rows[0]);
 
     if (rows.length === 0) {
@@ -168,21 +171,27 @@ const login = async (req, res) => {
   }
 };
 
+
+
 const changePassword = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const { old_password, password, confirm_password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     // Get userId from authentication middleware
-    const userId = req.user.id;
+    console.log(req.user);
+    
+    const userEmail = req.user.email;
+    console.log("UserEmail",userEmail);
+    
 
-    if (!userId) {
+    if (!userEmail) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     // Fetch user by userId
-    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
+    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [userEmail]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
@@ -204,9 +213,9 @@ const changePassword = async (req, res) => {
     // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await db.query("UPDATE users SET password = ? WHERE id = ?", [
+    await db.query("UPDATE users SET password = ? WHERE email = ?", [
       hashedPassword,
-      userId,
+      userEmail,
     ]);
 
     return res.json({ message: "Password changed successfully" });
@@ -215,6 +224,9 @@ const changePassword = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
 
 const getProfile = async (req, res) => {
   console.log("Profile API called");

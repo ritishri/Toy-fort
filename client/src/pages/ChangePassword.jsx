@@ -49,7 +49,7 @@ const ChangePassword = () => {
         }
       );
   
-      console.log(values);
+      // console.log(values);
       if (response.status === 201) {
         console.log("Password changed successfully");
       }
