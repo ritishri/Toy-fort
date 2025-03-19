@@ -6,6 +6,9 @@ export const AppContextProvider = (props) => {
   
   const storedUser = localStorage.getItem("user");
 
+  console.log("Stored user",storedUser);
+  
+
   const [user, setUser] = useState(() => {
     try {
       return storedUser ? JSON.parse(storedUser) : "Sign In";

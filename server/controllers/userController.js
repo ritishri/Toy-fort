@@ -108,19 +108,19 @@ const register = async (req, res) => {
     );
 
     const [newUser] = await connection.query(
-      "SELECT first_name, last_name, email, phone_number FROM users WHERE email = ?",
+      "SELECT id, first_name, last_name, email, phone_number FROM users WHERE email = ?",
       [email]
     );
 
-    console.log("New user", newUser);
+    console.log("New user", newUser[0].id);
 
     const token = jwt.sign(
-      { id: newUser[0].id, email: newUser[0].email },
+      { id: newUser[0].id, email: newUser[0].email  },
       process.env.JWT_KEY,
      
     )
 
-    console.log(token.split(" ")[1])
+    console.log(token)
     
 
     res.status(201).json({
@@ -231,14 +231,19 @@ const changePassword = async (req, res) => {
 const getProfile = async (req, res) => {
 
   try {
+
+    const userId = req.user.id
+    // console.log("UserId",userId);
+    // console.log(req.user)
+    
     const db = await connectToDatabase();
 
-    const userEmail = req.user.email;
+    const useId = req.user.id;
     // console.log(userEmail);
 
     const rows = await db.query(
-      "SELECT first_name, last_name,email,phone_number FROM users WHERE email = ?",
-      [userEmail]
+      "SELECT id, first_name, last_name,email,phone_number FROM users WHERE id = ?",
+      [userId]
     );
 
     // console.log(rows[0]);
@@ -247,7 +252,8 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(rows[0]);
+    res.json(rows[0])
+
   } catch (error) {
     console.log(error.message);
 

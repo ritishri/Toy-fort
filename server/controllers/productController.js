@@ -41,4 +41,7 @@ const productsDetails = async (req, res) => {
   }
 }
 
+
+
+
 export{brandProducts, productsDetails}

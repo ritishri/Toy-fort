@@ -20,14 +20,18 @@ function UpdateSideBar() {
           console.log("No token found");
           return;
         }
+        
         const response = await axios.get(
           "http://localhost:5000/api/user/profile",
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
+
+        // console.log(response.data);
+        
 
         if (response.data.length > 0) {
           const userData = response.data[0];
@@ -115,7 +119,7 @@ function UpdateSideBar() {
               <input
                 type="email"
                 value={data.email}
-                className="w-full p-2 border border-gray-300 rounded-sm"
+                className="w-full p-2 text-gray-500 border border-gray-300 rounded-sm"
                 onChange={(e) => setData({ ...data, email: e.target.value })}
               />
             </div>
@@ -125,7 +129,7 @@ function UpdateSideBar() {
               </label>
               <input
                 type="text"
-                className="w-full p-2 border border-gray-300 rounded-sm"
+                className="w-full p-2 text-gray-500 border border-gray-300 rounded-sm"
                 value={data.first_name}
                 onChange={(e) =>
                   setData((prev) => ({ ...prev, first_name: e.target.value }))
@@ -138,7 +142,7 @@ function UpdateSideBar() {
               </label>
               <input
                 type="text"
-                className="w-full p-2 border border-gray-300 rounded-sm"
+                className="w-full p-2 text-gray-500 border border-gray-300 rounded-sm"
                 value={data.last_name}
                 onChange={(e) =>
                   setData({ ...data, last_name: e.target.value })
@@ -151,7 +155,7 @@ function UpdateSideBar() {
               </label>
               <input
                 type="text"
-                className="w-full p-2 border border-gray-300 rounded-sm"
+                className="w-full p-2 text-gray-500 border border-gray-300 rounded-sm"
                 value={data.phone_number}
                 onChange={(e) =>
                   setData({ ...data, phone_number: e.target.value })

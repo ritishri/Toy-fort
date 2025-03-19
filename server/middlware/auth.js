@@ -17,6 +17,8 @@ const verifyToken = (req, res, next) => {
         console.log("Decoded Token:", decoded);
 
         req.user = decoded;
+        // console.log(decoded.id);
+        
         next();
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
@@ -25,3 +27,37 @@ const verifyToken = (req, res, next) => {
 };
 
 export default verifyToken;
+
+
+
+
+
+
+
+// import jwt from 'jsonwebtoken';
+
+// const verifyToken = (req, res, next) => {
+
+//     try {
+//        const token = req.headers.authorization?.split(" ")[1];
+
+        // if (!token) {
+        //     return res.status(401).json({ success: false, message: "Not Authorized: No Token" });
+        // }
+
+        // // Verify token
+        // const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+
+        // // console.log("Decoded Token:", token_decode);
+
+        // req.body.userId = token_decode.id
+        
+        // next();
+//     } catch (error) {
+//         console.error("JWT Verification Error:", error.message);
+//         return res.status(403).json({ message: 'Invalid Token' });
+//     }
+// };
+
+// export default verifyToken;
+
