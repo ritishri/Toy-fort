@@ -226,8 +226,6 @@ const changePassword = async (req, res) => {
 };
 
 
-
-
 const getProfile = async (req, res) => {
 
   try {
@@ -244,7 +242,7 @@ const getProfile = async (req, res) => {
     const rows = await db.query(
       "SELECT id, first_name, last_name,email,phone_number FROM users WHERE id = ?",
       [userId]
-    );
+    )
 
     // console.log(rows[0]);
 
@@ -262,18 +260,17 @@ const getProfile = async (req, res) => {
 };
 
 
+
 const updateProfile = async(req,res)=>{
 
-  
-try {
+  try {
   const db = await connectToDatabase()
 
    const {id, first_name, last_name, email, phone_number } = req.body
 
    if(!id){
     res.status(400).json({message:"UserId is required"})
-   }
-
+  }
 
    const currentUser = await db.query("SELECT * from users where id = ? ",[id])
   //  console.log("Current user",currentUser);
@@ -282,9 +279,6 @@ try {
    if (currentUser.length === 0) {
     return res.status(404).json({ message: "User not found" });
   }
-
-
-
    await db.query("UPDATE users SET email = ?, first_name = ?, last_name = ?, phone_number = ? WHERE id = ?",[email, first_name, last_name, phone_number, id])
 
    return res.status(200).json({message:"Profile Updated"})
@@ -293,9 +287,9 @@ try {
   console.log("Error in updating profile",error)
   return res.status(500).json({message:"Internal server error"})
   
-}
+}}
 
-}
+
 
 export {
   getAllSliders,
@@ -310,4 +304,3 @@ export {
   updateProfile
 };
 
-// SELECT * from blog_images WHERE id BETWEEN 1 AND 10 OR ID BETWEEN 11 AND 13 OR ID BETWEEN 14 AND 16 OR ID BETWEEN 19 AND 20 OR ID BETWEEN 63 AND 71 OR ID=60 ORDER BY id DESC
