@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile} from "../controllers/userController.js";
+import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile, updateProfile} from "../controllers/userController.js";
 import { brandProducts, productsDetails } from "../controllers/productController.js"
 import verifyToken from '../middlware/auth.js'
 
@@ -19,6 +19,7 @@ router.post('/register',register)
 router.post('/login',login)
 router.post('/settings/change-password',verifyToken,changePassword)
 router.get("/user/profile",verifyToken,getProfile)
+router.put("/user/update-profile",verifyToken,updateProfile)
 
 
 

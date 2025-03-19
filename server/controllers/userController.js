@@ -85,7 +85,7 @@ const relatedBlog = async (req, res) => {
 
 const register = async (req, res) => {
   const { first_name, last_name, email, password, phone_number } = req.body;
-  console.log("Registration", req.body);
+  // console.log("Registration", req.body);
 
   try {
     const connection = await connectToDatabase();
@@ -179,8 +179,8 @@ const changePassword = async (req, res) => {
     const { old_password, password, confirm_password } = req.body;
     // console.log(req.body);
 
-    // Get userId from authentication middleware
-    console.log(req.user);
+    
+    // console.log(req.user);
     
     const userEmail = req.user.email;
     console.log("UserEmail",userEmail);
@@ -190,7 +190,7 @@ const changePassword = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Fetch user by userId
+
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [userEmail]);
 
     if (rows.length === 0) {
@@ -199,13 +199,13 @@ const changePassword = async (req, res) => {
 
     const user = rows[0];
 
-    // Compare old password with hashed password in DB
+    
     const isMatch = await bcrypt.compare(old_password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect old password" });
     }
 
-    // Check if new password and confirm password match
+ 
     if (password !== confirm_password) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
@@ -261,6 +261,42 @@ const getProfile = async (req, res) => {
   }
 };
 
+
+const updateProfile = async(req,res)=>{
+
+  
+try {
+  const db = await connectToDatabase()
+
+   const {id, first_name, last_name, email, phone_number } = req.body
+
+   if(!id){
+    res.status(400).json({message:"UserId is required"})
+   }
+
+
+   const currentUser = await db.query("SELECT * from users where id = ? ",[id])
+  //  console.log("Current user",currentUser);
+   
+
+   if (currentUser.length === 0) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+
+
+   await db.query("UPDATE users SET email = ?, first_name = ?, last_name = ?, phone_number = ? WHERE id = ?",[email, first_name, last_name, phone_number, id])
+
+   return res.status(200).json({message:"Profile Updated"})
+  
+} catch (error) {
+  console.log("Error in updating profile",error)
+  return res.status(500).json({message:"Internal server error"})
+  
+}
+
+}
+
 export {
   getAllSliders,
   booksImages,
@@ -271,6 +307,7 @@ export {
   login,
   changePassword,
   getProfile,
+  updateProfile
 };
 
 // SELECT * from blog_images WHERE id BETWEEN 1 AND 10 OR ID BETWEEN 11 AND 13 OR ID BETWEEN 14 AND 16 OR ID BETWEEN 19 AND 20 OR ID BETWEEN 63 AND 71 OR ID=60 ORDER BY id DESC

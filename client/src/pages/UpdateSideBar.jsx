@@ -47,6 +47,43 @@ function UpdateSideBar() {
     fetchUserData();
   }, []);
 
+
+
+  const handleUpdate = async(e) =>{
+    e.preventDefault()
+
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user?.id; 
+    
+
+    if(!userId){
+      console.log("User ID not found");
+      return
+    }
+
+    try {
+      const response = await axios.put(
+          `http://localhost:5000/api/user/update-profile`,
+          { userId, ...data },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+
+        if(response.status === 200){
+          console.log("Profile updated successfully");
+          
+        }
+    } catch (error) {
+      console.log("Error in updating profile",error);
+      
+    }
+  }
+
+  
+
   return (
     <div>
       <div
@@ -111,7 +148,7 @@ function UpdateSideBar() {
         </div>
 
         <div className="w-3/4 p-10">
-          <form className="space-y-4 w-full ">
+          <form onSubmit={handleUpdate} className="space-y-4 w-full ">
             <div>
               <label className="block text-black font-semibold text-base mb-2">
                 Email Address
