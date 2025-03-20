@@ -14,7 +14,10 @@ const Register = () => {
     confirm_password: "",
   });
 
-  const {user,setUser} = useContext(AppContext)
+  const [message, setMessage] = useState("");
+  const [messageState, setMessageState] = useState(true);
+
+  const { user, setUser } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -36,19 +39,21 @@ const Register = () => {
         values
       );
 
-      console.log(values.first_name)
-      console.log('Register Val',values)
-      
+      console.log(values.first_name);
+      console.log("Register Val", values);
 
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);
         if (response.data.user) {
-          setUser(response.data.user); 
-        console.log("Registration successful:", response.data.message);
-        localStorage.setItem("user", values.first_name)
-        navigate('/settings/edit-profile')
+          setUser(response.data.user);
+          console.log("Registration successful:", response.data.message);
+          localStorage.setItem("user", values.first_name);
+          navigate("/settings/edit-profile");
+        }else{
+          setMessageState(false)
+          setMessage("User not Register!")
+        }
       }
-    }
     } catch (error) {
       console.log(error.message);
     }

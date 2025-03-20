@@ -112,44 +112,42 @@ const register = async (req, res) => {
       [email]
     );
 
-    console.log("New user", newUser[0].id);
+    // console.log("New user", newUser[0].id);
 
     const token = jwt.sign(
-      { id: newUser[0].id, email: newUser[0].email  },
-      process.env.JWT_KEY,
-     
-    )
+      { id: newUser[0].id, email: newUser[0].email },
+      process.env.JWT_KEY
+    );
 
-    console.log(token)
-    
+    // console.log(token)
 
     res.status(201).json({
       message: "User created",
       token,
       user: newUser[0],
-    })
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Login", req.body);
+  // console.log("Login", req.body);
 
   try {
     const db = await connectToDatabase();
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
       email,
-    ])
-    console.log(rows[0]);
+    ]);
+    // console.log(rows[0]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not existed" });
     }
 
     const user = rows[0];
-    console.log("Details", user);
+    // console.log("Details", user);
 
     const isMatch = await bcrypt.compare(password, rows[0].password);
 
@@ -171,27 +169,24 @@ const login = async (req, res) => {
   }
 };
 
-
-
 const changePassword = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const { old_password, password, confirm_password } = req.body;
     // console.log(req.body);
 
-    
     // console.log(req.user);
-    
+
     const userEmail = req.user.email;
-    console.log("UserEmail",userEmail);
-    
+    // console.log("UserEmail",userEmail);
 
     if (!userEmail) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-
-    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [userEmail]);
+    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
+      userEmail,
+    ]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
@@ -199,15 +194,17 @@ const changePassword = async (req, res) => {
 
     const user = rows[0];
 
-    
     const isMatch = await bcrypt.compare(old_password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Incorrect old password" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect old password" });
     }
 
- 
     if (password !== confirm_password) {
-      return res.status(400).json({ message: "Passwords do not match" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Passwords do not match" });
     }
 
     // Hash the new password
@@ -218,22 +215,22 @@ const changePassword = async (req, res) => {
       userEmail,
     ]);
 
-    return res.json({ message: "Password changed successfully" });
+    return res.json({
+      success: true,
+      message: "Password changed successfully",
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-
 const getProfile = async (req, res) => {
-
   try {
-
-    const userId = req.user.id
+    const userId = req.user.id;
     // console.log("UserId",userId);
     // console.log(req.user)
-    
+
     const db = await connectToDatabase();
 
     const useId = req.user.id;
@@ -242,7 +239,7 @@ const getProfile = async (req, res) => {
     const rows = await db.query(
       "SELECT id, first_name, last_name,email,phone_number FROM users WHERE id = ?",
       [userId]
-    )
+    );
 
     // console.log(rows[0]);
 
@@ -250,8 +247,7 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(rows[0])
-
+    res.json(rows[0]);
   } catch (error) {
     console.log(error.message);
 
@@ -259,37 +255,35 @@ const getProfile = async (req, res) => {
   }
 };
 
-
-
-const updateProfile = async(req,res)=>{
-
+const updateProfile = async (req, res) => {
   try {
-  const db = await connectToDatabase()
+    const db = await connectToDatabase();
 
-   const {id, first_name, last_name, email, phone_number } = req.body
+    const { id, first_name, last_name, email, phone_number } = req.body;
 
-   if(!id){
-    res.status(400).json({message:"UserId is required"})
+    if (!id) {
+      res.status(400).json({ message: "UserId is required" });
+    }
+
+    const currentUser = await db.query("SELECT * from users where id = ? ", [
+      id,
+    ]);
+    //  console.log("Current user",currentUser);
+
+    if (currentUser.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await db.query(
+      "UPDATE users SET email = ?, first_name = ?, last_name = ?, phone_number = ? WHERE id = ?",
+      [email, first_name, last_name, phone_number, id]
+    );
+
+    return res.status(200).json({ success: true, message: "Profile Updated" });
+  } catch (error) {
+    console.log("Error in updating profile", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-   const currentUser = await db.query("SELECT * from users where id = ? ",[id])
-  //  console.log("Current user",currentUser);
-   
-
-   if (currentUser.length === 0) {
-    return res.status(404).json({ message: "User not found" });
-  }
-   await db.query("UPDATE users SET email = ?, first_name = ?, last_name = ?, phone_number = ? WHERE id = ?",[email, first_name, last_name, phone_number, id])
-
-   return res.status(200).json({message:"Profile Updated"})
-  
-} catch (error) {
-  console.log("Error in updating profile",error)
-  return res.status(500).json({message:"Internal server error"})
-  
-}}
-
-
+};
 
 export {
   getAllSliders,
@@ -301,6 +295,5 @@ export {
   login,
   changePassword,
   getProfile,
-  updateProfile
+  updateProfile,
 };
-

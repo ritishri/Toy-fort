@@ -2,9 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FaCheckCircle } from "react-icons/fa";
 
 const ChangePassword = () => {
   const [menu, setMenu] = useState("Change Password");
+  const [message, setMessage] = useState("");
+  const [messageState, setMessageState] = useState(true);
 
   const [values, setValues] = useState({
     old_password: "",
@@ -12,35 +15,38 @@ const ChangePassword = () => {
     confirm_password: "",
   });
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       if (!token) {
         console.log("No token found");
+        setMessage("Unauthorized. Please log in.");
+        setMessageState(false);
         return;
       }
-  
+
       const response = await axios.post(
         "http://localhost:5000/api/settings/change-password",
         values,
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-  
-      // console.log(values);
-      if (response.status === 201) {
-        console.log("Password changed successfully");
+
+      if (response.data.success) {
+        setMessageState(true);
+      } else {
+        setMessageState(false);
       }
+      setMessage(response.data.message);
     } catch (err) {
-      console.log(err.message);
+      setMessageState(false);
+      setMessage(err.response?.data?.message || "Something went wrong!");
     }
   };
-  
 
   return (
     <div>
@@ -109,6 +115,37 @@ const ChangePassword = () => {
         <div className="w-3/4 p-10">
           <form className="space-y-4 w-full" onSubmit={handleSubmit}>
             <div>
+              {message && messageState && (
+                <div
+                  style={{
+                    backgroundColor: "#d4edda",
+                    padding: "20px",
+                    color: "#155724",
+                    marginBottom: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FaCheckCircle style={{ marginRight: "10px" }} />
+                  {message}
+                </div>
+              )}
+
+              {message && !messageState && (
+                <div
+                  style={{
+                    backgroundColor: "#f8d7da",
+                    padding: "20px",
+                    color: "155724",
+                    marginBottom: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FaCheckCircle style={{ marginRight: "10px" }} />
+                  {message}
+                </div>
+              )}
               <label className="block text-black font-semibold text-sm mb-2">
                 Old Password
               </label>
@@ -153,7 +190,11 @@ const ChangePassword = () => {
             <div className="flex space-x-4">
               <button
                 type="submit"
-                style={{backgroundColor:"black", color:"white" , padding:"8px"}}
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "8px",
+                }}
               >
                 Change Password
               </button>

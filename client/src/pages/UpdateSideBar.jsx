@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FaCheckCircle } from "react-icons/fa";
 
 function UpdateSideBar() {
   const [menu, setMenu] = useState("Update Profile");
+  const [message, setMessage] = useState("");
+  const [messageState, setMessageState] = useState(true)
 
   const [data, setData] = useState({
     email: "",
@@ -20,7 +23,7 @@ function UpdateSideBar() {
           console.log("No token found");
           return;
         }
-        
+
         const response = await axios.get(
           "http://localhost:5000/api/user/profile",
           {
@@ -31,12 +34,15 @@ function UpdateSideBar() {
         );
 
         // console.log(response.data);
-        
 
         if (response.data.length > 0) {
           const userData = response.data[0];
+          setMessageState(true)
+          setMessage("Register Successful!")
           setData(userData);
         } else {
+          setMessageState(false)
+          setMessage("User not Register!")
           console.log("No user data found in response");
         }
       } catch (error) {
@@ -47,42 +53,40 @@ function UpdateSideBar() {
     fetchUserData();
   }, []);
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
 
-  const handleUpdate = async(e) =>{
-    e.preventDefault()
-
-    const user = JSON.parse(localStorage.getItem("user"))
-    const userId = user?.id; 
-    
-
-    if(!userId){
+    if (!userId) {
       console.log("User ID not found");
-      return
+      return;
     }
 
     try {
       const response = await axios.put(
-          `http://localhost:5000/api/user/update-profile`,
-          { userId, ...data },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-          }
-        );
-
-        if(response.status === 200){
-          console.log("Profile updated successfully");
-          
+        `http://localhost:5000/api/user/update-profile`,
+        { userId, ...data },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-    } catch (error) {
-      console.log("Error in updating profile",error);
-      
-    }
-  }
+      );
 
-  
+      if (response.status === 200) {
+        setMessageState(true)
+        setMessage("Changes successfully saved!");
+        console.log("Profile updated successfully");
+      }else{
+        setMessageState(false)
+        setMessage("Changes not saved!");
+      }
+    } catch (error) {
+      console.log("Error in updating profile", error);
+    }
+  };
 
   return (
     <div>
@@ -147,9 +151,46 @@ function UpdateSideBar() {
           </div>
         </div>
 
+        {/* <div>
+          {
+          message && <div style={{ backgroundColor: "#d4edda", padding: "10px", color: "#155724", borderRadius: "5px" }}>{message}</div>
+          }
+        </div> */}
+
         <div className="w-3/4 p-10">
           <form onSubmit={handleUpdate} className="space-y-4 w-full ">
             <div>
+              {message && messageState && (
+                <div
+                  style={{
+                    backgroundColor: "#d4edda",
+                    padding: "20px",
+                    color: "#155724",
+                    marginBottom:"10px",
+                    display:"flex",
+                    alignItems:"center"
+                  }}
+                >
+                  <FaCheckCircle style={{ marginRight: "10px" }} />
+                  {message}
+                </div>
+              )}
+
+               {message && !messageState && (
+                <div
+                  style={{
+                    backgroundColor: "#f8d7da",
+                    padding: "20px",
+                    color: "155724",
+                    marginBottom:"10px",
+                    display:"flex",
+                    alignItems:"center"
+                  }}
+                >
+                  <FaCheckCircle style={{ marginRight: "10px" }} />
+                  {message}
+                </div>
+              )}
               <label className="block text-black font-semibold text-base mb-2">
                 Email Address
               </label>
