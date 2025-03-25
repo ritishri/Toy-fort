@@ -151,12 +151,6 @@ function UpdateSideBar() {
           </div>
         </div>
 
-        {/* <div>
-          {
-          message && <div style={{ backgroundColor: "#d4edda", padding: "10px", color: "#155724", borderRadius: "5px" }}>{message}</div>
-          }
-        </div> */}
-
         <div className="w-3/4 p-10">
           <form onSubmit={handleUpdate} className="space-y-4 w-full ">
             <div>
@@ -251,7 +245,10 @@ function UpdateSideBar() {
               >
                 Save Changes
               </button>
-              <button className="bg-black text-white px-4 py-2">Next</button>
+
+              <Link to={'/settings/shipping-address'}>
+               <button className="bg-black text-white px-4 py-2">Next</button>
+              </Link>
             </div>
           </form>
         </div>

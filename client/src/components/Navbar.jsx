@@ -1,3 +1,4 @@
+import "@fontsource/open-sans";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -9,9 +10,16 @@ import {
   faLinkedin,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
-import { ShoppingCartIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { FiShoppingBag } from "react-icons/fi";
+import { MdOutlineReceiptLong } from "react-icons/md";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
@@ -20,13 +28,12 @@ function Navbar() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { user, setUser } = useContext(AppContext);
+  const { user, setUser, profile, setProfile } = useContext(AppContext);
 
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
-
 
   const handleChanges = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -49,9 +56,12 @@ function Navbar() {
         // // console.log("Login successful:", response.data);
         // console.log("Before updating state, user:", user)
 
+        localStorage.setItem("token",response.data.token)
+
         if (response.data.user) {
           // console.log("Setting user state:", response.data.user);
           setUser(response.data.user);
+          setProfile(false);
         }
 
         setShowLoginForm(!showLoginForm);
@@ -68,8 +78,14 @@ function Navbar() {
     setShowLoginForm(!showLoginForm);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setProfile(false);
+  };
+
   return (
-    <div className="">
+    <div className="" style={{ fontFamily: "Open Sans" }}>
       <div className="bg-red-500 h-10 flex flex-row space-x-4 p-2 text-white font-semibold text-lg">
         <a className="" href="https://www.facebook.com/toyfort/">
           <FontAwesomeIcon icon={faFacebook} />
@@ -133,7 +149,7 @@ function Navbar() {
           </svg>
         </div>
 
-        <div className="flex flex-row gap-2 space-x-2  pt-4 font-semibold text-lg ">
+        <div className="flex items-center gap-2 font-semibold text-xl">
           <ShoppingCartIcon className="w-9 h-9 text-gray-500" />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +157,7 @@ function Navbar() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-8 text-gray-500"
+            className="w-8 h-8 text-gray-500"
           >
             <path
               strokeLinecap="round"
@@ -149,27 +165,84 @@ function Navbar() {
               d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
             />
           </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-8 text-gray-500"
-            onClick={toggleLoginForm}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-            />
-          </svg>
-          <p
-            className="text-lg text-gray-500 cursor-pointer"
-            onClick={toggleLoginForm}
-          >
-            {user ? user.first_name : "Sign In"}
-          </p>
+
+          {user && user !== "Sign In" ? (
+            <div className="relative flex items-center gap-1">
+              <span
+                onClick={() => setProfile(!profile)}
+                className="cursor-pointer text-[#606060] text-md font-normal flex items-center gap-1"
+              >
+                <AccountCircleIcon className="text-[#606060] w-8 h-8" />
+                {user.first_name}
+                <ExpandMoreIcon className="text-[#606060]" />
+              </span>
+
+              {profile && (
+                <div className="absolute right-0 top-full bg-white border rounded-lg shadow-lg z-50">
+                  <div className="flex flex-col py-2">
+                    <Link className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1">
+                      <PersonOutlineIcon fontSize="small" />
+                      Profile
+                    </Link>
+                    <Link
+                      to="/order"
+                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                    >
+                      <MdOutlineReceiptLong size={24} />
+                      Orders
+                    </Link>
+                    <Link
+                      to="/refund-requests"
+                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                    >
+                      <FiShoppingBag size={20} />
+                      Refund
+                    </Link>
+                    <Link
+                      to="/settings/edit-profile"
+                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                    >
+                      <SettingsIcon fontSize="small" className="text-base" />
+                      Settings
+                      <span className="absolute left-4 bottom-0 w-[50%] h-[2px] tracking-widest bg-[#bfbdbd]"></span>
+                    </Link>
+                    <Link
+                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      onClick={handleLogout}
+                    >
+
+                      <LogoutIcon fontSize="small" />
+                      Logout
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-8 h-8 text-gray-500 text-center"
+                onClick={toggleLoginForm}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <button
+                onClick={toggleLoginForm}
+                className="text-[#606060] text-sm font-normal cursor-pointer"
+              >
+                {user}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -8,6 +8,7 @@ export const AppContextProvider = (props) => {
 
   console.log("Stored user",storedUser);
   
+  const [profile, setProfile] = useState(false)
 
   const [user, setUser] = useState(() => {
     try {
@@ -25,9 +26,14 @@ export const AppContextProvider = (props) => {
     }
   }, [user]);
 
+
+  
+
   const value = {
     user,
     setUser,
+    profile,
+    setProfile
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

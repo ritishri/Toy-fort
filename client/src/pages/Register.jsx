@@ -15,9 +15,9 @@ const Register = () => {
   });
 
   const [message, setMessage] = useState("");
-  const [messageState, setMessageState] = useState(true);
+  const [messageState, setMessageState] = useState(false);
 
-  const { user, setUser } = useContext(AppContext);
+  const { user, setUser, setProfile } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -45,7 +45,9 @@ const Register = () => {
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);
         if (response.data.user) {
-          setUser(response.data.user);
+          setUser(response.data.user)
+          setProfile(true)
+          
           console.log("Registration successful:", response.data.message);
           localStorage.setItem("user", values.first_name);
           navigate("/settings/edit-profile");
@@ -57,7 +59,8 @@ const Register = () => {
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }
+
   return (
     <div className="flex flex-col items-center">
       <p className="text-red-600 text-2xl mb-12 text-center">

@@ -26,6 +26,8 @@ import ProductDetails from "./pages/ProductDetails";
 import UpdateProfile from './pages/UpdateSideBar'
 import ShippingAddress from "./pages/ShippingAddress";
 import ChangePassword from "./pages/ChangePassword";
+import Orders from "./pages/Orders";
+import Refund from "./pages/Refund";
 
 
 function App() {
@@ -56,6 +58,8 @@ function App() {
         <Route path="/settings/edit-profile" element={<UpdateProfile/>}/>
         <Route path="/settings/shipping-address" element={<ShippingAddress/>}/>
         <Route path="/settings/change-password" element={<ChangePassword/>}/>
+        <Route path="/order" element={<Orders/>}/>
+        <Route path="/refund-requests" element={<Refund/>}/>
         
 
 
