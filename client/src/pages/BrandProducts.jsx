@@ -42,11 +42,11 @@ const BrandProducts = () => {
         setCurrentPage(1)
         console.log(data)
       } catch (error) {
-        console.error("Error fetching brand products:", error.message);
+        console.error("Error fetching brand products:", error.message)
       }
-    };
-    fetchBrandProducts();
-  }, [brand]);
+    }
+    fetchBrandProducts()
+  }, [brand])
 
   const handleProduct = (productSlug) => {
     navigate(`/${productSlug}`);
@@ -71,6 +71,7 @@ const BrandProducts = () => {
                   ) - 1
                 }
                 onClick={() => handleProduct(product.slug)}
+                slug = {product.slug}
               />
             ))}
           </div>

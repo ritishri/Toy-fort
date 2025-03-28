@@ -1,10 +1,11 @@
 import { createContext, useState, useEffect } from "react";
+import { MdTitle } from "react-icons/md";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
   
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("user")
 
   console.log("Stored user",storedUser);
   
@@ -26,6 +27,38 @@ export const AppContextProvider = (props) => {
     }
   }, [user]);
 
+  const [wishlist, setWishlist] = useState(()=>{
+
+    try {
+      const storedWishlist = JSON.parse(localStorage.getItem("wishlist"));
+    return Array.isArray(storedWishlist) ? storedWishlist : [];
+    } catch (error) {
+      return []
+    }
+  })
+
+  useEffect(()=>{
+    localStorage.setItem("wishlist",JSON.stringify(wishlist))
+  },[wishlist])
+
+
+  const addToWishlist = (product) => {
+    setWishlist((prevWishlist) => {
+      // Check if the product is already in the wishlist
+      const isAlreadyInWishlist = prevWishlist.some((item) => item.title === product.title);
+  
+      if (isAlreadyInWishlist) return prevWishlist; // Avoid duplicates
+  
+      return [...prevWishlist, product]; // Append new product while keeping existing ones
+    });
+  };
+  
+
+
+  const removeFromWishlist = (title) =>{
+    setWishlist((prev) => prev.filter((item) => item.title != title))
+  }
+
 
   
 
@@ -33,7 +66,11 @@ export const AppContextProvider = (props) => {
     user,
     setUser,
     profile,
-    setProfile
+    setProfile,
+    storedUser,
+    wishlist,
+    addToWishlist,
+    removeFromWishlist
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

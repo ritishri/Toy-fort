@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { AppContext } from "../context/AppContext";
 
-const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick }) => {
+const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick ,slug}) => {
+
+  const {wishlist, addToWishlist,
+    removeFromWishlist} = useContext(AppContext)
+
+   console.log("details",imageUrl,slug,title);
+   
+  const isWishListed = wishlist.some((item) => item.title === title)
+
+
+  // const [isWishListed, setIsWishListed] = useState(false)
+
+
+  const handleWishList = (e) =>{
+    e.stopPropagation()
+    isWishListed ? removeFromWishlist(title) : addToWishlist({imageUrl,title,originalPrice,discountedPrice, slug})
+  }
+
+
   return (
-    <div className="p-4 shadow-lg cursor-pointer group" onClick={onClick}>
+    <div className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group" onClick={onClick}>
       <div className="relative">
         <div className="absolute top-2 left-2 w-8 h-8 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
           10%
@@ -17,14 +36,14 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick }) => {
         />
 
         <div className="flex-col absolute gap-2 bottom-1 right-2 hidden group-hover:flex">
-          <button className="p-2 bg-[#f3f5f5] rounded-full shadow-md hover:bg-gray-100">
+          <button className="p-2 bg-[#f3f5f5] rounded-full shadow-md hover:bg-gray-100" onClick={handleWishList}>
             {/* Wishlist Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              fill={isWishListed ? "red" : "none"}
               viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke="currentColor"
+              stroke={isWishListed ? "red" : "currentColor"}
               className="w-7 h-7 text-black"
             >
               <path
@@ -51,10 +70,10 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick }) => {
         </h2>
 
         <div className="flex items-center mt-2">
-          <span className="text-base text-gray-400 line-through mr-2">
+          <span className="text-base text-gray-400 font-bold line-through mr-2">
             ₹{originalPrice || "0"} {/* Fallback for originalPrice */}
           </span>
-          <span className="text-base text-black-600 font-medium">
+          <span className="text-base font-bold text-black-600">
             ₹{discountedPrice || "0"} {/* Fallback for discountedPrice */}
           </span>
         </div>

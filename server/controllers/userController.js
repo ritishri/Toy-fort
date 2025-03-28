@@ -92,7 +92,7 @@ const register = async (req, res) => {
     const [rows] = await connection.query(
       "SELECT * FROM users WHERE email = ?",
       [email]
-    );
+    )
 
     const user = rows[0];
 
@@ -102,13 +102,18 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const slug = first_name+'-'+last_name
+    const newSlug = slug.toLocaleLowerCase()
+    // console.log(newSlug);
+    
+
     await connection.query(
-      "INSERT INTO users (first_name, last_name, email, password, phone_number) VALUES (?, ?, ?, ?, ?)",
-      [first_name, last_name, email, hashedPassword, phone_number]
+      "INSERT INTO users (first_name, last_name, email, password, phone_number,slug) VALUES (?, ?, ?, ?, ?, ?)",
+      [first_name, last_name, email, hashedPassword, phone_number, newSlug]
     );
 
     const [newUser] = await connection.query(
-      "SELECT id, first_name, last_name, email, phone_number FROM users WHERE email = ?",
+      "SELECT id, first_name, last_name, email, phone_number, slug FROM users WHERE email = ?",
       [email]
     );
 
@@ -116,7 +121,7 @@ const register = async (req, res) => {
 
     const token = jwt.sign(
       { id: newUser[0].id, email: newUser[0].email },
-      process.env.JWT_KEY
+      process.env.JWT_KEY,{expiresIn:'10h'}
     );
 
     // console.log(token)
@@ -154,6 +159,21 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Wrong Password" });
     }
+     const slug = user.slug
+     const newSlug = slug.toLocaleLowerCase()
+    // console.log(user.id);
+    // console.log(user.email);
+    // console.log(newSlug);
+    
+    
+    const token = jwt.sign(
+      { id: user.id, email: user.email},
+      process.env.JWT_KEY,{expiresIn:'8h'}
+    );
+
+    // console.log(token);
+    
+
 
     res.status(201).json({
       user: {
@@ -161,7 +181,9 @@ const login = async (req, res) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        slug: newSlug
       },
+      token: token
     });
     // res.status(201).json({token: token})
   } catch (error) {

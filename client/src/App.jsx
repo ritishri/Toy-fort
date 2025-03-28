@@ -28,9 +28,14 @@ import ShippingAddress from "./pages/ShippingAddress";
 import ChangePassword from "./pages/ChangePassword";
 import Orders from "./pages/Orders";
 import Refund from "./pages/Refund";
+import WishList from "./pages/WishList";
 
 
 function App() {
+
+  const storedUser = JSON.parse(localStorage.getItem("user"))
+  const slug = storedUser?.slug
+
   return (
     <div>
       <Navbar />
@@ -60,6 +65,8 @@ function App() {
         <Route path="/settings/change-password" element={<ChangePassword/>}/>
         <Route path="/order" element={<Orders/>}/>
         <Route path="/refund-requests" element={<Refund/>}/>
+        <Route path="/wishlist/:slug" element={<WishList/>}/>
+
         
 
 

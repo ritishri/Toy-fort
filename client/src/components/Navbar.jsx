@@ -23,17 +23,24 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import {v4 as uuidv4} from 'uuid'
 
 function Navbar() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { user, setUser, profile, setProfile } = useContext(AppContext);
+  const { user, setUser, profile, setProfile } = useContext(AppContext)
+
+  const storedUser = JSON.parse(localStorage.getItem("user"))
+  const slug = storedUser?.slug
+  const id = storedUser?.uniqueId
 
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate()
 
   const handleChanges = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -50,7 +57,7 @@ function Navbar() {
 
       // console.log("Login response:", response.data)
 
-      // console.log(response.status);
+      console.log("Values",response);
 
       if (response.status === 201) {
         // // console.log("Login successful:", response.data);
@@ -59,9 +66,23 @@ function Navbar() {
         localStorage.setItem("token",response.data.token)
 
         if (response.data.user) {
-          // console.log("Setting user state:", response.data.user);
-          setUser(response.data.user);
-          setProfile(false);
+
+          let storedUser = JSON.parse(localStorage.getItem("user"))
+
+          console.log("Setting user state:", response.data.user);
+          // localStorage.setItem("user", values.first_name);
+
+          if(!storedUser?.uniqueId){
+            const uniqueId = uuidv4().split("-")[0]
+            console.log(uniqueId)
+            storedUser = {...response.data.user,uniqueId: `${uniqueId}`}
+
+            localStorage.setItem("user",JSON.stringify(storedUser))
+            
+          }
+          // setUser(response.data.user);
+          setUser(storedUser)
+          setProfile(false)
         }
 
         setShowLoginForm(!showLoginForm);
@@ -151,6 +172,7 @@ function Navbar() {
 
         <div className="flex items-center gap-2 font-semibold text-xl">
           <ShoppingCartIcon className="w-9 h-9 text-gray-500" />
+          {/* Wishlist icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -158,6 +180,8 @@ function Navbar() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="w-8 h-8 text-gray-500"
+            onClick={() => navigate(`/wishlist/${slug}-${id}`)} 
+            
           >
             <path
               strokeLinecap="round"
@@ -180,7 +204,7 @@ function Navbar() {
               {profile && (
                 <div className="absolute right-0 top-full bg-white border rounded-lg shadow-lg z-50">
                   <div className="flex flex-col py-2">
-                    <Link className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1">
+                    <Link to={`/wishlist/${slug}-${id}` } className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1">
                       <PersonOutlineIcon fontSize="small" />
                       Profile
                     </Link>
