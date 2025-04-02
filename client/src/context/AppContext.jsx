@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { MdTitle } from "react-icons/md";
+import axios from 'axios'
 
 export const AppContext = createContext();
 
@@ -7,9 +8,10 @@ export const AppContextProvider = (props) => {
   
   const storedUser = localStorage.getItem("user")
 
-  console.log("Stored user",storedUser);
+  console.log("Stored user",storedUser)
   
   const [profile, setProfile] = useState(false)
+  const [wishlist, setWishlist] = useState([])
 
   const [user, setUser] = useState(() => {
     try {
@@ -17,7 +19,7 @@ export const AppContextProvider = (props) => {
     } catch (error) {
       return "Sign In"; 
     }
-  });
+  })
 
   useEffect(() => {
     if (user && user !== "Sign In") {
@@ -27,40 +29,68 @@ export const AppContextProvider = (props) => {
     }
   }, [user]);
 
-  const [wishlist, setWishlist] = useState(()=>{
 
-    try {
-      const storedWishlist = JSON.parse(localStorage.getItem("wishlist"));
-    return Array.isArray(storedWishlist) ? storedWishlist : [];
-    } catch (error) {
-      return []
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        if (user && user !== "Sign In") {
+          const response = await axios.get("http://localhost:5000/api/wishlist", {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          });
+          console.log("response",response.data);
+          setWishlist(response.data.wishlist);
+        }
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+      }
     }
-  })
 
-  useEffect(()=>{
-    localStorage.setItem("wishlist",JSON.stringify(wishlist))
-  },[wishlist])
+    fetchWishlist()
+  }, [user])
 
 
-  const addToWishlist = (product) => {
-    setWishlist((prevWishlist) => {
-      // Check if the product is already in the wishlist
-      const isAlreadyInWishlist = prevWishlist.some((item) => item.title === product.title);
-  
-      if (isAlreadyInWishlist) return prevWishlist; // Avoid duplicates
-  
-      return [...prevWishlist, product]; // Append new product while keeping existing ones
-    });
-  };
-  
-
-
-  const removeFromWishlist = (title) =>{
-    setWishlist((prev) => prev.filter((item) => item.title != title))
+  // Add item to wishlist
+  const addToWishlist = async (item) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/add",
+        item,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          }
+        }
+      )
+      console.log("Response",response);
+      
+      setWishlist(response.data.wishlist);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
   }
 
 
-  
+
+  // Remove item from wishlist
+  const removeFromWishlist = async (itemId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/remove/${itemId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      )
+      setWishlist(response.data.wishlist);
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+    }
+  };
+
 
   const value = {
     user,
@@ -70,7 +100,8 @@ export const AppContextProvider = (props) => {
     storedUser,
     wishlist,
     addToWishlist,
-    removeFromWishlist
+    removeFromWishlist,
+    setWishlist,
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

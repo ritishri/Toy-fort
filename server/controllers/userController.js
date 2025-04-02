@@ -92,7 +92,7 @@ const register = async (req, res) => {
     const [rows] = await connection.query(
       "SELECT * FROM users WHERE email = ?",
       [email]
-    )
+    );
 
     const user = rows[0];
 
@@ -102,10 +102,9 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const slug = first_name+'-'+last_name
-    const newSlug = slug.toLocaleLowerCase()
+    const slug = first_name + "-" + last_name;
+    const newSlug = slug.toLocaleLowerCase();
     // console.log(newSlug);
-    
 
     await connection.query(
       "INSERT INTO users (first_name, last_name, email, password, phone_number,slug) VALUES (?, ?, ?, ?, ?, ?)",
@@ -121,7 +120,8 @@ const register = async (req, res) => {
 
     const token = jwt.sign(
       { id: newUser[0].id, email: newUser[0].email },
-      process.env.JWT_KEY,{expiresIn:'10h'}
+      process.env.JWT_KEY,
+      { expiresIn: "10h" }
     );
 
     // console.log(token)
@@ -159,21 +159,19 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Wrong Password" });
     }
-     const slug = user.slug
-     const newSlug = slug.toLocaleLowerCase()
+    const slug = user.slug;
+    const newSlug = slug.toLocaleLowerCase();
     // console.log(user.id);
     // console.log(user.email);
     // console.log(newSlug);
-    
-    
+
     const token = jwt.sign(
-      { id: user.id, email: user.email},
-      process.env.JWT_KEY,{expiresIn:'8h'}
+      { id: user.id, email: user.email },
+      process.env.JWT_KEY,
+      { expiresIn: "8h" }
     );
 
     // console.log(token);
-    
-
 
     res.status(201).json({
       user: {
@@ -181,9 +179,9 @@ const login = async (req, res) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        slug: newSlug
+        slug: newSlug,
       },
-      token: token
+      token: token,
     });
     // res.status(201).json({token: token})
   } catch (error) {
@@ -307,6 +305,137 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// const addToWishlist = async(req,res) =>{
+
+//   try {
+//     const {imageUrl, title, originalPrice, discountedPrice, slug} = req.body
+
+//     const userId = req.user.id
+//     console.log(userId)
+
+//     const db = await connectToDatabase();
+
+//     const [rows] = await db.query(
+//       "SELECT * FROM wishlist WHERE title = ?",
+//       [title]
+//     )
+
+//     const user = rows[0];
+
+//     if (rows.length > 0) {
+//       return res.status(409).json({ message: "Item already in wishlist" });
+//     }
+
+//     const newProduct = await db.query("INSERT INTO wishlist (image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?)", [imageUrl, title, originalPrice, discountedPrice, slug])
+//     console.log(newProduct);
+
+//     res.status(201).json(newProduct)
+
+//   } catch (error) {
+//     console.log(error.message)
+
+//     res.status(500).json({message: "Error in adding product to wishlist",error})
+//   }
+// }
+
+const addToWishlist = async (req, res) => {
+  try {
+    const { imageUrl, title, originalPrice, discountedPrice, slug } = req.body;
+    const userId = req.user?.id;
+    console.log(userId);
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No user ID found" });
+    }
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query(
+      "SELECT * FROM wishlist WHERE title = ? AND user_id = ?",
+      [title, userId]
+    );
+
+    // if (rows.length > 0) {
+    //   return res.status(409).json({ message: "Item already in wishlist" });
+    // }
+
+    const [result] = await db.query(
+      "INSERT INTO wishlist (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
+      [userId, imageUrl, title, originalPrice, discountedPrice, slug]
+    );
+
+    console.log(result);
+
+    res
+      .status(201)
+      .json({
+        message: "Product added successfully",
+        insertId: result.insertId,
+      });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        message: "Error in adding product to wishlist",
+        error: error.message,
+      });
+  }
+};
+
+const removeFromWishlist = async (req, res) => {
+  try {
+    const {id} = req.params;
+    // console.log("Remove id", id)
+
+    const db = await connectToDatabase();
+
+    const [wishlist] = await db.query("SELECT * from wishlist where id = ?" ,[id])
+    // console.log(wishlist);
+
+
+    await db.query("DELETE from wishlist where id = ?", [id]);
+
+    res.json({ message: "Item removed from wishlist" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error in removing product from wishlist", error });
+  }
+};
+
+
+
+const getWishlist = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized: No user ID found" });
+    }
+
+    const userId = req.user.id
+    console.log("UserId:", userId)
+    console.log("Request Body:", req.body)
+
+    const db = await connectToDatabase()
+  
+    const [rows] = await db.query("SELECT * FROM wishlist WHERE user_id = ?", [userId])
+
+    console.log("Wishlist:", rows)
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Wishlist is empty" })
+    }
+
+    res.json(rows)
+  } catch (error) {
+    console.error("Error fetching wishlist:", error.message)
+    res.status(500).json({ error: error.message })
+  }
+}
+
+
 export {
   getAllSliders,
   booksImages,
@@ -318,4 +447,7 @@ export {
   changePassword,
   getProfile,
   updateProfile,
+  addToWishlist,
+  removeFromWishlist,
+  getWishlist,
 };

@@ -1,25 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
 
-const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick ,slug}) => {
+const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }) => {
+  const { wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
 
-  const {wishlist, addToWishlist,
-    removeFromWishlist} = useContext(AppContext)
+  console.log("slug",slug);
+  
 
-   console.log("details",imageUrl,slug,title);
-   
-  const isWishListed = wishlist.some((item) => item.title === title)
+  const isWishListed = wishlist?.length ? wishlist.some((item) => item.title === title) : false;
+ 
+  console.log("Wishlist in Card:", wishlist);
 
-
-  // const [isWishListed, setIsWishListed] = useState(false)
-
-
-  const handleWishList = (e) =>{
+  const handleWishList = async (e) => {
     e.stopPropagation()
-    isWishListed ? removeFromWishlist(title) : addToWishlist({imageUrl,title,originalPrice,discountedPrice, slug})
+    if (isWishListed){
+      await removeFromWishlist(slug)
+    } else {
+      console.log("Addtowishlist",imageUrl,title,originalPrice,slug);
+      
+      await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug });
+    }
   }
-
 
   return (
     <div className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group" onClick={onClick}>
@@ -28,16 +30,14 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick ,slug})
           10%
         </div>
 
-        {/* Book cover image */}
         <img
-          src={imageUrl} 
-          alt={title || "Book Image"} 
+          src={imageUrl}
+          alt={title || "Book Image"}
           className="w-full h-64 object-cover rounded-lg"
         />
 
         <div className="flex-col absolute gap-2 bottom-1 right-2 hidden group-hover:flex">
           <button className="p-2 bg-[#f3f5f5] rounded-full shadow-md hover:bg-gray-100" onClick={handleWishList}>
-            {/* Wishlist Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill={isWishListed ? "red" : "none"}
@@ -55,26 +55,22 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, onClick ,slug})
           </button>
 
           <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-            {/* Shopping Cart Icon */}
-
             <ShoppingCartIcon className="w-7 h-7 text-black" />
           </button>
         </div>
       </div>
 
-      {/* Book details */}
       <div className="mt-4">
         <h2 className="text-base text-gray-800 truncate hover:text-red-600">
-          {title || "Unknown Book Title"}{" "}
-          {/* Fallback in case title is undefined */}
+          {title || "Unknown Book Title"}
         </h2>
 
         <div className="flex items-center mt-2">
           <span className="text-base text-gray-400 font-bold line-through mr-2">
-            ₹{originalPrice || "0"} {/* Fallback for originalPrice */}
+            ₹{originalPrice || "0"}
           </span>
           <span className="text-base font-bold text-black-600">
-            ₹{discountedPrice || "0"} {/* Fallback for discountedPrice */}
+            ₹{discountedPrice || "0"}
           </span>
         </div>
       </div>

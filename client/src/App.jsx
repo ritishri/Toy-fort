@@ -29,6 +29,7 @@ import ChangePassword from "./pages/ChangePassword";
 import Orders from "./pages/Orders";
 import Refund from "./pages/Refund";
 import WishList from "./pages/WishList";
+import Cart from "./pages/Cart";
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
         <Route path="/order" element={<Orders/>}/>
         <Route path="/refund-requests" element={<Refund/>}/>
         <Route path="/wishlist/:slug" element={<WishList/>}/>
+        <Route path="/cart" element={<Cart/>}/>
 
         
 

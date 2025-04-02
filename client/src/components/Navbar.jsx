@@ -33,6 +33,9 @@ function Navbar() {
 
   const storedUser = JSON.parse(localStorage.getItem("user"))
   const slug = storedUser?.slug
+
+  console.log("slug",slug);
+  
   const id = storedUser?.uniqueId
 
   const [values, setValues] = useState({
@@ -171,7 +174,7 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 font-semibold text-xl">
-          <ShoppingCartIcon className="w-9 h-9 text-gray-500" />
+          <ShoppingCartIcon className="w-9 h-9 text-gray-500 cursor-pointer" onClick={() => navigate('/cart')}  />
           {/* Wishlist icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
