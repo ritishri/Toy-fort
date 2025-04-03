@@ -248,8 +248,8 @@ const changePassword = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    // console.log("UserId",userId);
-    // console.log(req.user)
+    console.log("UserId", userId);
+    console.log(req.user);
 
     const db = await connectToDatabase();
 
@@ -368,35 +368,32 @@ const addToWishlist = async (req, res) => {
 
     console.log(result);
 
-    res
-      .status(201)
-      .json({
-        message: "Product added successfully",
-        insertId: result.insertId,
-      });
+    res.status(201).json({
+      message: "Product added successfully",
+      insertId: result.insertId,
+    });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Error in adding product to wishlist",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error in adding product to wishlist",
+      error: error.message,
+    });
   }
 };
 
 const removeFromWishlist = async (req, res) => {
   try {
-    const {id} = req.params;
-    // console.log("Remove id", id)
+    const { slug } = req.params;
+    console.log("slug", slug);
 
     const db = await connectToDatabase();
 
-    const [wishlist] = await db.query("SELECT * from wishlist where id = ?" ,[id])
+    const [wishlist] = await db.query("SELECT * from wishlist where id = ?", [
+      slug,
+    ]);
     // console.log(wishlist);
 
-
-    await db.query("DELETE from wishlist where id = ?", [id]);
+    await db.query("DELETE from wishlist where slug = ?", [slug]);
 
     res.json({ message: "Item removed from wishlist" });
   } catch (error) {
@@ -406,35 +403,32 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
-
-
 const getWishlist = async (req, res) => {
+  console.log("Req-user", req.user);
+
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "Unauthorized: No user ID found" });
-    }
+    const id = req.user.id;
+    console.log("UserId:", id);
+    // console.log("Request Body:", req.user)
 
-    const userId = req.user.id
-    console.log("UserId:", userId)
-    console.log("Request Body:", req.body)
+    const db = await connectToDatabase();
 
-    const db = await connectToDatabase()
-  
-    const [rows] = await db.query("SELECT * FROM wishlist WHERE user_id = ?", [userId])
+    const [rows] = await db.query("SELECT * FROM wishlist WHERE user_id = ?", [
+      id,
+    ]);
 
-    console.log("Wishlist:", rows)
+    console.log("Wishlist:", rows);
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Wishlist is empty" })
+      return res.status(404).json({ message: "Wishlist is empty" });
     }
 
-    res.json(rows)
+    res.json(rows);
   } catch (error) {
-    console.error("Error fetching wishlist:", error.message)
-    res.status(500).json({ error: error.message })
+    console.error("Error fetching wishlist:", error.message);
+    res.status(500).json({ error: error.message });
   }
-}
-
+};
 
 export {
   getAllSliders,

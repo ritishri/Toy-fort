@@ -1,27 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
 
 const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }) => {
   const { wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
 
-  console.log("slug",slug);
-  
+  // Check if the item is already in the wishlist
+  const [isWishListed, setIsWishListed] = useState(false);
 
-  const isWishListed = wishlist?.length ? wishlist.some((item) => item.title === title) : false;
- 
-  console.log("Wishlist in Card:", wishlist);
+  useEffect(() => {
+    if (Array.isArray(wishlist) && wishlist.length > 0) { 
+      setIsWishListed(wishlist.some((item) => item.slug === slug));
+    }
+  }, [wishlist, slug]); 
+  
+  
 
   const handleWishList = async (e) => {
     e.stopPropagation()
-    if (isWishListed){
-      await removeFromWishlist(slug)
-    } else {
-      console.log("Addtowishlist",imageUrl,title,originalPrice,slug);
+
+    try {
+      if (isWishListed) {
+        await removeFromWishlist(slug)
+        setIsWishListed(false)
+      } else {
+        await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug })
+        setIsWishListed(true)
+      }
+    } catch (error) {
+      console.log("Error updating wishlist",error);
       
-      await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug });
     }
-  }
+    
+  };
 
   return (
     <div className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group" onClick={onClick}>
@@ -30,14 +41,13 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
           10%
         </div>
 
-        <img
-          src={imageUrl}
-          alt={title || "Book Image"}
-          className="w-full h-64 object-cover rounded-lg"
-        />
+        <img src={imageUrl} alt={title || "Book Image"} className="w-full h-64 object-cover rounded-lg" />
 
         <div className="flex-col absolute gap-2 bottom-1 right-2 hidden group-hover:flex">
-          <button className="p-2 bg-[#f3f5f5] rounded-full shadow-md hover:bg-gray-100" onClick={handleWishList}>
+          <button
+            className="p-2 bg-[#f3f5f5] rounded-full shadow-md hover:bg-gray-100"
+            onClick={handleWishList}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill={isWishListed ? "red" : "none"}

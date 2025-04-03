@@ -21,8 +21,8 @@ router.post('/settings/change-password',verifyToken,changePassword)
 router.get("/user/profile",verifyToken,getProfile)
 router.put("/user/update-profile",verifyToken,updateProfile)
 router.post("/add",verifyToken,addToWishlist)
-router.delete("/remove/:id",verifyToken,removeFromWishlist)
-router.get("/wishlist",verifyToken,getWishlist)
+router.delete("/remove/:slug",verifyToken,removeFromWishlist)
+router.get("/user/wishlist",verifyToken,getWishlist)
 
 
 export default router;

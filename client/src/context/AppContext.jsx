@@ -27,7 +27,7 @@ export const AppContextProvider = (props) => {
     } else {
       localStorage.removeItem("user")
     }
-  }, [user]);
+  }, [user])
 
 
   useEffect(() => {
@@ -38,8 +38,8 @@ export const AppContextProvider = (props) => {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
-          });
-          console.log("response",response.data);
+          })
+          console.log("Fetched response",response.data.wishlist);
           setWishlist(response.data.wishlist);
         }
       } catch (error) {
@@ -51,41 +51,61 @@ export const AppContextProvider = (props) => {
   }, [user])
 
 
+
   // Add item to wishlist
+
   const addToWishlist = async (item) => {
     try {
+      console.log(item);
+
+      const token = localStorage.getItem('token')
+      // console.log("Token",token)
+      
+      
       const response = await axios.post(
         "http://localhost:5000/api/add",
         item,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            "Content-Type": "application/json",
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
-      console.log("Response",response);
+      console.log("Add Response", response)
+
+      if(response.data && response.data.wishlist){
+        console.log("Product Added successfully")
+        setWishlist(response.data.wishlist)
+        
+      }
       
-      setWishlist(response.data.wishlist);
+      
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
+      console.error("Error adding to wishlist:", error)
     }
   }
 
 
 
   // Remove item from wishlist
-  const removeFromWishlist = async (itemId) => {
+
+  const removeFromWishlist = async (slug) => {
+
+    console.log("slug remove wishlist",slug);
+    
     try {
+
+      const token = localStorage.getItem('token')
+      console.log("Token",token)
+
       const response = await axios.delete(
-        `http://localhost:5000/api/remove/${itemId}`,
+        `http://localhost:5000/api/remove/${slug}`,
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
-      setWishlist(response.data.wishlist);
+
+      if(response.data && response.data.wishlist){
+        setWishlist(response.data.wishlist);
+      }
     } catch (error) {
       console.error("Error removing from wishlist:", error);
     }
