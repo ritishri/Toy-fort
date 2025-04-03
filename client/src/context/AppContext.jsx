@@ -29,29 +29,6 @@ export const AppContextProvider = (props) => {
     }
   }, [user])
 
-
-  useEffect(() => {
-    const fetchWishlist = async () => {
-      try {
-        if (user && user !== "Sign In") {
-          const response = await axios.get("http://localhost:5000/api/wishlist", {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          })
-          console.log("Fetched response",response.data.wishlist);
-          setWishlist(response.data.wishlist);
-        }
-      } catch (error) {
-        console.error("Error fetching wishlist:", error);
-      }
-    }
-
-    fetchWishlist()
-  }, [user])
-
-
-
   // Add item to wishlist
 
   const addToWishlist = async (item) => {

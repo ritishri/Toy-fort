@@ -60,7 +60,7 @@ function Navbar() {
 
       // console.log("Login response:", response.data)
 
-      console.log("Values",response);
+      console.log("Values",response)
 
       if (response.status === 201) {
         // // console.log("Login successful:", response.data);

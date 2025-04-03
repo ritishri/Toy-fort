@@ -305,39 +305,6 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// const addToWishlist = async(req,res) =>{
-
-//   try {
-//     const {imageUrl, title, originalPrice, discountedPrice, slug} = req.body
-
-//     const userId = req.user.id
-//     console.log(userId)
-
-//     const db = await connectToDatabase();
-
-//     const [rows] = await db.query(
-//       "SELECT * FROM wishlist WHERE title = ?",
-//       [title]
-//     )
-
-//     const user = rows[0];
-
-//     if (rows.length > 0) {
-//       return res.status(409).json({ message: "Item already in wishlist" });
-//     }
-
-//     const newProduct = await db.query("INSERT INTO wishlist (image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?)", [imageUrl, title, originalPrice, discountedPrice, slug])
-//     console.log(newProduct);
-
-//     res.status(201).json(newProduct)
-
-//   } catch (error) {
-//     console.log(error.message)
-
-//     res.status(500).json({message: "Error in adding product to wishlist",error})
-//   }
-// }
-
 const addToWishlist = async (req, res) => {
   try {
     const { imageUrl, title, originalPrice, discountedPrice, slug } = req.body;
@@ -390,7 +357,8 @@ const removeFromWishlist = async (req, res) => {
 
     const [wishlist] = await db.query("SELECT * from wishlist where id = ?", [
       slug,
-    ]);
+    ])
+    
     // console.log(wishlist);
 
     await db.query("DELETE from wishlist where slug = ?", [slug]);

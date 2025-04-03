@@ -1,19 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useState,useEffect } from "react";
 import "@fontsource/open-sans";
 import { AppContext } from "../context/AppContext";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const WishList = () => {
-  const { wishlist } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext)
 
-  console.log("wishlist", wishlist);
+  const [wishlist, setWishlist] = useState([])
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      const token = localStorage.getItem('token');
+      // console.log("Fetching wishlist... User:", user, "Token:", token);
+  
+      try {
+        if (user && user !== "Sign In") {
+          const response = await axios.get("http://localhost:5000/api/user/wishlist", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          // console.log("Fetched response", response.data);
+          setWishlist(response.data)
+        }
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+        setWishlist([])
+      }
+    };
+  
+    fetchWishlist();
+  }, [user]);
+  
+
 
   const handleDetails = (productSlug) => {
-    navigate(`/${productSlug}`);
-  };
+    navigate(`/${productSlug}`)
+  }
 
   return (
     <div style={{ fontFamily: "Open Sans" }}>
@@ -24,17 +50,18 @@ const WishList = () => {
         <span className="mr-1 text-gray-600">Wishlist</span>
       </div>
       <div className="p-4">
-        {wishlist.length > 0 ? (
+      {Array.isArray(wishlist) && wishlist.length > 0 ? (
+
           <div className="w-full ml-5 mt-5">
             <div className="w-full grid grid-cols-4 gap-4">
               {wishlist.map((item, index) => (
                 <Card
                   className="border border-black cursor-pointer"
                   key={index}
-                  imageUrl={item.imageUrl}
+                  imageUrl={item.image}
                   title={item.title}
-                  originalPrice={item.originalPrice}
-                  discountedPrice={item.discountedPrice}
+                  originalPrice={item.original_price}
+                  discountedPrice={item.discounted_price}
                   onClick={() => handleDetails(item.slug)}
                 />
               ))}

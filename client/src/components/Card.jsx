@@ -12,7 +12,7 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
     if (Array.isArray(wishlist) && wishlist.length > 0) { 
       setIsWishListed(wishlist.some((item) => item.slug === slug));
     }
-  }, [wishlist, slug]); 
+  }, [wishlist, slug]) 
   
   
 
