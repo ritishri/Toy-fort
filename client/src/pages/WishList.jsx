@@ -21,7 +21,7 @@ const WishList = () => {
         if (user && user !== "Sign In") {
           const response = await axios.get("http://localhost:5000/api/user/wishlist", {
             headers: { Authorization: `Bearer ${token}` },
-          });
+          })
   
           // console.log("Fetched response", response.data);
           setWishlist(response.data)
@@ -55,6 +55,7 @@ const WishList = () => {
           <div className="w-full ml-5 mt-5">
             <div className="w-full grid grid-cols-4 gap-4">
               {wishlist.map((item, index) => (
+                           
                 <Card
                   className="border border-black cursor-pointer"
                   key={index}

@@ -3,36 +3,69 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
 
 const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }) => {
-  const { wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
+  const { setWishlist ,wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
 
   // Check if the item is already in the wishlist
   const [isWishListed, setIsWishListed] = useState(false);
 
   useEffect(() => {
     if (Array.isArray(wishlist) && wishlist.length > 0) { 
-      setIsWishListed(wishlist.some((item) => item.slug === slug));
+      setIsWishListed(wishlist.some((item) => item.title === title));
     }
-  }, [wishlist, slug]) 
+  }, [wishlist,title]) 
+
+  console.log("Wishlist in UI:", wishlist);
+  console.log("Checking title:", title);
+  console.log("Result:", wishlist.some((item) => item.title === title));
+
+  
+  // let isWishListed = wishlist.some((item) => item.slug === slug)
+  // console.log("isWishListed",isWishListed);
+  
+
   
   
+
+  // const handleWishList = async (e) => {
+  //   e.stopPropagation()
+
+  //   try {
+  //     if (isWishListed) {
+  //       await removeFromWishlist(slug)
+  //       setIsWishListed(false)
+  //     } else {
+  //       await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug })
+  //       setIsWishListed(true)
+  //     }
+  //   } catch (error) {
+  //     console.log("Error updating wishlist",error);
+      
+  //   }
+    
+  // };
+
+  const handleIcon = () =>{
+    if(isWishListed){
+      setIsWishListed(false)
+    }
+    setIsWishListed(true)
+  }
+
 
   const handleWishList = async (e) => {
-    e.stopPropagation()
-
+    e.stopPropagation();
     try {
       if (isWishListed) {
-        await removeFromWishlist(slug)
-        setIsWishListed(false)
+        await removeFromWishlist(slug);
       } else {
-        await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug })
-        setIsWishListed(true)
+        await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug });
       }
     } catch (error) {
-      console.log("Error updating wishlist",error);
-      
+      console.log("Error updating wishlist", error);
     }
-    
   };
+  
+  
 
   return (
     <div className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group" onClick={onClick}>
@@ -49,6 +82,7 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
             onClick={handleWishList}
           >
             <svg
+              onClick={handleIcon}
               xmlns="http://www.w3.org/2000/svg"
               fill={isWishListed ? "red" : "none"}
               viewBox="0 0 24 24"

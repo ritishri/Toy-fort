@@ -44,12 +44,13 @@ export const AppContextProvider = (props) => {
         item,
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      console.log("Add Response", response)
+      console.log("Add Response", response.data.result)
 
-      if(response.data && response.data.wishlist){
+      if(response.data && response.data.result){
         console.log("Product Added successfully")
-        setWishlist(response.data.wishlist)
-        
+         setWishlist(response.data.result)
+         
+        // setWishlist((prevWishlist) => [...prevWishlist, item])
       }
       
       
@@ -81,7 +82,10 @@ export const AppContextProvider = (props) => {
       )
 
       if(response.data && response.data.wishlist){
-        setWishlist(response.data.wishlist);
+        // setWishlist(response.data.wishlist);
+        setWishlist((prevWishlist) => prevWishlist.filter(item => item.slug !== slug));
+
+
       }
     } catch (error) {
       console.error("Error removing from wishlist:", error);

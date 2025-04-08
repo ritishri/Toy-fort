@@ -319,25 +319,28 @@ const addToWishlist = async (req, res) => {
 
     const db = await connectToDatabase();
 
-    const [rows] = await db.query(
-      "SELECT * FROM wishlist WHERE title = ? AND user_id = ?",
-      [title, userId]
-    );
-
     // if (rows.length > 0) {
     //   return res.status(409).json({ message: "Item already in wishlist" });
     // }
 
     const [result] = await db.query(
-      "INSERT INTO wishlist (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
+      "INSERT INTO wishlists (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
       [userId, imageUrl, title, originalPrice, discountedPrice, slug]
     );
 
     console.log(result);
 
+    const [rows] = await db.query(
+      "SELECT * FROM wishlists WHERE title = ? AND user_id = ?",
+      [title, userId]
+    );
+
+    console.log("rows", rows);
+
     res.status(201).json({
       message: "Product added successfully",
       insertId: result.insertId,
+      result: rows,
     });
   } catch (error) {
     console.error(error);
@@ -355,13 +358,13 @@ const removeFromWishlist = async (req, res) => {
 
     const db = await connectToDatabase();
 
-    const [wishlist] = await db.query("SELECT * from wishlist where id = ?", [
+    const [wishlist] = await db.query("SELECT * from wishlists where id = ?", [
       slug,
-    ])
-    
+    ]);
+
     // console.log(wishlist);
 
-    await db.query("DELETE from wishlist where slug = ?", [slug]);
+    await db.query("DELETE from wishlists where slug = ?", [slug]);
 
     res.json({ message: "Item removed from wishlist" });
   } catch (error) {
@@ -381,7 +384,7 @@ const getWishlist = async (req, res) => {
 
     const db = await connectToDatabase();
 
-    const [rows] = await db.query("SELECT * FROM wishlist WHERE user_id = ?", [
+    const [rows] = await db.query("SELECT * FROM wishlists WHERE user_id = ?", [
       id,
     ]);
 
@@ -394,6 +397,98 @@ const getWishlist = async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error("Error fetching wishlist:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const addToCart = async (req, res) => {
+  try {
+    const { imageUrl, title, originalPrice, discountedPrice, slug } = req.body;
+    const userId = req.user?.id;
+    console.log(userId);
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No user ID found" });
+    }
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query(
+      "SELECT * FROM cart WHERE title = ? AND user_id = ?",
+      [title, userId]
+    );
+
+    console.log("rows", rows);
+
+    const [result] = await db.query(
+      "INSERT INTO cart (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
+      [userId, imageUrl, title, originalPrice, discountedPrice, slug]
+    );
+
+    console.log(result);
+
+    res.status(201).json({
+      message: "Product added successfully",
+      insertId: result.insertId,
+      result: rows,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error in adding product to wishlist",
+      error: error.message,
+    });
+  }
+};
+
+const removeFromCart = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    console.log("slug", slug);
+
+    const db = await connectToDatabase();
+
+    const [cart] = await db.query("SELECT * from cart where id = ?", [slug]);
+
+    if (cart.length === 0) {
+      return res.status(401).json({ message: "Item not in cart" });
+    }
+
+    // console.log(cart);
+
+    await db.query("DELETE from cart where slug = ?", [slug]);
+
+    res.json({ message: "Item removed from cart" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error in removing product from cart", error });
+  }
+};
+
+const getCartProducts = async (req, res) => {
+  console.log("Req-user", req.user);
+
+  try {
+    const id = req.user.id;
+    console.log("UserId:", id);
+    // console.log("Request Body:", req.user)
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT * FROM cart WHERE user_id = ?", [id]);
+
+    console.log("Cart Products:", rows);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Cart is empty" });
+    }
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching Cart:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
@@ -412,4 +507,7 @@ export {
   addToWishlist,
   removeFromWishlist,
   getWishlist,
+  addToCart,
+  getCartProducts,
+  removeFromCart,
 };

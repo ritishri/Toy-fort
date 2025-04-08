@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile, updateProfile, addToWishlist, removeFromWishlist, getWishlist} from "../controllers/userController.js";
+import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile, updateProfile, addToWishlist, removeFromWishlist, getWishlist, addToCart, getCartProducts, removeFromCart} from "../controllers/userController.js";
 import { brandProducts, productsDetails } from "../controllers/productController.js"
 import verifyToken from '../middlware/auth.js'
 
@@ -23,6 +23,12 @@ router.put("/user/update-profile",verifyToken,updateProfile)
 router.post("/add",verifyToken,addToWishlist)
 router.delete("/remove/:slug",verifyToken,removeFromWishlist)
 router.get("/user/wishlist",verifyToken,getWishlist)
+router.post("/addToCart",verifyToken,addToCart)
+router.get("/user/getCartProducts",verifyToken,getCartProducts)
+router.delete("/removeProduct/:slug",verifyToken,removeFromCart)
+
+
+
 
 
 export default router;
