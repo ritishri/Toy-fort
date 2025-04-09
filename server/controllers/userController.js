@@ -405,7 +405,7 @@ const addToCart = async (req, res) => {
   try {
     const { imageUrl, title, originalPrice, discountedPrice, slug } = req.body;
     const userId = req.user?.id;
-    console.log(userId);
+    // console.log(userId);
 
     if (!userId) {
       return res
@@ -420,14 +420,14 @@ const addToCart = async (req, res) => {
       [title, userId]
     );
 
-    console.log("rows", rows);
+    // console.log("rows", rows);
 
     const [result] = await db.query(
       "INSERT INTO cart (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
       [userId, imageUrl, title, originalPrice, discountedPrice, slug]
     );
 
-    console.log(result);
+    // console.log(result);
 
     res.status(201).json({
       message: "Product added successfully",

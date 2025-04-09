@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
+import axios from "axios";
 
 const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }) => {
   const { setWishlist ,wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
@@ -64,6 +65,38 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
       console.log("Error updating wishlist", error);
     }
   };
+
+
+
+  const addToCart = async({imageUrl,title,originalPrice,discountedPrice,slug})=>{
+
+    // console.log(imageUrl,title,originalPrice,discountedPrice,slug)
+
+    try {
+
+      const token = localStorage.getItem('token')
+      // console.log("Token",token)
+      
+      
+      const response = await axios.post(
+        "http://localhost:5000/api/addToCart",
+        {imageUrl,title,originalPrice,discountedPrice,slug},
+
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      // console.log("Add Cart Response", response)
+
+      if(response.data){
+        console.log("Product Added successfully")
+      }
+      
+      
+    } catch (error) {
+      console.error("Error adding to cart:", error)
+    }
+
+    
+  }
   
   
 
@@ -99,7 +132,7 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
           </button>
 
           <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-            <ShoppingCartIcon className="w-7 h-7 text-black" />
+            <ShoppingCartIcon onClick={()=>addToCart({imageUrl,title,originalPrice,discountedPrice,slug})} className="w-7 h-7 text-black" />
           </button>
         </div>
       </div>
