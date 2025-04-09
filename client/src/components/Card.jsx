@@ -132,7 +132,7 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
           </button>
 
           <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-            <ShoppingCartIcon onClick={()=>addToCart({imageUrl,title,originalPrice,discountedPrice,slug})} className="w-7 h-7 text-black" />
+            <ShoppingCartIcon onClick={(e)=>{e.stopPropagation(); addToCart({imageUrl,title,originalPrice,discountedPrice,slug})}} className="w-7 h-7 text-black" />
           </button>
         </div>
       </div>
