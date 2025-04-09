@@ -44,6 +44,33 @@ const Cart = () => {
     fetchCart();
   }, [user]);
 
+
+  const removeFromCart = async (slug) => {
+
+    console.log("slug remove cart",slug);
+    
+    try {
+
+      const token = localStorage.getItem('token')
+      // console.log("Token",token)
+
+      const response = await axios.delete(
+        `http://localhost:5000/api/removeProduct/${slug}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      // console.log("Cart Response",response);
+      
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+    }
+  };
+
+
   const addProduct = () => {
     setState(state + 1);
   };
@@ -107,7 +134,7 @@ const Cart = () => {
                   </p>
                 </div>
 
-                <button className="mt-4 bg-gray-100 px-3 py-1 text-sm border">
+                <button onClick={()=>removeFromCart(item.slug)} className="mt-4 bg-gray-100 px-3 py-1 text-sm border">
                   × Remove
                 </button>
 

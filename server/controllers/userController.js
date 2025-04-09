@@ -446,17 +446,17 @@ const addToCart = async (req, res) => {
 const removeFromCart = async (req, res) => {
   try {
     const { slug } = req.params;
-    console.log("slug", slug);
+    // console.log("slug", slug);
 
     const db = await connectToDatabase();
 
-    const [cart] = await db.query("SELECT * from cart where id = ?", [slug]);
+    const [cart] = await db.query("SELECT * from cart where slug = ?", [slug]);
 
     if (cart.length === 0) {
       return res.status(401).json({ message: "Item not in cart" });
     }
 
-    // console.log(cart);
+    // console.log(cart)
 
     await db.query("DELETE from cart where slug = ?", [slug]);
 
@@ -469,18 +469,17 @@ const removeFromCart = async (req, res) => {
 };
 
 const getCartProducts = async (req, res) => {
-  console.log("Req-user", req.user);
 
   try {
     const id = req.user.id;
-    console.log("UserId:", id);
+    // console.log("UserId:", id);
     // console.log("Request Body:", req.user)
 
     const db = await connectToDatabase();
 
     const [rows] = await db.query("SELECT * FROM cart WHERE user_id = ?", [id]);
 
-    console.log("Cart Products:", rows);
+    // console.log("Cart Products:", rows);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "Cart is empty" });
