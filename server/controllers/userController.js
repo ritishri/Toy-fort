@@ -443,6 +443,60 @@ const addToCart = async (req, res) => {
   }
 };
 
+const increaseProductQuantity = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    // console.log(slug);
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT quantity from cart where slug = ?", [
+      slug,
+    ]);
+
+    const quantity = rows[0].quantity
+
+    const newQuantity = quantity + 1
+
+    await db.query("UPDATE cart set quantity = ? where slug = ?", [
+      newQuantity,
+      slug,
+    ]);
+
+    res.status(200).json({ message: "Quantity  updated", newQuantity });
+  } catch (error) {
+    console.log("Error in updating quantity", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const decreaseProductQuantity = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    // console.log(slug);
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT quantity from cart where slug = ?", [
+      slug,
+    ]);
+
+    const quantity = rows[0].quantity;
+
+    const newQuantity = quantity - 1;
+
+    await db.query("UPDATE cart set quantity = ? where slug = ?", [
+      newQuantity,
+      slug,
+    ]);
+
+    res.status(200).json({ message: "Quantity  updated", newQuantity });
+  } catch (error) {
+    console.log("Error in updating quantity", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const removeFromCart = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -469,7 +523,6 @@ const removeFromCart = async (req, res) => {
 };
 
 const getCartProducts = async (req, res) => {
-
   try {
     const id = req.user.id;
     // console.log("UserId:", id);
@@ -509,4 +562,6 @@ export {
   addToCart,
   getCartProducts,
   removeFromCart,
+  increaseProductQuantity,
+  decreaseProductQuantity
 };

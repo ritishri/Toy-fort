@@ -3,6 +3,11 @@ import "@fontsource/open-sans";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import visaImg from "../assets/visa.svg";
+import masterCard from "../assets/mastercard.svg";
+import maestro from "../assets/maestro.svg";
+import american from "../assets/amex.svg";
+import discover from "../assets/discover.svg";
 
 const Cart = () => {
   const { user, setUser } = useContext(AppContext);
@@ -106,16 +111,16 @@ const Cart = () => {
   const { totalPrice, discountedPrice, youSaved } = calculateTotal();
 
   return (
-    <div style={{ fontFamily: "Open Sans" }} className="p-8">
+    <div className="p-8">
       <h1 className="font-bold text-xl ml-4">My Cart ({cart.length})</h1>
 
-      <div className="flex flex-col lg:flex-row justify-between mt-6 gap-8">
+      <div className="flex flex-col lg:flex-row justify-between mt-3 gap-8">
         {/* Left: Cart items */}
 
-        <div className="flex-1">
+        <div className="w-[65%]">
           <hr className="my-4" />
           {cart.map((item, index) => (
-            <div key={index} className="flex items-start gap-6  pb-4 mb-4">
+            <div key={index} className="flex items-start gap-6 pb-4 mb-4">
               <img
                 src={item.image}
                 alt={item.title}
@@ -142,7 +147,7 @@ const Cart = () => {
 
                 <button
                   onClick={() => removeFromCart(item.slug)}
-                  className="mt-4 bg-gray-100 px-3 py-1 text-sm border"
+                  className="mt-4 bg-gray-50 px-3 py-1 text-sm border"
                 >
                   × Remove
                 </button>
@@ -177,7 +182,9 @@ const Cart = () => {
           </button>
         </div>
 
-        <div className="bg-gray-50 p-6 rounded shadow-md w-full max-w-sm">
+        {/* Right: Cart items */}
+
+        <div className="bg-gray-50 p-6 rounded shadow-md font-bold w-full max-w-sm">
           <div className="flex justify-between mb-2">
             <span>Total Price</span>
             <span className="line-through text-gray-500">₹{totalPrice}</span>
@@ -218,6 +225,15 @@ const Cart = () => {
           <button className="w-full bg-black text-white py-2 rounded">
             Continue to Checkout
           </button>
+
+          <div className="flex-row flex w-8 mt-4 items-center gap-2">
+            <img src={visaImg} />
+            <img src={masterCard} />
+            <img src={maestro} />
+            <img src={american} />
+            <img src={discover} />
+          </div>
+
         </div>
       </div>
     </div>

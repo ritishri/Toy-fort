@@ -1,31 +1,38 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 
-const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }) => {
-  const { setWishlist ,wishlist, addToWishlist, removeFromWishlist } = useContext(AppContext);
+const Card = ({
+  imageUrl,
+  title,
+  originalPrice,
+  discountedPrice,
+  slug,
+  onClick,
+}) => {
+  const { setWishlist, wishlist, addToWishlist, removeFromWishlist } =
+    useContext(AppContext);
 
   // Check if the item is already in the wishlist
   const [isWishListed, setIsWishListed] = useState(false);
+  const [addCart, setAddCart] = useState(false);
 
   useEffect(() => {
-    if (Array.isArray(wishlist) && wishlist.length > 0) { 
+    if (Array.isArray(wishlist) && wishlist.length > 0) {
       setIsWishListed(wishlist.some((item) => item.title === title));
     }
-  }, [wishlist,title]) 
+  }, [wishlist, title]);
 
   console.log("Wishlist in UI:", wishlist);
   console.log("Checking title:", title);
-  console.log("Result:", wishlist.some((item) => item.title === title));
+  console.log(
+    "Result:",
+    wishlist.some((item) => item.title === title)
+  );
 
-  
   // let isWishListed = wishlist.some((item) => item.slug === slug)
   // console.log("isWishListed",isWishListed);
-  
-
-  
-  
 
   // const handleWishList = async (e) => {
   //   e.stopPropagation()
@@ -40,18 +47,17 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
   //     }
   //   } catch (error) {
   //     console.log("Error updating wishlist",error);
-      
+
   //   }
-    
+
   // };
 
-  const handleIcon = () =>{
-    if(isWishListed){
-      setIsWishListed(false)
+  const handleIcon = () => {
+    if (isWishListed) {
+      setIsWishListed(false);
     }
-    setIsWishListed(true)
-  }
-
+    setIsWishListed(true);
+  };
 
   const handleWishList = async (e) => {
     e.stopPropagation();
@@ -59,55 +65,68 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
       if (isWishListed) {
         await removeFromWishlist(slug);
       } else {
-        await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug });
+        await addToWishlist({
+          imageUrl,
+          title,
+          originalPrice,
+          discountedPrice,
+          slug,
+        });
       }
     } catch (error) {
       console.log("Error updating wishlist", error);
     }
   };
 
-
-
-  const addToCart = async({imageUrl,title,originalPrice,discountedPrice,slug})=>{
-
+  const addToCart = async ({
+    imageUrl,
+    title,
+    originalPrice,
+    discountedPrice,
+    slug,
+  }) => {
     // console.log(imageUrl,title,originalPrice,discountedPrice,slug)
 
     try {
-
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       // console.log("Token",token)
-      
-      
+
       const response = await axios.post(
         "http://localhost:5000/api/addToCart",
-        {imageUrl,title,originalPrice,discountedPrice,slug},
+        { imageUrl, title, originalPrice, discountedPrice, slug },
 
         { headers: { Authorization: `Bearer ${token}` } }
-      )
+      );
       // console.log("Add Cart Response", response)
 
-      if(response.data){
-        console.log("Product Added successfully")
+      if (response.data) {
+        console.log("Product Added successfully");
+        setAddCart(true);
       }
-      
-      
-    } catch (error) {
-      console.error("Error adding to cart:", error)
-    }
 
-    
-  }
-  
-  
+      setTimeout(() => {
+        setAddCart(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
 
   return (
-    <div className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group" onClick={onClick}>
+    <div
+      className="p-3 w-[280px] shadow-lg border border-gray-200 cursor-pointer group"
+      onClick={onClick}
+    >
       <div className="relative">
         <div className="absolute top-2 left-2 w-8 h-8 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
           10%
         </div>
 
-        <img src={imageUrl} alt={title || "Book Image"} className="w-full h-64 object-cover rounded-lg" />
+        <img
+          src={imageUrl}
+          alt={title || "Book Image"}
+          className="w-full h-64 object-cover rounded-lg"
+        />
 
         <div className="flex-col absolute gap-2 bottom-1 right-2 hidden group-hover:flex">
           <button
@@ -131,9 +150,26 @@ const Card = ({ imageUrl, title, originalPrice, discountedPrice, slug, onClick }
             </svg>
           </button>
 
-          <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
+          {/* <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
             <ShoppingCartIcon onClick={(e)=>{e.stopPropagation(); addToCart({imageUrl,title,originalPrice,discountedPrice,slug})}} className="w-7 h-7 text-black" />
+          </button> */}
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({imageUrl,title,originalPrice,discountedPrice,slug});
+            }}
+            className={`p-2 rounded-full shadow-md transition-all duration-300 ${
+              addCart ? 'bg-green-500' : 'bg-white'
+            }`}
+          >
+            {addCart ? (
+              <CheckIcon className="w-7 h-7 text-white" />
+            ) : (
+              <ShoppingCartIcon className="w-7 h-7 text-black" />
+            )}
           </button>
+
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile, updateProfile, addToWishlist, removeFromWishlist, getWishlist, addToCart, getCartProducts, removeFromCart} from "../controllers/userController.js";
+import { getAllSliders , booksImages,blogImages, blogContent,relatedBlog, register, login, changePassword, getProfile, updateProfile, addToWishlist, removeFromWishlist, getWishlist, addToCart, getCartProducts, removeFromCart, increaseProductQuantity, decreaseProductQuantity} from "../controllers/userController.js";
 import { brandProducts, productsDetails } from "../controllers/productController.js"
 import verifyToken from '../middlware/auth.js'
 
@@ -26,7 +26,8 @@ router.get("/user/wishlist",verifyToken,getWishlist)
 router.post("/addToCart",verifyToken,addToCart)
 router.get("/user/getCartProducts",verifyToken,getCartProducts)
 router.delete("/removeProduct/:slug",verifyToken,removeFromCart)
-
+router.post("/increaseProductQuantity/:slug",increaseProductQuantity)
+router.post("/decreaseProductQuantity/:slug",decreaseProductQuantity)
 
 
 
