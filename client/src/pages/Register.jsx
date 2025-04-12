@@ -49,7 +49,7 @@ const Register = () => {
           setProfile(true)
           
           console.log("Registration successful:", response.data.message);
-          localStorage.setItem("user", values.first_name);
+          localStorage.setItem("user", JSON.stringify(response.data.user))
           navigate("/settings/edit-profile");
         }else{
           setMessageState(false)

@@ -454,9 +454,9 @@ const increaseProductQuantity = async (req, res) => {
       slug,
     ]);
 
-    const quantity = rows[0].quantity
+    const quantity = rows[0].quantity;
 
-    const newQuantity = quantity + 1
+    const newQuantity = quantity + 1;
 
     await db.query("UPDATE cart set quantity = ? where slug = ?", [
       newQuantity,
@@ -481,14 +481,16 @@ const decreaseProductQuantity = async (req, res) => {
       slug,
     ]);
 
-    const quantity = rows[0].quantity;
+    let newQuantity = rows[0].quantity;
 
-    const newQuantity = quantity - 1;
+    if (newQuantity >= 1) {
+      newQuantity = newQuantity - 1;
+    }
 
     await db.query("UPDATE cart set quantity = ? where slug = ?", [
       newQuantity,
       slug,
-    ]);
+    ])
 
     res.status(200).json({ message: "Quantity  updated", newQuantity });
   } catch (error) {
@@ -563,5 +565,5 @@ export {
   getCartProducts,
   removeFromCart,
   increaseProductQuantity,
-  decreaseProductQuantity
+  decreaseProductQuantity,
 };

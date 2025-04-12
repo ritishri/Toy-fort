@@ -12,7 +12,8 @@ import discover from "../assets/discover.svg";
 const Cart = () => {
   const { user, setUser } = useContext(AppContext);
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState([])
+  // const [productQuantity,setProductQuantity] = useState(1)
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -37,12 +38,7 @@ const Cart = () => {
 
         // console.log("Cart response:", response.data)
 
-        const updatedCart = response.data.map((item) => ({
-          ...item,
-          quantity: 1,
-        }));
-
-        setCart(updatedCart);
+        setCart(response.data);
       } catch (error) {
         console.log(
           "Error in fetching products:",
@@ -76,22 +72,45 @@ const Cart = () => {
     }
   };
 
-  const addProduct = (index) => {
-    setCart((prevCart) =>
-      prevCart.map((item, i) =>
-        i === index ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+  const increaseProductQuantity = async(slug) => {
+    //  console.log("slug update cart",slug);
+
+     try {
+
+      const response = await axios.post(
+        `http://localhost:5000/api/increaseProductQuantity/${slug}`
+      );
+
+      // console.log("Cart Response",response.data.newQuantity);
+      // setProductQuantity(response.data.newQuantity)
+
+      const newQuantity = response.data.newQuantity
+
+      setCart((prevCart) => prevCart.map((item)=>item.slug === slug ? {...item,quantity: newQuantity} : item))
+    } catch (error) {
+      console.error("Error in updating quantity of product:", error);
+    }
   };
 
-  const removeProduct = (index) => {
-    setCart((prevCart) =>
-      prevCart.map((item, i) =>
-        i === index && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+  const removeProductQuantity = async(slug) => {
+    // console.log("slug update cart",slug);
+
+     try {
+
+      const response = await axios.post(
+        `http://localhost:5000/api/decreaseProductQuantity/${slug}`
+      );
+
+      // console.log("Cart Response",response.data.newQuantity);
+      // setProductQuantity(response.data.newQuantity)
+
+      const newQuantity = response.data.newQuantity
+
+      setCart((prevCart) => prevCart.map((item)=>item.slug === slug ? {...item,quantity: newQuantity} : item))
+
+    } catch (error) {
+      console.error("Error in updating quantity of product:", error);
+    }
   };
 
   const calculateTotal = () => {
@@ -156,7 +175,7 @@ const Cart = () => {
               <div className="flex flex-col items-center gap-2 mt-3">
                 <div className="flex flex-row items-center gap-0 border border-gray-300 rounded overflow-hidden">
                   <button
-                    onClick={() => removeProduct(index)}
+                    onClick={() => removeProductQuantity(item.slug)}
                     className="px-3 py-1 w-full text-lg border-r border-gray-300"
                   >
                     -
@@ -165,7 +184,7 @@ const Cart = () => {
                     {item.quantity}
                   </button>
                   <button
-                    onClick={() => addProduct(index)}
+                    onClick={() => increaseProductQuantity(item.slug)}
                     className="px-3 py-1 w-full text-lg border-l border-gray-300"
                   >
                     +

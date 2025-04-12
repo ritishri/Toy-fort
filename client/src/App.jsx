@@ -30,6 +30,7 @@ import Orders from "./pages/Orders";
 import Refund from "./pages/Refund";
 import WishList from "./pages/WishList";
 import Cart from "./pages/Cart";
+import cartSlider from "./pages/cartSlider";
 
 
 function App() {
@@ -68,6 +69,8 @@ function App() {
         <Route path="/refund-requests" element={<Refund/>}/>
         <Route path="/wishlist/:slug" element={<WishList/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/card-slider" element={<cartSlider/>}/>
+
 
         
 
