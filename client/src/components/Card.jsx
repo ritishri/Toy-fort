@@ -11,8 +11,13 @@ const Card = ({
   slug,
   onClick,
 }) => {
-  const { setWishlist, wishlist, addToWishlist, removeFromWishlist } =
-    useContext(AppContext);
+  const {
+    setWishlist,
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    addToCart,
+  } = useContext(AppContext);
 
   // Check if the item is already in the wishlist
   const [isWishListed, setIsWishListed] = useState(false);
@@ -30,27 +35,6 @@ const Card = ({
     "Result:",
     wishlist.some((item) => item.title === title)
   );
-
-  // let isWishListed = wishlist.some((item) => item.slug === slug)
-  // console.log("isWishListed",isWishListed);
-
-  // const handleWishList = async (e) => {
-  //   e.stopPropagation()
-
-  //   try {
-  //     if (isWishListed) {
-  //       await removeFromWishlist(slug)
-  //       setIsWishListed(false)
-  //     } else {
-  //       await addToWishlist({ imageUrl, title, originalPrice, discountedPrice, slug })
-  //       setIsWishListed(true)
-  //     }
-  //   } catch (error) {
-  //     console.log("Error updating wishlist",error);
-
-  //   }
-
-  // };
 
   const handleIcon = () => {
     if (isWishListed) {
@@ -75,40 +59,6 @@ const Card = ({
       }
     } catch (error) {
       console.log("Error updating wishlist", error);
-    }
-  };
-
-  const addToCart = async ({
-    imageUrl,
-    title,
-    originalPrice,
-    discountedPrice,
-    slug,
-  }) => {
-    // console.log(imageUrl,title,originalPrice,discountedPrice,slug)
-
-    try {
-      const token = localStorage.getItem("token");
-      // console.log("Token",token)
-
-      const response = await axios.post(
-        "http://localhost:5000/api/addToCart",
-        { imageUrl, title, originalPrice, discountedPrice, slug },
-
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      // console.log("Add Cart Response", response)
-
-      if (response.data) {
-        console.log("Product Added successfully");
-        setAddCart(true);
-      }
-
-      setTimeout(() => {
-        setAddCart(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
     }
   };
 
@@ -150,17 +100,23 @@ const Card = ({
             </svg>
           </button>
 
-          {/* <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
-            <ShoppingCartIcon onClick={(e)=>{e.stopPropagation(); addToCart({imageUrl,title,originalPrice,discountedPrice,slug})}} className="w-7 h-7 text-black" />
-          </button> */}
-
           <button
             onClick={(e) => {
               e.stopPropagation();
-              addToCart({imageUrl,title,originalPrice,discountedPrice,slug});
+              addToCart({
+                imageUrl,
+                title,
+                originalPrice,
+                discountedPrice,
+                slug,
+              });
+              setAddCart(true)
+              setTimeout(() => {
+                setAddCart(false)
+              }, 2000);
             }}
             className={`p-2 rounded-full shadow-md transition-all duration-300 ${
-              addCart ? 'bg-green-500' : 'bg-white'
+              addCart ? "bg-green-500" : "bg-white"
             }`}
           >
             {addCart ? (
@@ -169,7 +125,6 @@ const Card = ({
               <ShoppingCartIcon className="w-7 h-7 text-black" />
             )}
           </button>
-
         </div>
       </div>
 
