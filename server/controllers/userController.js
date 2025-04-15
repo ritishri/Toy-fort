@@ -375,11 +375,9 @@ const removeFromWishlist = async (req, res) => {
 };
 
 const getWishlist = async (req, res) => {
-  console.log("Req-user", req.user);
-
   try {
     const id = req.user.id;
-    console.log("UserId:", id);
+    // console.log("UserId:", id);
     // console.log("Request Body:", req.user)
 
     const db = await connectToDatabase();
@@ -388,7 +386,7 @@ const getWishlist = async (req, res) => {
       id,
     ]);
 
-    console.log("Wishlist:", rows);
+    // console.log("Wishlist:", rows);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "Wishlist is empty" });
@@ -490,7 +488,7 @@ const decreaseProductQuantity = async (req, res) => {
     await db.query("UPDATE cart set quantity = ? where slug = ?", [
       newQuantity,
       slug,
-    ])
+    ]);
 
     res.status(200).json({ message: "Quantity  updated", newQuantity });
   } catch (error) {

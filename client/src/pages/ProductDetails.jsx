@@ -61,11 +61,11 @@ const ProductDetails = () => {
     const fetchBrandProducts = async () => {
       try {
         if (!slug) {
-          return "No slug";
+          return "No slug"
         }
         const { data } = await axios.get(`http://localhost:5000/api/${slug}`);
         setProducts(data);
-        console.log("Fetched Data: ", data);
+        console.log("Fetched Data: ", data)
       } catch (error) {
         console.error("Error fetching brand products:", error.message);
       }

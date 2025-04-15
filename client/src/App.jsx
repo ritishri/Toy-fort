@@ -31,6 +31,7 @@ import Refund from "./pages/Refund";
 import WishList from "./pages/WishList";
 import Cart from "./pages/Cart";
 import cartSlider from "./pages/cartSlider";
+import DiscountProductPage from "./pages/DiscountProductPage";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
         <Route path="/wishlist/:slug" element={<WishList/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/card-slider" element={<cartSlider/>}/>
+        <Route path="/products/discount" element={<DiscountProductPage/>}/>
 
 
         

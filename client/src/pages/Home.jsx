@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import Slider from './Slider';
+import Slider from "./Slider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 
 const brandImages = [
   "https://toyfort.s3.ap-south-1.amazonaws.com/smartivity-8.png",
@@ -27,10 +27,7 @@ const brandImages = [
   "https://toyfort.s3.ap-south-1.amazonaws.com/step-2-17.png",
   "https://toyfort.s3.ap-south-1.amazonaws.com/joie-19.png",
   "https://toyfort.s3.ap-south-1.amazonaws.com/graco-20.png",
-]
-
-
-
+];
 
 const categories = [
   {
@@ -73,6 +70,8 @@ function Home() {
 
   const [showFAQs, setShowFAQs] = useState(false);
   const [fqsa, setFaqs] = useState(false);
+
+  const navigate = useNavigate();
 
   const [showAnswers, setShowAnswers] = useState({
     q1: true,
@@ -125,6 +124,10 @@ function Home() {
     }));
   };
 
+  const handleDiscount = async (discount) => {
+    navigate(`/products/discount?discount=${discount}`);
+  };
+
   return (
     <div className="p-4">
       {/* Offer Popup */}
@@ -174,7 +177,7 @@ function Home() {
 
           <div className="flex">
             {sliderImages.map((img, index) => {
-              const brandName = img.split("/").pop().split("-")[0]; 
+              const brandName = img.split("/").pop().split("-")[0];
 
               return (
                 <Link key={index} to={`/products?brand=${brandName}`}>
@@ -185,7 +188,7 @@ function Home() {
                   />
                 </Link>
               );
-             })}
+            })}
           </div>
 
           <button onClick={rightSlide}>
@@ -230,7 +233,7 @@ function Home() {
         />
       </div>
 
-      {/* SPecial Price */}
+      {/* Special Price */}
 
       <div className="w-full">
         <h1 className="flex justify-center items-center font-semibold text-xl font-sans bg-gray-100 m-10 pb-2 pt-2 border-r-4 cursor-pointer rounded-full border-2 border-gray-200 shadow-lg transition-shadow duration-300 ease-in-out transform hover:scale-105 animate-fadeIn ">
@@ -239,7 +242,10 @@ function Home() {
         </h1>
       </div>
 
-      <div className="flex flex-row m-3">
+      <div
+        className="flex flex-row m-3"
+        onClick={() => handleDiscount("20-30")}
+      >
         <div className="relative w-80 h-64 m-5 border-2 transition hover:scale-110 border-gray-200 rounded-lg overflow-hidden group">
           <img
             className="w-full h-full rounded-lg transition duration-200 hover:scale-110 transform "
@@ -250,7 +256,10 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative w-80 h-64 transition hover:scale-110 m-5 border-2 border-gray-200 rounded-lg overflow-hidden group">
+        <div
+          className="relative w-80 h-64 transition hover:scale-110 m-5 border-2 border-gray-200 rounded-lg overflow-hidden group"
+          onClick={() => handleDiscount("30-40")}
+        >
           <img
             className="w-full h-full rounded-lg transition ease-in-out hover:scale-110"
             src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/Metashot_35_off.png"
@@ -260,7 +269,10 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group">
+        <div
+          className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group"
+          onClick={() => handleDiscount("40-50")}
+        >
           <img
             className="w-full h-full rounded-lg transition duration-200 hover:scale-110 transform "
             src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/Headphone_45_off.png"
@@ -270,7 +282,10 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group">
+        <div
+          className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group"
+          onClick={() => handleDiscount("50-100")}
+        >
           <img
             className="w-full h-full rounded-lg transition duration-200 hover:scale-110 transform "
             src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/Bags_55_off.png"

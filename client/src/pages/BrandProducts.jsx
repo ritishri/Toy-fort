@@ -62,6 +62,7 @@ const BrandProducts = () => {
               <Card
                 className="border border-gray-600 cursor-pointer"
                 key={product.id}
+                discount={product.discount_rate}
                 imageUrl={product.image_default}
                 title={product.title}
                 originalPrice={product.price / 100}

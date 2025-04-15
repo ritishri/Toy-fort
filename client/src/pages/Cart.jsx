@@ -10,7 +10,8 @@ import american from "../assets/amex.svg";
 import discover from "../assets/discover.svg";
 
 const Cart = () => {
-  const { user, setUser,cart,setCart, increaseProductQuantity } = useContext(AppContext);
+  const { user, setUser, cart, setCart, increaseProductQuantity } =
+    useContext(AppContext);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -69,31 +70,10 @@ const Cart = () => {
     }
   };
 
-  // const increaseProductQuantity = async(slug) => {
-  //   //  console.log("slug update cart",slug);
-
-  //    try {
-
-  //     const response = await axios.post(
-  //       `http://localhost:5000/api/increaseProductQuantity/${slug}`
-  //     );
-
-  //     // console.log("Cart Response",response.data.newQuantity);
-  //     // setProductQuantity(response.data.newQuantity)
-
-  //     const newQuantity = response.data.newQuantity
-
-  //     setCart((prevCart) => prevCart.map((item)=>item.slug === slug ? {...item,quantity: newQuantity} : item))
-  //   } catch (error) {
-  //     console.error("Error in updating quantity of product:", error);
-  //   }
-  // };
-
-  const removeProductQuantity = async(slug) => {
+  const removeProductQuantity = async (slug) => {
     // console.log("slug update cart",slug);
 
-     try {
-
+    try {
       const response = await axios.post(
         `http://localhost:5000/api/decreaseProductQuantity/${slug}`
       );
@@ -101,10 +81,13 @@ const Cart = () => {
       // console.log("Cart Response",response.data.newQuantity);
       // setProductQuantity(response.data.newQuantity)
 
-      const newQuantity = response.data.newQuantity
+      const newQuantity = response.data.newQuantity;
 
-      setCart((prevCart) => prevCart.map((item)=>item.slug === slug ? {...item,quantity: newQuantity} : item))
-
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.slug === slug ? { ...item, quantity: newQuantity } : item
+        )
+      );
     } catch (error) {
       console.error("Error in updating quantity of product:", error);
     }
@@ -249,7 +232,6 @@ const Cart = () => {
             <img src={american} />
             <img src={discover} />
           </div>
-
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ const Card = ({
   discountedPrice,
   slug,
   onClick,
+  discount
 }) => {
   const {
     setWishlist,
@@ -69,7 +70,7 @@ const Card = ({
     >
       <div className="relative">
         <div className="absolute top-2 left-2 w-8 h-8 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-          10%
+          {discount}%
         </div>
 
         <img
