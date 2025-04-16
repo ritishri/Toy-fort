@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Card from "../components/Card";
+import Sidebar from "../components/Sidebar";
 
 function discountProductPage() {
   const location = useLocation();
@@ -29,7 +30,8 @@ function discountProductPage() {
   }, [discount]);
 
   return (
-    <div>
+    <div className="flex">
+      <Sidebar/>
       <div className="p-4">
         {Array.isArray(product) && product.length > 0 ? (
           <div className="w-full ml-5 mt-5">

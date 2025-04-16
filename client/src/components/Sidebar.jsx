@@ -34,9 +34,9 @@ const Sidebar = () => {
 
   return (
     <div>
-      <p className="text-gray-500 mt-4 pl-6 text-sm">Home / Books</p>
+      <p className="text-gray-500 mt-4 pl-6 text-sm">Home / Products</p>
 
-      <h1 className="text-xl pl-6 font-medium mt-6">Books</h1>
+      <h1 className="text-xl pl-6 font-medium mt-6">Products</h1>
 
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
