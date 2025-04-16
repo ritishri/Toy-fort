@@ -23,6 +23,8 @@ import {
   brandProducts,
   productsDetails,
   productDiscount,
+  filterProductOnAge,
+  
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
 
@@ -49,5 +51,7 @@ router.delete("/removeProduct/:slug", verifyToken, removeFromCart);
 router.post("/increaseProductQuantity/:slug", increaseProductQuantity);
 router.post("/decreaseProductQuantity/:slug", decreaseProductQuantity);
 router.get("/products/discount", productDiscount);
+router.get("/products/age", filterProductOnAge);
+
 
 export default router;

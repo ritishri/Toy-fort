@@ -128,6 +128,10 @@ function Home() {
     navigate(`/products/discount?discount=${discount}`);
   };
 
+  const ageFilter = async (age) => {
+    navigate(`/products/age?age=${age}`);
+  };
+
   return (
     <div className="p-4">
       {/* Offer Popup */}
@@ -207,27 +211,27 @@ function Home() {
       </h1>
 
       <div className="flex flex-row">
-        <img
+        <img onClick={()=>ageFilter("0-18M")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/1.png"
         />
-        <img
+        <img onClick={()=>ageFilter("18-36M")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/2.png"
         />
-        <img
+        <img onClick={()=>ageFilter("3-5Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/3.png"
         />
-        <img
+        <img onClick={()=>ageFilter("5-8Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/4.png"
         />
-        <img
+        <img onClick={()=>ageFilter("8-12Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/5.png"
         />
-        <img
+        <img onClick={()=>ageFilter("12Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/6.png"
         />
