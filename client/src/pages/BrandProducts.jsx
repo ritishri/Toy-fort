@@ -9,17 +9,17 @@ import { useNavigate } from "react-router-dom";
 const BrandProducts = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams] = useSearchParams();
-  const brand = searchParams.get("brand");
+  const [searchParams] = useSearchParams()
+  const brand = searchParams.get("brand")
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const postsPerPage = 24;
+  const postsPerPage = 24
 
-  const totalPages = Math.ceil(products.length / postsPerPage);
+  const totalPages = Math.ceil(products.length / postsPerPage)
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setCurrentPage(page)
   };
 
   const indexOfLastProduct = currentPage * postsPerPage;
@@ -81,7 +81,7 @@ const BrandProducts = () => {
 
       <div className="flex justify-center mt-5 mb-5">
         <Pagination
-          totalPages={totalPages}
+          totalPages={Math.ceil(products.length / postsPerPage)}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />

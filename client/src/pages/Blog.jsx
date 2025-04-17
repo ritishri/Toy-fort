@@ -116,7 +116,7 @@ function Blog() {
       </div>
 
       <Pagination
-        totalPages={totalPages}
+        totalPages={Math.ceil(blogPosts.length / postsPerPage)}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />

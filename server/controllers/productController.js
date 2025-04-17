@@ -20,7 +20,7 @@ const brandProducts = async (req, res) => {
 
 const productsDetails = async (req, res) => {
   try {
-    console.log("Received params:", req.params);
+    // console.log("Received params:", req.params);
 
     const { attribute2_value, slug } = req.params;
 
@@ -63,7 +63,7 @@ const productDiscount = async (req, res) => {
 const filterProductOnAge = async (req, res) => {
   try {
     const { age } = req.query;
-    console.log(age)
+    // console.log(age)
 
     const db = await connectToDatabase()
     const [rows] = await db.query(
