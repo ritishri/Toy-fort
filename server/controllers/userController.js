@@ -418,7 +418,7 @@ const addToCart = async (req, res) => {
       [title, userId]
     );
 
-    // console.log("rows", rows);
+    console.log("rows", rows);
 
     const [result] = await db.query(
       "INSERT INTO cart (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",

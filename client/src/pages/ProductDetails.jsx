@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "@fontsource/open-sans";
 import Carousel from "../components/CarouselImages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { ShoppingCartIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBolt,
@@ -22,7 +22,7 @@ import {
   faWhatsapp,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-
+import { AppContext } from "../context/AppContext";
 
 const ProductDetails = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +30,9 @@ const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("description");
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
+  const [addCart, setAddCart] = useState(false);
+
+  const { addToCart } = useContext(AppContext);
 
   const handleCountryChange = (selectedOption) => {
     setSelectedCountry(selectedOption);
@@ -61,11 +64,21 @@ const ProductDetails = () => {
     const fetchBrandProducts = async () => {
       try {
         if (!slug) {
-          return "No slug"
+          return "No slug";
         }
         const { data } = await axios.get(`http://localhost:5000/api/${slug}`);
-        setProducts(data);
-        console.log("Fetched Data: ", data)
+
+        const product = {
+          ...data[0],
+          originalPrice: data[0].price / 100,
+          discountedPrice: Math.ceil(
+            (data[0].price / 100) * (1 - data[0].discount_rate / 100) - 1
+          ),
+          imageUrl: data[0].image_default,
+        };
+
+        setProducts(product);
+        console.log("Fetched Data: ", product.image_default);
       } catch (error) {
         console.error("Error fetching brand products:", error.message);
       }
@@ -116,16 +129,16 @@ const ProductDetails = () => {
 
         {/*Right section  */}
         <div className="w-[48%]">
-          {products.length > 0 && (
+          {products && (
             <div>
               <h1 className="text-2xl font-semibold tracking-wider ">
-                {products[0].title}
+                {products.title}
               </h1>
               <p className="mt-2">
                 Brand Url:
                 <span className="text-red-600">
                   {" "}
-                  {products[0].attribute2_value}
+                  {products.attribute2_value}
                 </span>
               </p>
               <div className="flex ml-16 text-sm gap-0.5">
@@ -134,13 +147,13 @@ const ProductDetails = () => {
                 <FontAwesomeIcon className="text-gray-400" icon={faStar} />
                 <FontAwesomeIcon className="text-gray-400" icon={faStar} />
                 <FontAwesomeIcon className="text-gray-400" icon={faStar} />
-                <p className="text-gray-400">({products[0].rating})</p>
+                <p className="text-gray-400">({products.rating})</p>
 
                 <div className="flex text-gray-500 ml-96 gap-3">
                   <p>
                     {" "}
                     <FontAwesomeIcon className="mr-1" icon={faEye} />
-                    {products[0].pageviews}
+                    {products.pageviews}
                   </p>
                   <p>
                     {" "}
@@ -155,17 +168,14 @@ const ProductDetails = () => {
 
               <p className="mt-6">
                 <span className="text-[#9a9a9a] line-through text-2xl font-semibold">
-                  ₹{products[0].price / 100}{" "}
+                  ₹{products.originalPrice}{" "}
                 </span>
 
                 <span className="text-2xl font-semibold ml-2">
-                  {Math.ceil(
-                    (products[0].price / 100) *
-                      (1 - products[0].discount_rate / 100)
-                  ) - 1}{" "}
+                  {products.discountedPrice}{" "}
                 </span>
                 <span className="bg-red-500 text-white p-1">
-                  -{products[0].discount_rate}%
+                  -{products.discount_rate}%
                 </span>
 
                 <span className="border border-gray-400 p-2 ml-96 text-xs">
@@ -181,7 +191,7 @@ const ProductDetails = () => {
 
               <div className="flex gap-x-10 mt-4">
                 <p>SKU</p>
-                <p className="text-gray-400">{products[0].sku}</p>
+                <p className="text-gray-400">{products.sku}</p>
               </div>
 
               <div className="mt-5 flex ">
@@ -202,8 +212,21 @@ const ProductDetails = () => {
                 </button>
 
                 <div className="flex">
-                  <button className="bg-red-600  hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center">
-                    <ShoppingCartIcon className="w-5 h-5 mr-2 text-white" />
+                  <button
+                    className="bg-red-600  hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center"
+                    onClick={(e) => {
+                      addToCart(products);
+                      setAddCart(true);
+                      setTimeout(() => {
+                        setAddCart(false);
+                      }, 2000);
+                    }}
+                  >
+                    {addCart ? (
+                      <CheckIcon className="w-7 h-7 font-bold text-white" />
+                    ) : (
+                      <ShoppingCartIcon className="w-7 h-7 text-white" />
+                    )}
                     Add to Cart
                   </button>
                   <button className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center">
@@ -391,12 +414,14 @@ const ProductDetails = () => {
 
           {activeTab === "shipping" && (
             <div className="p-4 w-full bg-white shadow-lg rounded-md">
-            {/* Shipping Cost & Select Location */}
-            <div className="grid grid-cols-2 gap-4 border-b pb-4">
-              <div className="font-semibold text-lg">Shipping Cost</div>
-              <div>
-                <span className="font-semibold text-lg">Select Your Location</span>
-                {/* <div className="flex gap-4 mt-2">
+              {/* Shipping Cost & Select Location */}
+              <div className="grid grid-cols-2 gap-4 border-b pb-4">
+                <div className="font-semibold text-lg">Shipping Cost</div>
+                <div>
+                  <span className="font-semibold text-lg">
+                    Select Your Location
+                  </span>
+                  {/* <div className="flex gap-4 mt-2">
                   <select
                     options={countryOptions}
                     placeholder="Country"
@@ -409,20 +434,20 @@ const ProductDetails = () => {
                     isDisabled={!selectedCountry}
                     className="w-1/2"
                   /> */}
-                {/* </div> */}
+                  {/* </div> */}
+                </div>
+              </div>
+
+              {/* Shop Location */}
+              <div className="mt-4">
+                <h2 className=" w-full font-semibold text-lg">Shop Location</h2>
+                <iframe
+                  className="mt-2 w-full h-72 rounded-lg"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434508616!2d144.96305791531582!3d-37.81410797975154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df82dfc4f%3A0x5045675218ce6e0!2sMelbourne!5e0!3m2!1sen!2sin!4v1645023491203"
+                  loading="lazy"
+                ></iframe>
               </div>
             </div>
-      
-            {/* Shop Location */}
-            <div className="mt-4">
-              <h2 className=" w-full font-semibold text-lg">Shop Location</h2>
-              <iframe
-                className="mt-2 w-full h-72 rounded-lg"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434508616!2d144.96305791531582!3d-37.81410797975154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df82dfc4f%3A0x5045675218ce6e0!2sMelbourne!5e0!3m2!1sen!2sin!4v1645023491203"
-                loading="lazy"
-              ></iframe>
-            </div>
-          </div>
           )}
 
           {activeTab === "reviews" && (

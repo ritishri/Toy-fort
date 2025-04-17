@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../context/AppContext";
-import axios from "axios";
+
 
 const Card = ({
   imageUrl,

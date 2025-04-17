@@ -101,7 +101,7 @@ export const AppContextProvider = (props) => {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
+        )
       }
 
       if (response.data && response.data.result) {
