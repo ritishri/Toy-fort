@@ -40,12 +40,14 @@ const Sidebar = () => {
 
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
-      <p className="text-base pl-10 mt-5">Books</p>
-      <a href="/books/colouring-books"><p className="text-base pl-10 mt-2">Colouring Books</p></a>
-      <p className="text-base pl-10 mt-2">Activity Books</p>
-      <p className="text-base pl-10 mt-2">Sticker Books</p>
-      <p className="text-base pl-10 mt-2">Musical Books</p>
-      <p className="text-base pl-10 mt-2 mb-4">Story Books</p>
+      <p className="text-base pl-10 mt-5">Home</p>
+      <a href="/books/colouring-books"><p className="text-base pl-10 mt-1">Books</p></a>
+      <p className="text-small pl-10 mt-1">Infants</p>
+      <p className="text-base pl-10 mt-1">Toys</p>
+      <p className="text-base pl-10 mt-1">Sports</p>
+      <p className="text-base pl-10 mt-1">School Items</p>
+      <p className="text-base pl-10 mt-1">Electronics</p>
+      <p className="text-base pl-10 mt-1 mb-4">Contact Us</p>
 
       <hr className="w-1/6 ml-6" />
 

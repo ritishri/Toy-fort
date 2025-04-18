@@ -45,7 +45,7 @@ const productDiscount = async (req, res) => {
     const { discount } = req.query;
     // console.log(discount)
 
-    const db = await connectToDatabase()
+    const db = await connectToDatabase();
     const [rows] = await db.query(
       "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.attribute3_value = ? AND images.is_main = 1 ORDER BY images.image_default DESC",
       [discount]
@@ -58,14 +58,12 @@ const productDiscount = async (req, res) => {
   }
 };
 
-
-
 const filterProductOnAge = async (req, res) => {
   try {
     const { age } = req.query;
     // console.log(age)
 
-    const db = await connectToDatabase()
+    const db = await connectToDatabase();
     const [rows] = await db.query(
       "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.attribute1_value = ? AND images.is_main = 1 ORDER BY images.image_default DESC",
       [age]
@@ -78,9 +76,28 @@ const filterProductOnAge = async (req, res) => {
   }
 };
 
-export { 
-  brandProducts, 
-  productsDetails, 
-  productDiscount, 
-  filterProductOnAge
+const sideBarFilter = async (req, res) => {
+  try {
+    const { category } = req.params;
+    console.log(category);
+
+    const db = await connectToDatabase();
+    const [rows] = await db.query(
+      "SELECT categories.* from categories JOIN products on categories.id = products.category_id where categories.slug = ?",
+      [category]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.log("Error in fetching the products:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export {
+  brandProducts,
+  productsDetails,
+  productDiscount,
+  filterProductOnAge,
+  sideBarFilter,
 };

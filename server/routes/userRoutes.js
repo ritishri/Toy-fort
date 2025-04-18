@@ -24,6 +24,7 @@ import {
   productsDetails,
   productDiscount,
   filterProductOnAge,
+  sideBarFilter,
   
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
@@ -52,6 +53,7 @@ router.post("/increaseProductQuantity/:slug", increaseProductQuantity);
 router.post("/decreaseProductQuantity/:slug", decreaseProductQuantity);
 router.get("/products/discount", productDiscount);
 router.get("/products/age", filterProductOnAge);
+router.get("/category/:category", sideBarFilter);
 
 
 export default router;
