@@ -36,7 +36,7 @@ const AgeProductPage = () => {
     if (age) {
       fetchProduct();
     }
-  }, [age]);
+  }, [age])
 
   const handleProduct = (productSlug) => {
     navigate(`/${productSlug}`);

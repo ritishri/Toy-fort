@@ -79,15 +79,43 @@ const filterProductOnAge = async (req, res) => {
 const sideBarFilter = async (req, res) => {
   try {
     const { category } = req.params;
-    console.log(category);
+    console.log("Sidebar cat:",category);
+
+    // const category = req.params.category;
+    // const brand = req.query.brand;
+    // console.log("Sidebar cat1:",category);
+    // console.log("Sidebar brand1:",brand);
+
+    const db = await connectToDatabase();
+
+
+    const [rows] = await db.query(
+      "SELECT  categories.*, products.*, product_details.*, images.*  from categories INNER JOIN products on categories.id = products.category_id INNER JOIN images ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id where categories.slug= ? AND images.is_main = 1 ORDER BY images.image_default DESC;",
+      [category]
+    )
+    
+    res.json(rows)
+  } catch (error) {
+    console.log("Error in fetching the products:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+const sideBarBrandFilter = async (req, res) => {
+  try {
+    const category = req.params.category
+    const brand = req.query.brand
+    console.log("Sidebar cat:",category)
+    console.log("Sidebar brand:",brand)
 
     const db = await connectToDatabase();
     const [rows] = await db.query(
-      "SELECT categories.* from categories JOIN products on categories.id = products.category_id where categories.slug = ?",
-      [category]
-    );
-
-    res.json(rows);
+      "SELECT  categories.*, products.*, product_details.*, images.*  from categories INNER JOIN products on categories.id = products.category_id INNER JOIN images ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE categories.slug = ? AND attribute2_value = ? AND images.is_main = 1 ORDER BY images.image_default DESC;",
+      [category, brand]
+    )
+    
+    res.json(rows)
   } catch (error) {
     console.log("Error in fetching the products:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -100,4 +128,5 @@ export {
   productDiscount,
   filterProductOnAge,
   sideBarFilter,
+  sideBarBrandFilter
 };

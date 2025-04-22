@@ -33,6 +33,7 @@ import Cart from "./pages/Cart";
 import cartSlider from "./pages/cartSlider";
 import DiscountProductPage from "./pages/DiscountProductPage";
 import AgeProductPage from "./pages/AgeProductPage";
+import CategoryProductPage from "./pages/CategoryProductPage";
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
         <Route path="/card-slider" element={<cartSlider/>}/>
         <Route path="/products/discount" element={<DiscountProductPage/>}/>
         <Route path="/products/age" element={<AgeProductPage/>}/>
+        <Route path="/category/:category" element={<CategoryProductPage/>}/>
 
         
 

@@ -1,36 +1,41 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ChevronRight } from "lucide-react";
+import { AppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   // State to control visibility of stock options and hr
   const [showStockOptions, setShowStockOptions] = useState(false);
+  const [showDiscounts, setShowDiscounts] = useState(true); // Manage the visibility of the discounts section
+  const [showGender, setShowGender] = useState(true);
+  const [showAge, setShowAge] = useState(true);
+
+  const navigate = useNavigate();
+
+  const { sidebarFilter } = useContext(AppContext);
 
   // Handle checkbox change
   const handleCheckboxChange = () => {
     setShowStockOptions(!showStockOptions); // Toggle visibility of stock options
   };
 
-  const [showDiscounts, setShowDiscounts] = useState(true); // Manage the visibility of the discounts section
-
   // Function to handle the toggle of the Discounts checkbox
   const handleDiscountToggle = (e) => {
     setShowDiscounts(e.target.checked);
   };
 
-  const [showAge, setShowAge] = useState(true);
-
-  const handleAgeToggle = (e) =>
-  {
+  const handleAgeToggle = (e) => {
     setShowAge(e.target.checked);
-  }
+  };
 
-  const [showGender, setShowGender] = useState(true);
-
-  const handleGenderToggle = (e) =>
-  {
+  const handleGenderToggle = (e) => {
     setShowGender(e.target.checked);
-  }
+  };
 
+  const handleSidebar = (category) => {
+    sidebarFilter(category);
+    navigate(`/category/${category}`);
+  };
 
   return (
     <div>
@@ -40,14 +45,49 @@ const Sidebar = () => {
 
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
-      <p className="text-base pl-10 mt-5">Home</p>
-      <a href="/books/colouring-books"><p className="text-base pl-10 mt-1">Books</p></a>
-      <p className="text-small pl-10 mt-1">Infants</p>
-      <p className="text-base pl-10 mt-1">Toys</p>
-      <p className="text-base pl-10 mt-1">Sports</p>
-      <p className="text-base pl-10 mt-1">School Items</p>
-      <p className="text-base pl-10 mt-1">Electronics</p>
-      <p className="text-base pl-10 mt-1 mb-4">Contact Us</p>
+      <p className="text-base pl-10 mt-5 cursor-pointer">Home</p>
+      <p
+        onClick={() => handleSidebar("books")}
+        className="text-base pl-10 mt-1 cursor-pointer"
+      >
+        Books
+      </p>
+      <p
+        onClick={() => handleSidebar("infants")}
+        className="text-small pl-10 mt-1 cursor-pointer"
+      >
+        Infants
+      </p>
+      <p
+        onClick={() => handleSidebar("toys")}
+        className="text-base pl-10 mt-1 cursor-pointer"
+      >
+        Toys
+      </p>
+      <p
+        onClick={() => handleSidebar("sports")}
+        className="text-base pl-10 mt-1 cursor-pointer"
+      >
+        Sports
+      </p>
+      <p
+        onClick={() => handleSidebar("school-items")}
+        className="text-base pl-10 mt-1 cursor-pointer"
+      >
+        School Items
+      </p>
+      <p
+        onClick={() => handleSidebar("electronics")}
+        className="text-base pl-10 mt-1 cursor-pointer"
+      >
+        Electronics
+      </p>
+      <p
+        onClick={() => handleSidebar("contact us")}
+        className="text-base pl-10 mt-1 mb-4 cursor-pointer"
+      >
+        Contact Us
+      </p>
 
       <hr className="w-1/6 ml-6" />
 
@@ -164,144 +204,159 @@ const Sidebar = () => {
       <hr className="w-1/6 ml-6" />
 
       <div className="mt-5">
-      
-      {/* Discounts checkbox */}
-      <div className="pl-6">
-        <input
-          type="checkbox"
-          id="discounts-checkbox"
-          checked={showDiscounts}
-          onChange={handleDiscountToggle}
-          className="mr-2"
-        />
-        <label htmlFor="discounts-checkbox" className="font-medium">
-          Discounts
-        </label>
+        {/* Discounts checkbox */}
+        <div className="pl-6">
+          <input
+            type="checkbox"
+            id="discounts-checkbox"
+            checked={showDiscounts}
+            onChange={handleDiscountToggle}
+            className="mr-2"
+          />
+          <label htmlFor="discounts-checkbox" className="font-medium">
+            Discounts
+          </label>
+        </div>
+
+        {/* Discount options will appear only if the checkbox is checked */}
+        {showDiscounts && (
+          <div className="pl-10 mt-3">
+            <div>
+              <input type="checkbox" id="discount1" />
+              <label htmlFor="discount1" className="ml-2">
+                50-100%
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="discount2" />
+              <label htmlFor="discount2" className="ml-2">
+                40-50%
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="discount3" />
+              <label htmlFor="discount3" className="ml-2">
+                30-40%
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="discount4" />
+              <label htmlFor="discount4" className="ml-2">
+                20-30%
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="discount5" />
+              <label htmlFor="discount5" className="ml-2">
+                0-20%
+              </label>
+            </div>
+          </div>
+        )}
       </div>
 
+      <hr className="w-1/6 mt-5 ml-6" />
 
-      {/* Discount options will appear only if the checkbox is checked */}
-      {showDiscounts && (
-        <div className="pl-10 mt-3">
-          <div>
-            <input type="checkbox" id="discount1" />
-            <label htmlFor="discount1" className="ml-2">50-100%</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="discount2" />
-            <label htmlFor="discount2" className="ml-2">40-50%</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="discount3" />
-            <label htmlFor="discount3" className="ml-2">30-40%</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="discount4" />
-            <label htmlFor="discount4" className="ml-2">20-30%</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="discount5" />
-            <label htmlFor="discount5" className="ml-2">0-20%</label>
-          </div>
+      <div className="mt-5">
+        {/* Gender checkbox */}
+        <div className="pl-6">
+          <input
+            type="checkbox"
+            id="gender-checkbox"
+            checked={showGender}
+            onChange={handleGenderToggle}
+            className="mr-2"
+          />
+          <label htmlFor="gender-checkbox" className="font-medium">
+            Gender
+          </label>
         </div>
-      )}
-    </div>
 
-     <hr className="w-1/6 mt-5 ml-6"/>
-
-    <div className="mt-5">
-      
-      {/* Gender checkbox */}
-      <div className="pl-6">
-        <input
-          type="checkbox"
-          id="gender-checkbox"
-          checked={showGender}
-          onChange={handleGenderToggle}
-          className="mr-2"
-        />
-        <label htmlFor="gender-checkbox" className="font-medium">
-          Gender
-        </label>
+        {/* Discount options will appear only if the checkbox is checked */}
+        {showGender && (
+          <div className="pl-10 mt-3">
+            <div>
+              <input type="checkbox" id="gender1" />
+              <label htmlFor="gender1" className="ml-2">
+                Boys
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="gender2" />
+              <label htmlFor="gender2" className="ml-2">
+                Girls
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="gender3" />
+              <label htmlFor="gender3" className="ml-2">
+                Unisex
+              </label>
+            </div>
+          </div>
+        )}
       </div>
 
+      <hr className="w-1/6 mt-5 ml-6" />
 
-      {/* Discount options will appear only if the checkbox is checked */}
-      {showGender && (
-        <div className="pl-10 mt-3">
-          <div>
-            <input type="checkbox" id="gender1" />
-            <label htmlFor="gender1" className="ml-2">Boys</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="gender2" />
-            <label htmlFor="gender2" className="ml-2">Girls</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="gender3" />
-            <label htmlFor="gender3" className="ml-2">Unisex</label>
-          </div>
+      <div className="mt-5">
+        {/* Age checkbox */}
+        <div className="pl-6">
+          <input
+            type="checkbox"
+            id="age-checkbox"
+            checked={showAge}
+            onChange={handleAgeToggle}
+            className="mr-2"
+          />
+          <label htmlFor="age-checkbox" className="font-medium">
+            Age
+          </label>
         </div>
-      )}
-    </div>
 
-    <hr className="w-1/6 mt-5 ml-6"/>
-
-    <div className="mt-5">
-      
-      {/* Age checkbox */}
-      <div className="pl-6">
-        <input
-          type="checkbox"
-          id="age-checkbox"
-          checked={showAge}
-          onChange={handleAgeToggle}
-          className="mr-2"
-        />
-        <label htmlFor="age-checkbox" className="font-medium">
-          Age
-        </label>
+        {/* Discount options will appear only if the checkbox is checked */}
+        {showAge && (
+          <div className="pl-10 mt-3">
+            <div>
+              <input type="checkbox" id="age1" />
+              <label htmlFor="age1" className="ml-2">
+                0-18 M
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="age2" />
+              <label htmlFor="age2" className="ml-2">
+                18-36 M
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="age3" />
+              <label htmlFor="age3" className="ml-2">
+                3-5 Y
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="age4" />
+              <label htmlFor="age4" className="ml-2">
+                5-8 Y
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="age5" />
+              <label htmlFor="age5" className="ml-2">
+                -12 Y
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="checkbox" id="age6" />
+              <label htmlFor="age6" className="ml-2">
+                12+ Y
+              </label>
+            </div>
+          </div>
+        )}
       </div>
-
-
-      {/* Discount options will appear only if the checkbox is checked */}
-      {showAge && (
-        <div className="pl-10 mt-3">
-          <div>
-            <input type="checkbox" id="age1" />
-            <label htmlFor="age1" className="ml-2">0-18 M</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="age2" />
-            <label htmlFor="age2" className="ml-2">18-36 M</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="age3" />
-            <label htmlFor="age3" className="ml-2">3-5 Y</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="age4" />
-            <label htmlFor="age4" className="ml-2">5-8 Y</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="age5" />
-            <label htmlFor="age5" className="ml-2">-12 Y</label>
-          </div>
-          <div className="mt-2">
-            <input type="checkbox" id="age6" />
-            <label htmlFor="age6" className="ml-2">12+ Y</label>
-          </div>
-        </div>
-      )}
     </div>
-
-
-
-
-
-
-
-     </div>
   );
 };
 

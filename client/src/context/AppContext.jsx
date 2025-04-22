@@ -11,6 +11,7 @@ export const AppContextProvider = (props) => {
   const [profile, setProfile] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
+  const [sidebarProducts, setSidebarProducts] = useState([]);
 
   const [user, setUser] = useState(() => {
     try {
@@ -101,7 +102,7 @@ export const AppContextProvider = (props) => {
               Authorization: `Bearer ${token}`,
             },
           }
-        )
+        );
       }
 
       if (response.data && response.data.result) {
@@ -134,6 +135,19 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  const sidebarFilter = async (category) => {
+    
+    try {
+      const response  = await axios.get(
+        `http://localhost:5000/api/category/${category}`
+      );
+      // console.log("Response",response)
+      setSidebarProducts(response.data)
+    } catch (error) {
+      console.error("Error in updating quantity of product:", error);
+    }
+  }
+
   const value = {
     user,
     setUser,
@@ -148,6 +162,9 @@ export const AppContextProvider = (props) => {
     cart,
     setCart,
     increaseProductQuantity,
+    sidebarFilter,
+    sidebarProducts,
+    setSidebarProducts
   };
 
   return (
