@@ -25,7 +25,9 @@ import {
   productDiscount,
   filterProductOnAge,
   sideBarFilter,
-  sideBarBrandFilter
+  sideBarBrandFilter,
+  getBrand,
+  getBrandProduct
   
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
@@ -53,9 +55,18 @@ router.delete("/removeProduct/:slug", verifyToken, removeFromCart);
 router.post("/increaseProductQuantity/:slug", increaseProductQuantity);
 router.post("/decreaseProductQuantity/:slug", decreaseProductQuantity);
 router.get("/products/discount", productDiscount);
-router.get("/products/age", filterProductOnAge);
-router.get("/category/:category", sideBarFilter);
-router.get("/brand/:category", sideBarBrandFilter);
+router.get("/products/age", filterProductOnAge)
+
+router.get("/category/:category", (req, res) => {
+  if (req.query.brand) {
+    return sideBarBrandFilter(req, res);
+  } else {
+    return sideBarFilter(req, res);
+  }
+})  
+
+router.get("/getbrand/name", getBrand)
+router.get("/brandProducts/products", getBrandProduct)
 
 
 export default router;

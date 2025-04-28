@@ -122,11 +122,52 @@ const sideBarBrandFilter = async (req, res) => {
   }
 };
 
+
+const getBrand = async(req,res) =>{
+  
+  try {
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT distinct attribute2_value from products order by attribute2_value ASC")
+    console.log(rows)
+
+    res.json(rows)
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
+
+const getBrandProduct = async(req,res)=>{
+
+  try {
+
+    const brand = req.query.brand
+    // console.log(brand);
+    
+    const db = await connectToDatabase()
+
+    const [rows] = await db.query("SELECT  categories.*, products.*, product_details.*, images.*  from categories INNER JOIN products on categories.id = products.category_id INNER JOIN images ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id where  attribute2_value = ? AND images.is_main = 1 ORDER BY images.image_default DESC;",[brand])
+
+    // console.log(rows);
+
+    res.json(rows)
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 export {
   brandProducts,
   productsDetails,
   productDiscount,
   filterProductOnAge,
   sideBarFilter,
-  sideBarBrandFilter
+  sideBarBrandFilter,
+  getBrand,
+  getBrandProduct
 };

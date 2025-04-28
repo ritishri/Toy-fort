@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Sidebar = () => {
   // State to control visibility of stock options and hr
@@ -9,6 +10,7 @@ const Sidebar = () => {
   const [showDiscounts, setShowDiscounts] = useState(true); // Manage the visibility of the discounts section
   const [showGender, setShowGender] = useState(true);
   const [showAge, setShowAge] = useState(true);
+  const [getBrandName, setGetBrandName] = useState([]);
 
   const navigate = useNavigate();
 
@@ -36,6 +38,27 @@ const Sidebar = () => {
     sidebarFilter(category);
     navigate(`/category/${category}`);
   };
+
+  const handleBrand = (item) =>{
+    navigate(`/brandProducts/products?brand=${item}`)
+  }
+
+  useEffect(() => {
+    const getBrandName = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/getbrand/name"
+        );
+
+        const brandName = response.data.map((item) => item.attribute2_value);
+        // console.log("BrandName",brandName)
+        setGetBrandName(brandName);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBrandName();
+  }, []);
 
   return (
     <div>
@@ -173,285 +196,9 @@ const Sidebar = () => {
           className="pl-6 max-h-40 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400"
           style={{ width: "200px" }}
         >
-          <p className="font-medium mb-2">Aayushi</p>
-          <p className="font-medium mb-2">Abracadabra</p>
-          <p className="font-medium mb-2">Adidas</p>
-          <p className="font-medium mb-2">Aditi Toys</p>
-          <p className="font-medium mb-2">Aiko</p>
-          <p className="font-medium mb-2">Alexa</p>
-          <p className="font-medium mb-2">Alter</p>
-          <p className="font-medium mb-2">Anam</p>
-          <p className="font-medium mb-2">Annie</p>
-          <p className="font-medium mb-2">Apsara</p>
-          <p className="font-medium mb-2">Arctic Fox</p>
-          <p className="font-medium mb-2">Avenir</p>
-          <p className="font-medium mb-2">Avent</p>
-          <p className="font-medium mb-2">B.Box</p>
-          <p className="font-medium mb-2">Baby Brezza</p>
-          <p className="font-medium mb-2">Baby Forest</p>
-          <p className="font-medium mb-2">Baby Xpress</p>
-          <p className="font-medium mb-2">Backyard</p>
-          <p className="font-medium mb-2">Balak Creation</p>
-          <p className="font-medium mb-2">Barbie</p>
-          <p className="font-medium mb-2">Baybee</p>
-          <p className="font-medium mb-2">Bbluv</p>
-          <p className="font-medium mb-2">Bburago</p>
-          <p className="font-medium mb-2">Beaba</p>
-          <p className="font-medium mb-2">Bee</p>
-          <p className="font-medium mb-2">Bentley</p>
-          <p className="font-medium mb-2">Bestway</p>
-          <p className="font-medium mb-2">Binca</p>
-          <p className="font-medium mb-2">Blix</p>
-          <p className="font-medium mb-2">Bloomingo</p>
-          <p className="font-medium mb-2">Blue Orange</p>
-          <p className="font-medium mb-2">Boat</p>
-          <p className="font-medium mb-2">Book Cob
-          </p>
-          <p className="font-medium mb-2">Bookoli</p>
-          <p className="font-medium mb-2">BrainSmith</p>
-          <p className="font-medium mb-2">Buzz Bee
-          </p>
-          <p className="font-medium mb-2">CamelBak</p>
-          <p className="font-medium mb-2">Casio</p>
-          <p className="font-medium mb-2">Cetaphil</p>
-          <p className="font-medium mb-2">Chalk & Chuckles
-          </p>
-          <p className="font-medium mb-2">Chanak</p>
-          <p className="font-medium mb-2">Chessbazaar</p>
-          <p className="font-medium mb-2">Chicco</p>
-          <p className="font-medium mb-2">Clever Kids</p>
-          <p className="font-medium mb-2">Color Clash</p>
-          <p className="font-medium mb-2">Cosco</p>
-          <p className="font-medium mb-2">Crayola</p>
-          <p className="font-medium mb-2">Creative's</p>
-          <p className="font-medium mb-2">Cry Babies</p>
-          <p className="font-medium mb-2">Curious Cub</p>
-          <p className="font-medium mb-2">Dash</p>
-          <p className="font-medium mb-2">Disney</p>
-          <p className="font-medium mb-2">Doms</p>
-          <p className="font-medium mb-2">Doodle Hog</p>
-          <p className="font-medium mb-2">Dorling Kindersley</p>
-          <p className="font-medium mb-2">Dr Brown</p>
-          <p className="font-medium mb-2">Dr Brown's</p>
-          <p className="font-medium mb-2">Dr Mady</p>
-          <p className="font-medium mb-2">Dragon-I</p>
-          <p className="font-medium mb-2">Dreamland</p>
-          <p className="font-medium mb-2">Dreamland Publications</p>
-          <p className="font-medium mb-2">Dring</p>
-          <p className="font-medium mb-2">Dubblin</p>
-          <p className="font-medium mb-2">Dunlop</p>
-          <p className="font-medium mb-2">ELC</p>
-          <p className="font-medium mb-2">EZPZ</p>
-          <p className="font-medium mb-2">Educketive</p>
-          <p className="font-medium mb-2">Ekta
-          </p>
-          <p className="font-medium mb-2">Electrobotic
-          </p>
-          <p className="font-medium mb-2">Elmer's
-          </p>
-          <p className="font-medium mb-2">Ergobaby
-          </p>
-          <p className="font-medium mb-2">FT Champs
-          </p>
-          <p className="font-medium mb-2">Faber Castell
-          </p>
-          <p className="font-medium mb-2">Fire Force
-          </p>
-          <p className="font-medium mb-2">Fisher-Price
-
-          </p>
-          <p className="font-medium mb-2">Flair
-          </p>
-          <p className="font-medium mb-2">Flipper
-          </p>
-          <p className="font-medium mb-2">Frank
-          </p>
-          <p className="font-medium mb-2">FujiFilm
-          </p>
-          <p className="font-medium mb-2">Fun Factory
-          </p>
-          <p className="font-medium mb-2">Fundoolabs
-          </p>
-          <p className="font-medium mb-2">Funskool
-          </p>
-          <p className="font-medium mb-2">Funvention
-          </p>
-          <p className="font-medium mb-2">Genie
-          </p>
-          <p className="font-medium mb-2">Genius Box
-          </p>
-          <p className="font-medium mb-2">GoDiscover
-          </p>
-          <p className="font-medium mb-2">Gooyo
-          </p>
-          <p className="font-medium mb-2">Graco
-          </p>
-          <p className="font-medium mb-2">Graphix
-          </p>
-          <p className="font-medium mb-2">Gurliez
-          </p>
-          <p className="font-medium mb-2">HMC Toys
-          </p>
-          <p className="font-medium mb-2">HOOKABA
-          </p>
-          <p className="font-medium mb-2">Haba
-          </p>
-          <p className="font-medium mb-2">Hape
-          </p>
-          <p className="font-medium mb-2">Happy Hop
-          </p>
-          <p className="font-medium mb-2">Happy Kidz
-          </p>
-          <p className="font-medium mb-2">Harry Potter
-          </p>
-          <p className="font-medium mb-2">Hasbro
-          </p>
-          <p className="font-medium mb-2">Hasbro Gaming
-          </p>
-          <p className="font-medium mb-2">Hello Friend
-          </p>
-          <p className="font-medium mb-2">Hilife
-          </p>
-          <p className="font-medium mb-2">Hindal
-          </p>
-          <p className="font-medium mb-2">Hinkler
-          </p>
-          <p className="font-medium mb-2">Hopop
-          </p>
-          <p className="font-medium mb-2">Hot Focus
-          </p>
-          <p className="font-medium mb-2">Hot Wheels
-          </p>
-          <p className="font-medium mb-2">Hoverpro
-          </p>
-          <p className="font-medium mb-2">Hubble
-          </p>
-          <p className="font-medium mb-2">I'm Toy
-          </p>
-          <p className="font-medium mb-2">IMC Toys
-          </p>
-          <p className="font-medium mb-2">IToys
-          </p>
-          <p className="font-medium mb-2">Igloo Books
-          </p>
-          <p className="font-medium mb-2">Imagimake
-          </p>
-          <p className="font-medium mb-2">Innov8
-          </p>
-          <p className="font-medium mb-2">Innovador
-          </p>
-          <p className="font-medium mb-2">Inspiia
-          </p>
-          <p className="font-medium mb-2">Intex
-          </p>
-          <p className="font-medium mb-2">Inspiia
-          </p>
-          <p className="font-medium mb-2">JBL
-          </p>
-          <p className="font-medium mb-2">JCB
-          </p>
-          <p className="font-medium mb-2">Jar Melo
-          </p>
-          <p className="font-medium mb-2">Joie
-          </p>
-          <p className="font-medium mb-2">Joyo
-          </p>
-          <p className="font-medium mb-2">Jumbo
-          </p>
-          <p className="font-medium mb-2">Kaby
-          </p>
-          <p className="font-medium mb-2">Kalakaram
-          </p>
-          <p className="font-medium mb-2">Kats
-          </p>
-          <p className="font-medium mb-2">KidKraft
-          </p>
-          <p className="font-medium mb-2">King Sport
-          </p>
-          <p className="font-medium mb-2">Kipa
-          </p>
-          <p className="font-medium mb-2">Kriddaank
-          </p>
-          <p className="font-medium mb-2">Kristal
-          </p>
-          <p className="font-medium mb-2">Kutuhal
-          </p>
-          <p className="font-medium mb-2">Laurence King
-          </p>
-          <p className="font-medium mb-2">Lego
-          </p>
-          <p className="font-medium mb-2">Little Berry
-          </p>
-          <p className="font-medium mb-2">Little Tikes
-          </p>
-          <p className="font-medium mb-2">LoveDabble
-          </p>
-          <p className="font-medium mb-2">Lumo
-          </p>
-          <p className="font-medium mb-2">Luvlap
-          </p>
-          <p className="font-medium mb-2">Maate
-          </p>
-          <p className="font-medium mb-2">Macmillan
-          </p>
-          <p className="font-medium mb-2">Magna-Tiles
-          </p>
-          <p className="font-medium mb-2">Maharaja
-          </p>
-          <p className="font-medium mb-2">Maisto
-          </p>
-          <p className="font-medium mb-2">Majorette
-          </p>
-          <p className="font-medium mb-2">Make Believe Ideas
-          </p>
-          <p className="font-medium mb-2">Make It Real
-          </p>
-          <p className="font-medium mb-2">Manku
-          </p>
-          <p className="font-medium mb-2">Mastela
-          </p>
-          <p className="font-medium mb-2">Mattel
-          </p>
-          <p className="font-medium mb-2">Mattle
-          </p>
-          <p className="font-medium mb-2">Mee Mee
-          </p>
-          <p className="font-medium mb-2">Mekashi
-          </p>
-          <p className="font-medium mb-2">MeliiMelissa & Doug
-          </p>
-          <p className="font-medium mb-2">Mercedes
-          </p>
-          <p className="font-medium mb-2">MetClap
-          </p>
-          <p className="font-medium mb-2">MetaShot
-          </p>
-          <p className="font-medium mb-2">Miko
-          </p>
-          <p className="font-medium mb-2">Miles Kelly
-          </p>
-          <p className="font-medium mb-2">MindWare
-          </p>
-          <p className="font-medium mb-2">Mindful Me
-          </p>
-          <p className="font-medium mb-2">Mirada
-          </p>
-          <p className="font-medium mb-2">Mirana
-          </p>
-          <p className="font-medium mb-2">Monopoly
-          </p>
-          <p className="font-medium mb-2">Monster High
-          </p>
-          <p className="font-medium mb-2">Mother Sparsh
-          </p>
-          <p className="font-medium mb-2">MotherCare
-          </p>
-          <p className="font-medium mb-2">Motorola
-          </p><p className="font-medium mb-2">Mustela
-          </p>
-
-
-          
+          {getBrandName.map((item, index) => (
+            <p onClick={()=>handleBrand(`${item}`)} className="text-sm text-gray-800 hover:text-red-500 hover:underline  cursor-pointer mb-2">{item}</p>
+          ))}
         </div>
       </div>
 

@@ -34,6 +34,7 @@ import cartSlider from "./pages/cartSlider";
 import DiscountProductPage from "./pages/DiscountProductPage";
 import AgeProductPage from "./pages/AgeProductPage";
 import CategoryProductPage from "./pages/CategoryProductPage";
+import BrandProduct from "./pages/BrandProduct";
 
 
 function App() {
@@ -76,6 +77,7 @@ function App() {
         <Route path="/products/discount" element={<DiscountProductPage/>}/>
         <Route path="/products/age" element={<AgeProductPage/>}/>
         <Route path="/category/:category" element={<CategoryProductPage/>}/>
+        <Route path="/brandProducts/products" element={<BrandProduct/>}/>
 
         
 
