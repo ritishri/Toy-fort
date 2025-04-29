@@ -35,6 +35,7 @@ import DiscountProductPage from "./pages/DiscountProductPage";
 import AgeProductPage from "./pages/AgeProductPage";
 import CategoryProductPage from "./pages/CategoryProductPage";
 import BrandProduct from "./pages/BrandProduct";
+import ProductByGender from "./pages/ProductByGender";
 
 
 function App() {
@@ -78,6 +79,7 @@ function App() {
         <Route path="/products/age" element={<AgeProductPage/>}/>
         <Route path="/category/:category" element={<CategoryProductPage/>}/>
         <Route path="/brandProducts/products" element={<BrandProduct/>}/>
+        <Route path="/products/gender" element={<ProductByGender/>}/>
 
         
 

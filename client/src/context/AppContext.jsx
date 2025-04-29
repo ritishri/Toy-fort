@@ -11,7 +11,10 @@ export const AppContextProvider = (props) => {
   const [profile, setProfile] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
-  const [sidebarProducts, setSidebarProducts] = useState([]);
+  const [sidebarProducts, setSidebarProducts] = useState([])
+  const [product, setProduct] = useState([])
+  const [productByAge,setProductByAge] = useState([])
+  const [productByGender,setProductByGender] = useState([])
 
   const [user, setUser] = useState(() => {
     try {
@@ -148,6 +151,47 @@ export const AppContextProvider = (props) => {
     }
   }
 
+  const fetchDiscountProduct = async (discount) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/discount?discount=${discount}`
+      );
+
+      // console.log(response.data);
+      setProduct(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  }
+
+  const fetchProductByAge = async (age) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/age?age=${age}`
+      );
+
+      // console.log(response.data);
+      setProductByAge(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  };
+
+  const fetchProductByGender = async (gender) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/gender?gender=${gender}`
+      );
+
+      // console.log(response.data);
+      setProductByGender(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  }
+
+
+
   const value = {
     user,
     setUser,
@@ -164,7 +208,13 @@ export const AppContextProvider = (props) => {
     increaseProductQuantity,
     sidebarFilter,
     sidebarProducts,
-    setSidebarProducts
+    setSidebarProducts,
+    fetchDiscountProduct,
+    product,setProduct,
+    fetchProductByAge,
+    productByAge,setProductByAge,
+    fetchProductByGender,
+    productByGender
   };
 
   return (

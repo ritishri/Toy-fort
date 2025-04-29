@@ -161,6 +161,24 @@ const getBrandProduct = async(req,res)=>{
   }
 }
 
+const productByGender = async (req, res) => {
+  try {
+    const { gender } = req.query;
+    // console.log(gender)
+
+    const db = await connectToDatabase();
+    const [rows] = await db.query(
+      "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.attribute4_value = ? AND images.is_main = 1 ORDER BY images.image_default DESC",
+      [gender]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.log("Error in fetching the products:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export {
   brandProducts,
   productsDetails,
@@ -169,5 +187,6 @@ export {
   sideBarFilter,
   sideBarBrandFilter,
   getBrand,
-  getBrandProduct
+  getBrandProduct,
+  productByGender
 };

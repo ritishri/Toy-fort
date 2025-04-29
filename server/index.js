@@ -12,7 +12,7 @@ app.use(cors({
     origin: 'http://localhost:5173',
 }))
 
- app.use("/api", userRoutes);
+ app.use("/api", userRoutes)
 
 const startServer = async () => {
     try {

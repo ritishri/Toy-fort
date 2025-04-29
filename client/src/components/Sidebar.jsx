@@ -14,7 +14,12 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
 
-  const { sidebarFilter } = useContext(AppContext);
+  const {
+    sidebarFilter,
+    fetchDiscountProduct,
+    fetchProductByAge,
+    fetchProductByGender,
+  } = useContext(AppContext);
 
   // Handle checkbox change
   const handleCheckboxChange = () => {
@@ -39,9 +44,24 @@ const Sidebar = () => {
     navigate(`/category/${category}`);
   };
 
-  const handleBrand = (item) =>{
-    navigate(`/brandProducts/products?brand=${item}`)
-  }
+  const handleSiderbarDiscount = (discount) => {
+    fetchDiscountProduct(discount);
+    navigate(`/products/discount?discount=${discount}`);
+  };
+
+  const handleSidebarByAge = (age) => {
+    fetchProductByAge(age);
+    navigate(`/products/age?age=${age}`);
+  };
+
+  const handleSidebarByGender = (gender) => {
+    fetchProductByGender(gender);
+    navigate(`/products/gender?gender=${gender}`);
+  };
+
+  const handleBrand = (item) => {
+    navigate(`/brandProducts/products?brand=${item}`);
+  };
 
   useEffect(() => {
     const getBrandName = async () => {
@@ -197,7 +217,12 @@ const Sidebar = () => {
           style={{ width: "200px" }}
         >
           {getBrandName.map((item, index) => (
-            <p onClick={()=>handleBrand(`${item}`)} className="text-sm text-gray-800 hover:text-red-500 hover:underline  cursor-pointer mb-2">{item}</p>
+            <p
+              onClick={() => handleBrand(`${item}`)}
+              className="text-sm text-gray-800 hover:text-red-500 hover:underline  cursor-pointer mb-2"
+            >
+              {item}
+            </p>
           ))}
         </div>
       </div>
@@ -228,30 +253,49 @@ const Sidebar = () => {
         {showDiscounts && (
           <div className="pl-10 mt-3">
             <div>
-              <input type="checkbox" id="discount1" />
+              <input
+                type="checkbox"
+                id="discount1"
+                onClick={() => handleSiderbarDiscount("50-100")}
+              />
               <label htmlFor="discount1" className="ml-2">
                 50-100%
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="discount2" />
+              <input
+                type="checkbox"
+                id="discount2"
+                onClick={() => handleSiderbarDiscount("40-50")}
+              />
               <label htmlFor="discount2" className="ml-2">
                 40-50%
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="discount3" />
+              <input
+                type="checkbox"
+                id="discount3"
+                onClick={() => handleSiderbarDiscount("30-40")}
+              />
               <label htmlFor="discount3" className="ml-2">
                 30-40%
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="discount4" />
+              <input
+                type="checkbox"
+                id="discount4"
+                onClick={() => handleSiderbarDiscount("20-30")}
+              />
               <label htmlFor="discount4" className="ml-2">
                 20-30%
               </label>
             </div>
-            <div className="mt-2">
+            <div
+              className="mt-2"
+              onClick={() => handleSiderbarDiscount("0-20")}
+            >
               <input type="checkbox" id="discount5" />
               <label htmlFor="discount5" className="ml-2">
                 0-20%
@@ -282,19 +326,31 @@ const Sidebar = () => {
         {showGender && (
           <div className="pl-10 mt-3">
             <div>
-              <input type="checkbox" id="gender1" />
+              <input
+                type="checkbox"
+                id="gender1"
+                onClick={() => handleSidebarByGender("Boys")}
+              />
               <label htmlFor="gender1" className="ml-2">
                 Boys
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="gender2" />
+              <input
+                type="checkbox"
+                id="gender2"
+                onClick={() => handleSidebarByGender("Girls")}
+              />
               <label htmlFor="gender2" className="ml-2">
                 Girls
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="gender3" />
+              <input
+                type="checkbox"
+                id="gender3"
+                onClick={() => handleSidebarByGender("Unisex")}
+              />
               <label htmlFor="gender3" className="ml-2">
                 Unisex
               </label>
@@ -324,13 +380,21 @@ const Sidebar = () => {
         {showAge && (
           <div className="pl-10 mt-3">
             <div>
-              <input type="checkbox" id="age1" />
+              <input
+                type="checkbox"
+                id="age1"
+                onClick={() => handleSidebarByAge("0-18M")}
+              />
               <label htmlFor="age1" className="ml-2">
                 0-18 M
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="age2" />
+              <input
+                type="checkbox"
+                id="age2"
+                onClick={() => handleSidebarByAge("18-36M")}
+              />
               <label htmlFor="age2" className="ml-2">
                 18-36 M
               </label>
@@ -342,19 +406,31 @@ const Sidebar = () => {
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="age4" />
+              <input
+                type="checkbox"
+                id="age4"
+                onClick={() => handleSidebarByAge("5-8Y")}
+              />
               <label htmlFor="age4" className="ml-2">
                 5-8 Y
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="age5" />
+              <input
+                type="checkbox"
+                id="age5"
+                onClick={() => handleSidebarByAge("8-12Y")}
+              />
               <label htmlFor="age5" className="ml-2">
-                -12 Y
+                8-12 Y
               </label>
             </div>
             <div className="mt-2">
-              <input type="checkbox" id="age6" />
+              <input
+                type="checkbox"
+                id="age6"
+                onClick={() => handleSidebarByAge("12Y")}
+              />
               <label htmlFor="age6" className="ml-2">
                 12+ Y
               </label>
