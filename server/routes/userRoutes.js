@@ -31,7 +31,9 @@ import {
   productByGender,
   filterProductByPrice,
   getCharacter,
-  getCharacterProduct
+  getCharacterProduct,
+  productOutOfStock,
+  productInStock
   
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
@@ -75,6 +77,9 @@ router.get("/products/gender", productByGender);
 router.get('/products/filter-by-price', filterProductByPrice);
 router.get('/products/characters', getCharacter);
 router.get('/characterProducts/products', getCharacterProduct);
+router.get('/stock-products/out-stock', productOutOfStock);
+router.get('/stock-products/in-stock', productInStock);
+
 
 
 export default router;

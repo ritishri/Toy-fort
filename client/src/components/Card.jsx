@@ -30,12 +30,12 @@ const Card = ({
     }
   }, [wishlist, title]);
 
-  console.log("Wishlist in UI:", wishlist);
-  console.log("Checking title:", title);
-  console.log(
-    "Result:",
-    wishlist.some((item) => item.title === title)
-  );
+  // console.log("Wishlist in UI:", wishlist);
+  // // console.log("Checking title:", title);
+  // console.log(
+  //   "Result:",
+  //   wishlist.some((item) => item.title === title)
+  // );
 
   const handleIcon = () => {
     if (isWishListed) {

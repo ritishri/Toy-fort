@@ -215,9 +215,39 @@ const filterProductByPrice = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const [rows] = await db.query(
-      "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.price between  ? AND ?  ORDER BY images.image_default DESC",
+      "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.price between  ? AND ? AND images.is_main = 1  ORDER BY images.image_default DESC",
       [p_min * 100, p_max * 100]
     );
+
+    res.json(rows);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const productOutOfStock = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const [rows] = await db.query(
+      "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.stock = 0 AND images.is_main = 1 ORDER BY images.image_default DESC"
+    );
+
+    // console.log(rows);
+
+    res.json(rows);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const productInStock = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const [rows] = await db.query(
+      "SELECT images.*, products.*, product_details.* FROM images INNER JOIN products ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id WHERE products.stock > 0 AND images.is_main = 1 ORDER BY images.image_default DESC"
+    );
+
+    // console.log(rows);
 
     res.json(rows);
   } catch (error) {
@@ -238,4 +268,6 @@ export {
   filterProductByPrice,
   getCharacter,
   getCharacterProduct,
+  productOutOfStock,
+  productInStock,
 };

@@ -11,11 +11,13 @@ export const AppContextProvider = (props) => {
   const [profile, setProfile] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
-  const [sidebarProducts, setSidebarProducts] = useState([])
-  const [product, setProduct] = useState([])
-  const [productByAge,setProductByAge] = useState([])
-  const [productByGender,setProductByGender] = useState([])
-  const [productByPrice, setProductByPrice] = useState([])
+  const [sidebarProducts, setSidebarProducts] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [productByAge, setProductByAge] = useState([]);
+  const [productByGender, setProductByGender] = useState([]);
+  const [productByPrice, setProductByPrice] = useState([]);
+  const [productOutOfStock, setProductOutOfStock] = useState([]);
+  const [productInStock, setProductInStock] = useState([]);
 
   const [user, setUser] = useState(() => {
     try {
@@ -140,17 +142,16 @@ export const AppContextProvider = (props) => {
   };
 
   const sidebarFilter = async (category) => {
-    
     try {
-      const response  = await axios.get(
+      const response = await axios.get(
         `http://localhost:5000/api/category/${category}`
       );
       // console.log("Response",response)
-      setSidebarProducts(response.data)
+      setSidebarProducts(response.data);
     } catch (error) {
       console.error("Error in updating quantity of product:", error);
     }
-  }
+  };
 
   const fetchDiscountProduct = async (discount) => {
     try {
@@ -163,7 +164,7 @@ export const AppContextProvider = (props) => {
     } catch (error) {
       console.log("Error in fetching the products", error);
     }
-  }
+  };
 
   const fetchProductByAge = async (age) => {
     try {
@@ -189,22 +190,46 @@ export const AppContextProvider = (props) => {
     } catch (error) {
       console.log("Error in fetching the products", error);
     }
-  }
+  };
 
-  const fetchProductByPrice = async (min,max) => {
+  const fetchProductByPrice = async (min, max) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/products/filter-by-price?p_min=${min}&p_max=${max}`
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       setProductByPrice(response.data);
     } catch (error) {
       console.log("Error in fetching the products", error);
     }
-  }
+  };
 
+  const fetchProductOutStock = async (out) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/stock-products/out-stock?stock=${out}`
+      );
 
+      // console.log("Out of stock", response.data);
+      setProductOutOfStock(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  };
+
+  const fetchProductInStock = async (out) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/stock-products/in-stock?stock=${out}`
+      );
+
+      // console.log("In stock", response.data);
+      setProductInStock(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  };
 
   const value = {
     user,
@@ -224,14 +249,20 @@ export const AppContextProvider = (props) => {
     sidebarProducts,
     setSidebarProducts,
     fetchDiscountProduct,
-    product,setProduct,
+    product,
+    setProduct,
     fetchProductByAge,
-    productByAge,setProductByAge,
+    productByAge,
+    setProductByAge,
     fetchProductByGender,
     productByGender,
     fetchProductByPrice,
     setProductByPrice,
-    productByPrice
+    productByPrice,
+    fetchProductOutStock,
+    productOutOfStock,
+    fetchProductInStock,
+    productInStock,
   };
 
   return (

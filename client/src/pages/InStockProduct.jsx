@@ -1,39 +1,27 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Sidebar from "../components/Sidebar";
-import Pagination from "../components/Pagination";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Card from "../components/Card";
+import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
-const CharacterProducts = () => {
-  const character = new URLSearchParams(location.search).get("character");
-  console.log("character", character);
-
-  const [product, setProduct] = useState([]);
+import Pagination from "../components/Pagination";
+import { AppContext } from "../context/AppContext";
+const InStockProduct = () => {
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const imgUrl = import.meta.env.VITE_IMAGE_URL;
+  const { fetchProductInStock, productInStock } = useContext(AppContext);
 
   const navigate = useNavigate();
 
   const postsPerPage = 24;
 
+  const inStock = new URLSearchParams(location.search).get("stock");
+
   useEffect(() => {
-    const fetchProductsByCharacters = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/characterProducts/products?character=${character}`
-        );
-
-        setProduct(response.data);
-
-        // console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProductsByCharacters();
-  }, [character]);
+    if (inStock) {
+      fetchProductInStock(inStock);
+    }
+  }, [inStock, fetchProductInStock]);
 
   const handleProduct = (productSlug) => {
     navigate(`/${productSlug}`);
@@ -45,23 +33,24 @@ const CharacterProducts = () => {
 
   const indexOfLastProduct = currentPage * postsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
-  const currentProduct = product.slice(indexOfFirstProduct, indexOfLastProduct);
-
+  const currentProduct = productInStock.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-1">
         <Sidebar />
         <div className="p-4">
-          {Array.isArray(product) && product.length > 0 ? (
+          {Array.isArray(productInStock) && productInStock.length > 0 ? (
             <div className="w-full ml-5 mt-5">
               <div className="w-full grid grid-cols-4 gap-4">
-                {currentProduct.map((item, index) => (
+                {productInStock.map((item, index) => (
                   <Card
                     className="border border-black cursor-pointer"
                     key={index}
                     discount={item.discount_rate}
                     imageUrl={item.image_default}
-                    //   imageUrl={`${imgUrl}${item.image_default}`}
                     title={item.title}
                     originalPrice={item.price / 100}
                     discountedPrice={
@@ -82,7 +71,7 @@ const CharacterProducts = () => {
       </div>
       <div className="flex justify-center mt-5 mb-5">
         <Pagination
-          totalPages={Math.ceil(product.length / postsPerPage)}
+          totalPages={Math.ceil(productInStock.length / postsPerPage)}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
@@ -91,4 +80,4 @@ const CharacterProducts = () => {
   );
 };
 
-export default CharacterProducts;
+export default InStockProduct;

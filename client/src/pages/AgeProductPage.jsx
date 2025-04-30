@@ -16,8 +16,6 @@ const AgeProductPage = () => {
 
   const postsPerPage = 24;
 
-  const totalPages = Math.ceil(productByAge.length / postsPerPage);
-
   const age = new URLSearchParams(location.search).get("age");
 
   useEffect(() => {

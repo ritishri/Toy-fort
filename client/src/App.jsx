@@ -38,6 +38,8 @@ import BrandProduct from "./pages/BrandProduct";
 import ProductByGender from "./pages/ProductByGender";
 import ProductOnPrice from "./pages/ProductOnPrice";
 import CharacterProducts from "./pages/CharacterProducts";
+import InStockProduct from "./pages/InStockProduct";
+import OutOfStockProduct from "./pages/OutOfStockProduct";
 
 
 function App() {
@@ -84,6 +86,9 @@ function App() {
         <Route path="/products/gender" element={<ProductByGender/>}/>
         <Route path="/products/filter-by-price" element={<ProductOnPrice/>}/>
         <Route path="/characterProducts/products" element={<CharacterProducts/>}/>
+        <Route path="/stock-product/in-stock" element={<InStockProduct/>}/>
+        <Route path="/stock-product/out-stock" element={<OutOfStockProduct/>}/>
+        
 
         
 

@@ -81,6 +81,14 @@ const Sidebar = () => {
     navigate(`/characterProducts/products?character=${item}`);
   };
 
+  const handleOutOfStockProduct = (item) => {
+    navigate(`/stock-product/out-stock?stock=${item}`);
+  }
+
+  const handleInStockProduct = (item) => {
+    navigate(`/stock-product/in-stock?stock=${item}`);
+  }
+
   useEffect(() => {
     const getBrandName = async () => {
       try {
@@ -186,21 +194,15 @@ const Sidebar = () => {
         {showStockOptions && (
           <div className="mt-2">
             <div>
-              <input type="checkbox" id="outOfStock" />
+              <input type="checkbox" id="outOfStock"  onClick={() => handleOutOfStockProduct("out")} />
               <label htmlFor="outOfStock" className="ml-2">
                 Out of Stock
               </label>
             </div>
             <div className="mt-1">
-              <input type="checkbox" id="inStock" />
+              <input type="checkbox" id="inStock" onClick={() => handleInStockProduct("in")}/>
               <label htmlFor="inStock" className="ml-2">
                 In Stock
-              </label>
-            </div>
-            <div className="mt-1">
-              <input type="checkbox" id="allItems" />
-              <label htmlFor="allItems" className="ml-2">
-                All Items
               </label>
             </div>
           </div>
