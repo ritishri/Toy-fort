@@ -11,6 +11,9 @@ const Sidebar = () => {
   const [showGender, setShowGender] = useState(true);
   const [showAge, setShowAge] = useState(true);
   const [getBrandName, setGetBrandName] = useState([]);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+  const [getCharacters, setGetCharacters] = useState([]);
 
   const navigate = useNavigate();
 
@@ -19,6 +22,9 @@ const Sidebar = () => {
     fetchDiscountProduct,
     fetchProductByAge,
     fetchProductByGender,
+    fetchProductByPrice,
+    setProductByPrice,
+    productByPrice,
   } = useContext(AppContext);
 
   // Handle checkbox change
@@ -59,8 +65,20 @@ const Sidebar = () => {
     navigate(`/products/gender?gender=${gender}`);
   };
 
+  const handleSidebarByPrice = (min, max) => {
+    console.log("min", min);
+    console.log("max", max);
+
+    fetchProductByPrice(min, max);
+    navigate(`/products/filter-by-price?p_min=${min}&p_max=${max}`);
+  };
+
   const handleBrand = (item) => {
     navigate(`/brandProducts/products?brand=${item}`);
+  };
+
+  const handleCharacters = (item) => {
+    navigate(`/characterProducts/products?character=${item}`);
   };
 
   useEffect(() => {
@@ -78,6 +96,23 @@ const Sidebar = () => {
       }
     };
     getBrandName();
+  }, []);
+
+  useEffect(() => {
+    const getCharactersName = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/products/characters"
+        );
+
+        const characters = response.data.map((item) => item.attribute5_value);
+        console.log("characters", characters);
+        setGetCharacters(characters);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCharactersName();
   }, []);
 
   return (
@@ -186,6 +221,8 @@ const Sidebar = () => {
               id="min"
               placeholder="Min"
               className="w-full border border-gray-300 p-1 rounded mt-1 text-s"
+              value={min}
+              onChange={(e) => setMin(e.target.value)}
             />
           </div>
           <div className="w-20">
@@ -197,10 +234,14 @@ const Sidebar = () => {
               id="max"
               placeholder="Max"
               className="w-full border border-gray-300 p-1 rounded mt-1 text-s"
+              value={max}
+              onChange={(e) => setMax(e.target.value)}
             />
           </div>
-          {/* Arrow icon beside max input */}
-          <button className="p-2 border bg-gray-100">
+          <button
+            className="p-2 border bg-gray-100"
+            onClick={() => handleSidebarByPrice(min, max)}
+          >
             <ChevronRight size={14} />
           </button>
         </div>
@@ -229,8 +270,27 @@ const Sidebar = () => {
 
       <hr className="w-1/6 ml-6" />
 
-      <p className="pl-6 font-medium mt-5">Characters</p>
-      <p className="pl-10 font-medium mt-5 mb-7">Princess</p>
+      {/* <p className="pl-6 font-medium mt-5">Characters</p>
+      <p className="pl-10 font-medium mt-5 mb-7">Princess</p> */}
+
+      <div className="pl-6 mt-5 font-medium mb-4">
+        <h1 className="font-medium mb-4">Characters</h1>
+
+        {/* Scrollable Brands Section */}
+        <div
+          className="pl-6 max-h-40 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400"
+          style={{ width: "200px" }}
+        >
+          {getCharacters.map((item, index) => (
+            <p
+              onClick={() => handleCharacters(`${item}`)}
+              className="text-sm text-gray-800 hover:text-red-500 hover:underline  cursor-pointer mb-2"
+            >
+              {item}
+            </p>
+          ))}
+        </div>
+      </div>
 
       <hr className="w-1/6 ml-6" />
 

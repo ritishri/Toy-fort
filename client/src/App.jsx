@@ -36,6 +36,8 @@ import AgeProductPage from "./pages/AgeProductPage";
 import CategoryProductPage from "./pages/CategoryProductPage";
 import BrandProduct from "./pages/BrandProduct";
 import ProductByGender from "./pages/ProductByGender";
+import ProductOnPrice from "./pages/ProductOnPrice";
+import CharacterProducts from "./pages/CharacterProducts";
 
 
 function App() {
@@ -80,6 +82,8 @@ function App() {
         <Route path="/category/:category" element={<CategoryProductPage/>}/>
         <Route path="/brandProducts/products" element={<BrandProduct/>}/>
         <Route path="/products/gender" element={<ProductByGender/>}/>
+        <Route path="/products/filter-by-price" element={<ProductOnPrice/>}/>
+        <Route path="/characterProducts/products" element={<CharacterProducts/>}/>
 
         
 

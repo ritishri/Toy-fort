@@ -1,32 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Card from "../components/Card";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Sidebar from "../components/Sidebar";
-import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
-import { AppContext } from "../context/AppContext";
+import Card from "../components/Card";
+import { useNavigate } from "react-router-dom";
+const CharacterProducts = () => {
+  const character = new URLSearchParams(location.search).get("character");
+  console.log("character", character);
 
-function discountProductPage() {
-  const location = useLocation();
+  const [product, setProduct] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { product , fetchDiscountProduct } = useContext(AppContext);
+
+  const imgUrl = import.meta.env.VITE_IMAGE_URL;
 
   const navigate = useNavigate();
 
   const postsPerPage = 24;
 
-  const totalPages = Math.ceil(product.length / postsPerPage);
-
-  const discount = new URLSearchParams(location.search).get("discount");
-
   useEffect(() => {
-    if (discount) {
-      fetchDiscountProduct(discount);
-    }
-  }, [discount, fetchDiscountProduct]);
+    const fetchProductsByCharacters = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/characterProducts/products?character=${character}`
+        );
 
-  const handleProducts = (productSlug) => {
-    navigate(`/${productSlug}`)
+        setProduct(response.data);
+
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProductsByCharacters();
+  }, [character]);
+
+  const handleProduct = (productSlug) => {
+    navigate(`/${productSlug}`);
   };
 
   const handlePageChange = (page) => {
@@ -51,6 +61,7 @@ function discountProductPage() {
                     key={index}
                     discount={item.discount_rate}
                     imageUrl={item.image_default}
+                    //   imageUrl={`${imgUrl}${item.image_default}`}
                     title={item.title}
                     originalPrice={item.price / 100}
                     discountedPrice={
@@ -58,7 +69,7 @@ function discountProductPage() {
                         (item.price / 100) * (1 - item.discount_rate / 100)
                       ) - 1
                     }
-                    onClick={() => handleProducts(item.slug)}
+                    onClick={() => handleProduct(item.slug)}
                     slug={item.slug}
                   />
                 ))}
@@ -78,6 +89,6 @@ function discountProductPage() {
       </div>
     </div>
   );
-}
+};
 
-export default discountProductPage;
+export default CharacterProducts;

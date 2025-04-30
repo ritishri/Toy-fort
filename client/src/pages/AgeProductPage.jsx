@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Card from "../components/Card";
-import Sidebar from "../components/Sidebar";
-import { useNavigate } from "react-router-dom";
-import Pagination from "../components/Pagination";
-import { AppContext } from "../context/AppContext";
+import React, { useContext, useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
+import Card from "../components/Card"
+import Sidebar from "../components/Sidebar"
+import { useNavigate } from "react-router-dom"
+import Pagination from "../components/Pagination"
+import { AppContext } from "../context/AppContext"
 
 const AgeProductPage = () => {
   const location = useLocation();

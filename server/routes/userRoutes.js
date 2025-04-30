@@ -28,7 +28,10 @@ import {
   sideBarBrandFilter,
   getBrand,
   getBrandProduct,
-  productByGender
+  productByGender,
+  filterProductByPrice,
+  getCharacter,
+  getCharacterProduct
   
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
@@ -69,6 +72,9 @@ router.get("/category/:category", (req, res) => {
 router.get("/getbrand/name", getBrand)
 router.get("/brandProducts/products", getBrandProduct)
 router.get("/products/gender", productByGender);
+router.get('/products/filter-by-price', filterProductByPrice);
+router.get('/products/characters', getCharacter);
+router.get('/characterProducts/products', getCharacterProduct);
 
 
 export default router;

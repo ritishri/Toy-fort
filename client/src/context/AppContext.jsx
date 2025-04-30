@@ -15,6 +15,7 @@ export const AppContextProvider = (props) => {
   const [product, setProduct] = useState([])
   const [productByAge,setProductByAge] = useState([])
   const [productByGender,setProductByGender] = useState([])
+  const [productByPrice, setProductByPrice] = useState([])
 
   const [user, setUser] = useState(() => {
     try {
@@ -190,6 +191,19 @@ export const AppContextProvider = (props) => {
     }
   }
 
+  const fetchProductByPrice = async (min,max) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/filter-by-price?p_min=${min}&p_max=${max}`
+      );
+
+      console.log(response.data);
+      setProductByPrice(response.data);
+    } catch (error) {
+      console.log("Error in fetching the products", error);
+    }
+  }
+
 
 
   const value = {
@@ -214,7 +228,10 @@ export const AppContextProvider = (props) => {
     fetchProductByAge,
     productByAge,setProductByAge,
     fetchProductByGender,
-    productByGender
+    productByGender,
+    fetchProductByPrice,
+    setProductByPrice,
+    productByPrice
   };
 
   return (

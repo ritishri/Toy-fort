@@ -1,32 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import Sidebar from "../components/Sidebar";
-import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
-import { AppContext } from "../context/AppContext";
 
-function discountProductPage() {
+const ProductOnPrice = () => {
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
-  const { product , fetchDiscountProduct } = useContext(AppContext);
+
+  const {
+    fetchProductByPrice,
+    productByPrice,
+  } = useContext(AppContext);
 
   const navigate = useNavigate();
 
   const postsPerPage = 24;
 
-  const totalPages = Math.ceil(product.length / postsPerPage);
-
-  const discount = new URLSearchParams(location.search).get("discount");
+  const min = new URLSearchParams(location.search).get("min");
+  const max = new URLSearchParams(location.search).get("max");
 
   useEffect(() => {
-    if (discount) {
-      fetchDiscountProduct(discount);
+    if (min && max) {
+        fetchProductByPrice(min,max);
     }
-  }, [discount, fetchDiscountProduct]);
+  }, [min,max, fetchProductByPrice]);
 
   const handleProducts = (productSlug) => {
-    navigate(`/${productSlug}`)
+    navigate(`/${productSlug}`);
   };
 
   const handlePageChange = (page) => {
@@ -35,14 +37,17 @@ function discountProductPage() {
 
   const indexOfLastProduct = currentPage * postsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
-  const currentProduct = product.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProduct = productByPrice.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-1">
-        <Sidebar />
+        <Sidebar/>
         <div className="p-4">
-          {Array.isArray(product) && product.length > 0 ? (
+          {Array.isArray(productByPrice) && productByPrice.length > 0 ? (
             <div className="w-full ml-5 mt-5">
               <div className="w-full grid grid-cols-4 gap-4">
                 {currentProduct.map((item, index) => (
@@ -71,13 +76,13 @@ function discountProductPage() {
       </div>
       <div className="flex justify-center mt-5 mb-5">
         <Pagination
-          totalPages={Math.ceil(product.length / postsPerPage)}
+          totalPages={Math.ceil(productByPrice.length / postsPerPage)}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
       </div>
     </div>
-  );
-}
+  )
+};
 
-export default discountProductPage;
+export default ProductOnPrice;

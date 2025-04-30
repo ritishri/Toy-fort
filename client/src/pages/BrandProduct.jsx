@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const BrandProduct = () => {
   const brand = new URLSearchParams(location.search).get("brand");
-  console.log("Brand", brand);
+  // console.log("Brand", brand);
 
   const [product,setProduct] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
