@@ -40,6 +40,7 @@ import ProductOnPrice from "./pages/ProductOnPrice";
 import CharacterProducts from "./pages/CharacterProducts";
 import InStockProduct from "./pages/InStockProduct";
 import OutOfStockProduct from "./pages/OutOfStockProduct";
+import SubCategory from "./pages/SubCategory";
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
         <Route path="/characterProducts/products" element={<CharacterProducts/>}/>
         <Route path="/stock-product/in-stock" element={<InStockProduct/>}/>
         <Route path="/stock-product/out-stock" element={<OutOfStockProduct/>}/>
+        <Route path="/category/:category/:subcategory" element={<SubCategory/>}/>
         
 
         

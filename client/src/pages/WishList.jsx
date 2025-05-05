@@ -23,7 +23,7 @@ const WishList = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
   
-          // console.log("Fetched response", response.data);
+          console.log("Fetched response", response.data);
           setWishlist(response.data)
         }
       } catch (error) {
@@ -59,6 +59,7 @@ const WishList = () => {
                 <Card
                   className="border border-black cursor-pointer"
                   key={index}
+                  discount={item.discount_rate}
                   imageUrl={item.image}
                   title={item.title}
                   originalPrice={item.original_price}

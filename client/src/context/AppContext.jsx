@@ -18,6 +18,7 @@ export const AppContextProvider = (props) => {
   const [productByPrice, setProductByPrice] = useState([]);
   const [productOutOfStock, setProductOutOfStock] = useState([]);
   const [productInStock, setProductInStock] = useState([]);
+  const [subcategoryProduct, setSubcategoryProduct] = useState([])
 
   const [user, setUser] = useState(() => {
     try {
@@ -33,9 +34,7 @@ export const AppContextProvider = (props) => {
     } else {
       localStorage.removeItem("user");
     }
-  }, [user]);
-
-  // Add item to wishlist
+  }, [user])
 
   const addToWishlist = async (item) => {
     try {
@@ -89,6 +88,8 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  // Add to cart 
+
   const addToCart = async (item) => {
     try {
       const token = localStorage.getItem("token");
@@ -121,6 +122,8 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  // Manage product quantity
+
   const increaseProductQuantity = async (slug) => {
     //  console.log("slug update cart",slug);
 
@@ -141,6 +144,8 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  // SideBar filters
+
   const sidebarFilter = async (category) => {
     try {
       const response = await axios.get(
@@ -152,6 +157,9 @@ export const AppContextProvider = (props) => {
       console.error("Error in updating quantity of product:", error);
     }
   };
+
+
+  // Filter to fetch discounted products
 
   const fetchDiscountProduct = async (discount) => {
     try {
@@ -231,6 +239,22 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  const fetchSubCategoryProduct = async (cat,subCat) =>{
+
+    try {
+      const response = await axios.get(`http://localhost:5000/api/category/${cat}/${subCat}`)
+
+      // console.log("sub-cat",response.data);
+      
+      setSubcategoryProduct(response.data)
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
   const value = {
     user,
     setUser,
@@ -263,6 +287,8 @@ export const AppContextProvider = (props) => {
     productOutOfStock,
     fetchProductInStock,
     productInStock,
+    fetchSubCategoryProduct,
+    subcategoryProduct
   };
 
   return (

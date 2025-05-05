@@ -64,6 +64,9 @@ const Cart = () => {
         }
       );
 
+      setCart((prevCart) => prevCart.filter((item) => item.slug !== slug))
+      // To update the card page dynamically
+
       // console.log("Cart Response",response);
     } catch (error) {
       console.error("Error removing from cart:", error);
@@ -175,10 +178,11 @@ const Cart = () => {
           ))}
 
           <hr className="my-4" />
-          <button className="bg-black text-white px-4 py-2 mt-4 rounded">
+          <a href="/"><button className="bg-black text-white px-4 py-2 mt-4 rounded">
             <KeyboardArrowLeftIcon />
             Keep Shopping
-          </button>
+          </button></a>
+          
         </div>
 
         {/* Right: Cart items */}

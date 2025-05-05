@@ -307,9 +307,9 @@ const updateProfile = async (req, res) => {
 
 const addToWishlist = async (req, res) => {
   try {
-    const { imageUrl, title, originalPrice, discountedPrice, slug } = req.body;
+    const { imageUrl, title, originalPrice, discountedPrice, slug, discount } = req.body;
     const userId = req.user?.id;
-    console.log(userId);
+    console.log("discount",discount);
 
     if (!userId) {
       return res
@@ -324,11 +324,11 @@ const addToWishlist = async (req, res) => {
     // }
 
     const [result] = await db.query(
-      "INSERT INTO wishlists (user_id, image, title, original_price, discounted_price, slug) VALUES (?,?,?,?,?,?)",
-      [userId, imageUrl, title, originalPrice, discountedPrice, slug]
+      "INSERT INTO wishlists (user_id, image, title, original_price, discounted_price, slug, discount) VALUES (?,?,?,?,?,?,?)",
+      [userId, imageUrl, title, originalPrice, discountedPrice, slug, discount]
     );
 
-    console.log(result);
+    console.log(result)
 
     const [rows] = await db.query(
       "SELECT * FROM wishlists WHERE title = ? AND user_id = ?",
@@ -481,7 +481,7 @@ const decreaseProductQuantity = async (req, res) => {
 
     let newQuantity = rows[0].quantity;
 
-    if (newQuantity >= 1) {
+    if (newQuantity > 1) {
       newQuantity = newQuantity - 1;
     }
 

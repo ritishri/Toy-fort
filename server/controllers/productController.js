@@ -79,7 +79,7 @@ const filterProductOnAge = async (req, res) => {
 const sideBarFilter = async (req, res) => {
   try {
     const { category } = req.params;
-    console.log("Sidebar cat:", category);
+    // console.log("Sidebar cat:", category);
 
     // const category = req.params.category;
     // const brand = req.query.brand;
@@ -255,6 +255,26 @@ const productInStock = async (req, res) => {
   }
 };
 
+const getSubCategoryProduct = async (req, res) => {
+
+  try {
+    const { subcategory } = req.params;
+
+    // console.log(subcategory);
+
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query(
+      "SELECT  categories.*, products.*, product_details.*, images.*  from categories INNER JOIN products on categories.id = products.category_id INNER JOIN images ON images.product_id = products.id INNER JOIN product_details ON products.id = product_details.product_id where  categories.slug= ? AND images.is_main = 1 ORDER BY images.image_default DESC;",
+      [subcategory]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.log("Error in fetching the product", error);
+  }
+};
+
 export {
   brandProducts,
   productsDetails,
@@ -270,4 +290,5 @@ export {
   getCharacterProduct,
   productOutOfStock,
   productInStock,
+  getSubCategoryProduct,
 };

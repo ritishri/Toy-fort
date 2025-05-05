@@ -56,6 +56,7 @@ const Card = ({
           originalPrice,
           discountedPrice,
           slug,
+          discount
         });
       }
     } catch (error) {
@@ -110,6 +111,7 @@ const Card = ({
                 originalPrice,
                 discountedPrice,
                 slug,
+                discount
               });
               setAddCart(true)
               setTimeout(() => {

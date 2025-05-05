@@ -186,7 +186,7 @@ function Home() {
               return (
                 <Link key={index} to={`/products?brand=${brandName}`}>
                   <img
-                    className="w-48 h-48 m-5 rounded-2xl transition-transform duration-1000 cursor-pointer hover:scale-105"
+                    className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
                     src={img}
                     alt={brandName}
                   />

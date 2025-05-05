@@ -1,19 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { AppContext } from "../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Sidebar = () => {
-  // State to control visibility of stock options and hr
+
   const [showStockOptions, setShowStockOptions] = useState(false);
-  const [showDiscounts, setShowDiscounts] = useState(true); // Manage the visibility of the discounts section
+  const [showDiscounts, setShowDiscounts] = useState(true)
   const [showGender, setShowGender] = useState(true);
   const [showAge, setShowAge] = useState(true);
   const [getBrandName, setGetBrandName] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [getCharacters, setGetCharacters] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [showCat, setShowCat] = useState(null)
 
   const navigate = useNavigate();
 
@@ -23,13 +25,12 @@ const Sidebar = () => {
     fetchProductByAge,
     fetchProductByGender,
     fetchProductByPrice,
-    setProductByPrice,
-    productByPrice,
+    fetchSubCategoryProduct
   } = useContext(AppContext);
 
   // Handle checkbox change
   const handleCheckboxChange = () => {
-    setShowStockOptions(!showStockOptions); // Toggle visibility of stock options
+    setShowStockOptions(!showStockOptions)
   };
 
   // Function to handle the toggle of the Discounts checkbox
@@ -46,7 +47,8 @@ const Sidebar = () => {
   };
 
   const handleSidebar = (category) => {
-    sidebarFilter(category);
+    setActiveCategory(prev => prev === category ? null : category);
+
     navigate(`/category/${category}`);
   };
 
@@ -83,14 +85,14 @@ const Sidebar = () => {
 
   const handleOutOfStockProduct = (item) => {
     navigate(`/stock-product/out-stock?stock=${item}`);
-  }
+  };
 
   const handleInStockProduct = (item) => {
     navigate(`/stock-product/in-stock?stock=${item}`);
-  }
+  };
 
   useEffect(() => {
-    const getBrandName = async () => {
+    const getBrandName = async () => {         
       try {
         const response = await axios.get(
           "http://localhost:5000/api/getbrand/name"
@@ -123,6 +125,13 @@ const Sidebar = () => {
     getCharactersName();
   }, []);
 
+
+  const handleSidebarCategory = async(cat,category)=>{
+    fetchSubCategoryProduct(cat,category)
+    navigate(`${category}`)
+    
+  }
+
   return (
     <div>
       <p className="text-gray-500 mt-4 pl-6 text-sm">Home / Products</p>
@@ -131,49 +140,282 @@ const Sidebar = () => {
 
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
-      <p className="text-base pl-10 mt-5 cursor-pointer">Home</p>
+      <a href="/" className="text-base pl-10 mt-5 cursor-pointer hover:text-red-500 hover:underline">
+        Home
+      </a>
       <p
         onClick={() => handleSidebar("books")}
-        className="text-base pl-10 mt-1 cursor-pointer"
+        className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         Books
       </p>
+
+      {activeCategory === "books" && (
+        <div>
+        <p onClick={()=>handleSidebarCategory("books","colouring-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Colouring Books
+        </p>
+        <p onClick={()=>handleSidebarCategory("books","activity-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Activity Books
+        </p>
+        <p onClick={()=>handleSidebarCategory("books","sticker-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Sticker Books
+        </p>
+        <p onClick={()=>handleSidebarCategory("books","musical-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Musical Books
+        </p>
+        <p onClick={()=>handleSidebarCategory("books","story-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Story Books
+        </p>
+        <p onClick={()=>handleSidebarCategory("books","novels-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Novels Books
+        </p>
+      </div>
+      )}
+
       <p
         onClick={() => handleSidebar("infants")}
-        className="text-small pl-10 mt-1 cursor-pointer"
+        className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         Infants
       </p>
+
+      {activeCategory === "infants" && (
+        <div>
+          <p onClick={()=>handleSidebarCategory("infants","baby-gear")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Baby Gear
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","feeding-nursing")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Feeding & Nursing
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","kids-furniture")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Kids Furniture
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","baby-bath")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Baby Bath
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","baby-bedding")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Baby Bedding
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","baby-diaper-care")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Baby Diaper Care
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","infant-utilities")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Infant Utilities
+          </p>
+          <p onClick={()=>handleSidebarCategory("infants","infants-toddlers")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Infant / Toddler
+          </p>
+        </div>
+      )}
+
       <p
         onClick={() => handleSidebar("toys")}
-        className="text-base pl-10 mt-1 cursor-pointer"
+        className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         Toys
       </p>
+
+      {activeCategory === "toys" && (
+        <div>
+          <p onClick={()=>handleSidebarCategory("toys","art-crafts")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Art & Craft
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","toys-organizer")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Toys Organizer
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","blocks-building-sets")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Blocks & Building Sets
+          </p> 
+          <p onClick={()=>handleSidebarCategory("toys","holi-special-gifts")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Holi Special Gifts
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","doll-doll-houses")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Doll & Doll Houses
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","figures-play-sets")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Figures & Play Sets
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","games")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Games
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","guns")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Guns
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","pools-water-funs")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Pools & Water Funs
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","musical-instruments")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Musical Instruments
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","outdoor-play")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Outdoor Play
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","pretend-play")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Pretend Play
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","remote-control-toys")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Remote Control Toys
+          </p>
+          <p onClick={()=>handleSidebarCategory("toys","soft-toys")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Soft Toys
+          </p>
+        </div>
+      )}
       <p
         onClick={() => handleSidebar("sports")}
-        className="text-base pl-10 mt-1 cursor-pointer"
+        className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         Sports
       </p>
+
+      {/* Badminton,Carrom Board, Fitness Equipment & Accessories ,Roller Skates ,Basket Ball, Bow and Arrow, Boxing Kit, Lawn Tennis, Football ,Table Tennis , Dart Board, Volley Ball, Skateboard, Cricket, Air Hockey, Squash, Archery Set, Pickleball, Pool Game, Golf */}
+      {activeCategory === "sports" && (
+        <div>
+           <p onClick={()=>handleSidebarCategory("sports","lunch-box")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+           Badminton
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","carrom-board")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Carrom Board
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","fitness-equipment-accessories")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Fitness Equipment & Accessories
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","roller-skates")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Roller Skates
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","basket-ball")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Basket Ball
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","bow-and-arrow")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Bow and Arrow
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","boxing-kit")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Boxing Kit
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","lawn-tennis")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Lawn Tennis
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","football")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Football
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","table-tennis")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Table Tennis
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","dart-board")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Dart Board
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","volley-ball")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Volley Ball
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","skateboard")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Skateboard
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","cricket")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Cricket
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","air-hockey")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Air Hockey
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","squash")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Squash
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","archery-set")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Archery Set
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","pickleball")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Pickleball
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","pool-game")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Pool Game
+          </p>
+          <p onClick={()=>handleSidebarCategory("sports","golf")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+          Golf
+          </p>
+
+        </div>
+
+      ) }
       <p
         onClick={() => handleSidebar("school-items")}
-        className="text-base pl-10 mt-1 cursor-pointer"
+        className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         School Items
       </p>
+
+      {activeCategory === "school-items" && (
+        <div>
+          <p onClick={()=>handleSidebarCategory("school-items","lunch-box")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Lunch Box
+          </p>
+          <p onClick={()=>handleSidebarCategory("school-items","study-table")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Study Table
+          </p>
+          <p onClick={()=>handleSidebarCategory("school-items","water-bottles")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Water Bottles
+          </p>
+          <p onClick={()=>handleSidebarCategory("school-items","gift-sets")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Gift Sets
+          </p>
+          <p onClick={()=>handleSidebarCategory("school-items","pencil-cases-and-pouches")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Pencil Cases and Pouches
+          </p>
+          <p onClick={()=>handleSidebarCategory("school-items","bags")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Bags
+          </p>
+        </div>
+      )}
+
       <p
         onClick={() => handleSidebar("electronics")}
-        className="text-base pl-10 mt-1 cursor-pointer"
+        className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
       >
         Electronics
       </p>
-      <p
-        onClick={() => handleSidebar("contact us")}
-        className="text-base pl-10 mt-1 mb-4 cursor-pointer"
+
+      {activeCategory === "electronics" && (
+        <div>
+          <p onClick={()=>handleSidebarCategory("electronics","camera")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Camera
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","led-bags")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            LED Bags
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","saregama-carvan")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Saregama Carvan
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","telescope")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Telescope
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","kids-watch")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Kids Watch
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","video-games")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Video Games
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","smart-watch-tracker")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Smart Watch & Tracker
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","binoculars")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Binoculars
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","e-scooter")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            E-Scooter
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","headphones")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Headphones
+          </p>
+          <p onClick={()=>handleSidebarCategory("electronics","hoverboards")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
+            Hoverboards
+          </p>
+        </div>
+      )}
+      <a href="/contact"
+        
+        className="text-base pl-10 mt-1 mb-4 cursor-pointer hover:text-red-500 hover:underline"
       >
         Contact Us
-      </p>
+      </a>
 
       <hr className="w-1/6 ml-6" />
 
@@ -194,14 +436,22 @@ const Sidebar = () => {
         {showStockOptions && (
           <div className="mt-2">
             <div>
-              <input type="checkbox" id="outOfStock"  onClick={() => handleOutOfStockProduct("out")} />
-              <label htmlFor="outOfStock" className="ml-2">
+              <input
+                type="checkbox"
+                id="outOfStock"
+                onClick={() => handleOutOfStockProduct("out")}
+              />
+              <label htmlFor="outOfStock" className="ml-2 hover:text-red-500 ">
                 Out of Stock
               </label>
             </div>
             <div className="mt-1">
-              <input type="checkbox" id="inStock" onClick={() => handleInStockProduct("in")}/>
-              <label htmlFor="inStock" className="ml-2">
+              <input
+                type="checkbox"
+                id="inStock"
+                onClick={() => handleInStockProduct("in")}
+              />
+              <label htmlFor="inStock" className="ml-2 hover:text-red-600">
                 In Stock
               </label>
             </div>
@@ -320,7 +570,7 @@ const Sidebar = () => {
                 id="discount1"
                 onClick={() => handleSiderbarDiscount("50-100")}
               />
-              <label htmlFor="discount1" className="ml-2">
+              <label htmlFor="discount1" className="ml-2 hover:text-red-600 ">
                 50-100%
               </label>
             </div>
@@ -330,7 +580,7 @@ const Sidebar = () => {
                 id="discount2"
                 onClick={() => handleSiderbarDiscount("40-50")}
               />
-              <label htmlFor="discount2" className="ml-2">
+              <label htmlFor="discount2" className="ml-2 hover:text-red-600">
                 40-50%
               </label>
             </div>
@@ -340,7 +590,7 @@ const Sidebar = () => {
                 id="discount3"
                 onClick={() => handleSiderbarDiscount("30-40")}
               />
-              <label htmlFor="discount3" className="ml-2">
+              <label htmlFor="discount3" className="ml-2 hover:text-red-600">
                 30-40%
               </label>
             </div>
@@ -350,7 +600,7 @@ const Sidebar = () => {
                 id="discount4"
                 onClick={() => handleSiderbarDiscount("20-30")}
               />
-              <label htmlFor="discount4" className="ml-2">
+              <label htmlFor="discount4" className="ml-2 hover:text-red-600">
                 20-30%
               </label>
             </div>
@@ -359,7 +609,7 @@ const Sidebar = () => {
               onClick={() => handleSiderbarDiscount("0-20")}
             >
               <input type="checkbox" id="discount5" />
-              <label htmlFor="discount5" className="ml-2">
+              <label htmlFor="discount5" className="ml-2 hover:text-red-600">
                 0-20%
               </label>
             </div>
@@ -393,7 +643,7 @@ const Sidebar = () => {
                 id="gender1"
                 onClick={() => handleSidebarByGender("Boys")}
               />
-              <label htmlFor="gender1" className="ml-2">
+              <label htmlFor="gender1" className="ml-2 hover:text-red-600">
                 Boys
               </label>
             </div>
@@ -403,7 +653,7 @@ const Sidebar = () => {
                 id="gender2"
                 onClick={() => handleSidebarByGender("Girls")}
               />
-              <label htmlFor="gender2" className="ml-2">
+              <label htmlFor="gender2" className="ml-2 hover:text-red-600">
                 Girls
               </label>
             </div>
@@ -413,7 +663,7 @@ const Sidebar = () => {
                 id="gender3"
                 onClick={() => handleSidebarByGender("Unisex")}
               />
-              <label htmlFor="gender3" className="ml-2">
+              <label htmlFor="gender3" className="ml-2 hover:text-red-600">
                 Unisex
               </label>
             </div>
@@ -447,7 +697,7 @@ const Sidebar = () => {
                 id="age1"
                 onClick={() => handleSidebarByAge("0-18M")}
               />
-              <label htmlFor="age1" className="ml-2">
+              <label htmlFor="age1" className="ml-2 hover:text-red-600">
                 0-18 M
               </label>
             </div>
@@ -457,13 +707,13 @@ const Sidebar = () => {
                 id="age2"
                 onClick={() => handleSidebarByAge("18-36M")}
               />
-              <label htmlFor="age2" className="ml-2">
+              <label htmlFor="age2" className="ml-2 hover:text-red-600">
                 18-36 M
               </label>
             </div>
             <div className="mt-2">
               <input type="checkbox" id="age3" />
-              <label htmlFor="age3" className="ml-2">
+              <label htmlFor="age3" className="ml-2 hover:text-red-600">
                 3-5 Y
               </label>
             </div>
@@ -473,7 +723,7 @@ const Sidebar = () => {
                 id="age4"
                 onClick={() => handleSidebarByAge("5-8Y")}
               />
-              <label htmlFor="age4" className="ml-2">
+              <label htmlFor="age4" className="ml-2 hover:text-red-600">
                 5-8 Y
               </label>
             </div>
@@ -483,7 +733,7 @@ const Sidebar = () => {
                 id="age5"
                 onClick={() => handleSidebarByAge("8-12Y")}
               />
-              <label htmlFor="age5" className="ml-2">
+              <label htmlFor="age5" className="ml-2 hover:text-red-600">
                 8-12 Y
               </label>
             </div>
@@ -493,7 +743,7 @@ const Sidebar = () => {
                 id="age6"
                 onClick={() => handleSidebarByAge("12Y")}
               />
-              <label htmlFor="age6" className="ml-2">
+              <label htmlFor="age6" className="ml-2 hover:text-red-600">
                 12+ Y
               </label>
             </div>

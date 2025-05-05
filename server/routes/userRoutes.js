@@ -33,7 +33,8 @@ import {
   getCharacter,
   getCharacterProduct,
   productOutOfStock,
-  productInStock
+  productInStock,
+  getSubCategoryProduct
   
 } from "../controllers/productController.js";
 import verifyToken from "../middlware/auth.js";
@@ -79,6 +80,8 @@ router.get('/products/characters', getCharacter);
 router.get('/characterProducts/products', getCharacterProduct);
 router.get('/stock-products/out-stock', productOutOfStock);
 router.get('/stock-products/in-stock', productInStock);
+router.get('/category/:category/:subcategory', getSubCategoryProduct);
+
 
 
 

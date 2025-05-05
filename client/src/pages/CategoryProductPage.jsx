@@ -48,6 +48,7 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 import Card from '../components/Card'
+import Sidebar from '../components/Sidebar'
 
 function CategoryProductPage() {
   const { category } = useParams()
@@ -62,6 +63,7 @@ function CategoryProductPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-1">
+        <Sidebar/>
         <div className="p-4">
           {Array.isArray(sidebarProducts) && sidebarProducts.length > 0 ? (
             <div className="w-full ml-5 mt-5">
