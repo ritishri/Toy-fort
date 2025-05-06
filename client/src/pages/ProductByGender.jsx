@@ -25,16 +25,19 @@ const ProductByGender = () => {
     }, [gender, fetchProductByGender]);
   
     const handleProducts = (productSlug) => {
-      navigate(`/${productSlug}`);
+      navigate(`/${productSlug}`); 
     };
   
     const handlePageChange = (page) => {
       setCurrentPage(page);
     };
-
+  
     const indexOfLastProduct = currentPage * postsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
-  const currentProduct = productByGender.slice(indexOfFirstProduct, indexOfLastProduct);
+    const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
+    const currentProduct = productByPrice.slice(
+      indexOfFirstProduct,
+      indexOfLastProduct
+    );
 
   return (
     <div className="flex flex-col min-h-screen">

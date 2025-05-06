@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Carousel } from "flowbite-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-
-// **Grouping images into sets of 3**
 function Slider() {
   const [slides, setSlides] = useState([]);
+
+
 
   useEffect(() => {
     const fetchSlider = async () => {
@@ -18,7 +19,13 @@ function Slider() {
     };
 
     fetchSlider();
-  }, []);
+  }, [])
+
+  const navigate = useNavigate()
+
+  const handleProducts = (productSlug) => {
+    navigate(`/${productSlug}`);
+  };
 
   const groupedSlides = [];
   for (let i = 3; i < slides.length; i += 3) {
@@ -44,8 +51,8 @@ function Slider() {
         {groupedSlides.map((group, index) => (
           <div key={index} className="flex justify-center space-x-3">
             {group.map((slide) => (
-              <a key={slide.id} href={slide.link} className="flex-1">
-                <img
+              <a onClick={() => handleProducts(`${slide}`)} key={slide.id} className="flex-1">
+                 <img 
                   className="w-full h-60 sm:h-72 sm:w-full md:h-80 lg:h-96 rounded-lg shadow-md"
                   src={slide.image}
                   alt="Slider Image"

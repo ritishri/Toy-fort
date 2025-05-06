@@ -193,27 +193,26 @@ const ProductDetails = () => {
                 <p>SKU</p>
                 <p className="text-gray-400">{products.sku}</p>
               </div>
-
-              <div className="mt-5 flex ">
+              <div className="mt-5 flex items-center">
                 <button
                   onClick={removeProduct}
-                  className="pt-3 pb-3 pl-4 pr-4 rounded-sm flex border border-gray-500 items-center "
+                  className="pt-3 pb-3 px-4 h-full rounded-sm border border-gray-500"
                 >
                   -
                 </button>
-                <button className="pt-3 pb-3 pl-4 pr-4 rounded-sm flex border-t border-b border-gray-500 items-center ">
+                <button className="pt-3 pb-3 px-4 h-full rounded-sm border-t border-b border-gray-500">
                   {state}
                 </button>
                 <button
                   onClick={addProduct}
-                  className="pt-3 pb-3 pl-4 pr-4 rounded-sm flex border border-gray-500 items-center"
+                  className="pt-3 pb-3 px-4 h-full rounded-sm border border-gray-500"
                 >
                   +
                 </button>
 
                 <div className="flex">
                   <button
-                    className="bg-red-600  hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center"
+                    className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center"
                     onClick={(e) => {
                       addToCart(products);
                       setAddCart(true);
@@ -236,7 +235,7 @@ const ProductDetails = () => {
                     />
                     Buy Now
                   </button>
-                  <button className=" text-gray-600 pt-3 pb-3 pl-6 pr-6 rounded-sm flex items-center">
+                  <button className="text-gray-600 pt-3 pb-3 pl-6 pr-6 rounded-sm flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
