@@ -153,72 +153,6 @@ const Sidebar = () => {
 
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
-      {/* <p
-        onClick={() => handleSidebar("books")}
-        className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
-      >
-        Books
-      </p> */}
-
-      {/* {activeCategory === "books" && (
-        <div>
-        <p onClick={()=>handleSidebarCategory("books","colouring-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Colouring Books
-        </p>
-        <p onClick={()=>handleSidebarCategory("books","activity-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Activity Books
-        </p>
-        <p onClick={()=>handleSidebarCategory("books","sticker-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Sticker Books
-        </p>
-        <p onClick={()=>handleSidebarCategory("books","musical-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Musical Books
-        </p>
-        <p onClick={()=>handleSidebarCategory("books","story-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Story Books
-        </p>
-        <p onClick={()=>handleSidebarCategory("books","novels-books")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-          Novels Books
-        </p>
-      </div>
-      )}
-
-      <p
-        onClick={() => handleSidebar("infants")}
-        className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
-      >
-        Infants
-      </p>
-
-      {activeCategory === "infants" && (
-        <div>
-          <p onClick={()=>handleSidebarCategory("infants","baby-gear")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Baby Gear
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","feeding-nursing")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Feeding & Nursing
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","kids-furniture")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Kids Furniture
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","baby-bath")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Baby Bath
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","baby-bedding")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Baby Bedding
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","baby-diaper-care")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Baby Diaper Care
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","infant-utilities")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Infant Utilities
-          </p>
-          <p onClick={()=>handleSidebarCategory("infants","infants-toddlers")} className="text-small pl-10 mt-1 cursor-pointer ml-2 text-gray-500 hover:text-red-500 hover:underline">
-            Infant / Toddler
-          </p>
-        </div>
-      )} */}
-
       <div className="">
         {activeCategory === null && (
           <>
@@ -269,7 +203,7 @@ const Sidebar = () => {
 
             <a
               href="/contact"
-              className="text-base pl-10 mt-1 mb-4 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-base pl-10 pt-8 mb-4 cursor-pointer hover:text-red-500 hover:underline"
             >
               Contact Us
             </a>
