@@ -5,17 +5,23 @@ import React from 'react';
 
 const QuoteRequests = () => {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-1 bg-gray-100 min-h-screen">
+    <div className="flex min-h-screen">
+      {/* Sidebar with fixed width */}
+      <div className="w-64">
+        <Sidebar />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 bg-gray-100">
         <Header />
+
         <div className="p-6">
           {/* Digital Sales Box */}
           <div className="bg-white shadow-md rounded-md p-6">
             <h2 className="text-gray-600 text-lg">Quote Requests</h2>
 
             {/* Filters Row */}
-            <div className="flex items-end gap-4 mt-4">
+            <div className="flex items-end gap-4 mt-4 flex-wrap">
               {/* Show Field */}
               <div className="flex flex-col">
                 <label className="text-gray-700 mb-1">Show</label>
@@ -58,9 +64,9 @@ const QuoteRequests = () => {
             </div>
 
             {/* Table */}
-            <div className="mt-4 overflow-hidden">
-              <table className="w-full border border-gray-300">
-                <thead className="text-gray-500">
+            <div className="mt-4 overflow-x-auto">
+              <table className="min-w-full border border-gray-300">
+                <thead className="text-gray-500 bg-gray-100">
                   <tr className="text-left">
                     <th className="px-2 py-1 border border-gray-300">Quote</th>
                     <th className="px-2 py-1 border border-gray-300">Product</th>
@@ -78,11 +84,12 @@ const QuoteRequests = () => {
                 </tbody>
               </table>
 
-              {/* No Records Found Message (Outside Table) */}
+              {/* No Records Found Message */}
               <p className="text-gray-400 mt-6 text-center">No records found!</p>
             </div>
           </div>
         </div>
+
         <Footer />
       </div>
     </div>
