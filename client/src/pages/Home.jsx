@@ -121,6 +121,21 @@ function Home() {
     }));
   };
 
+  useEffect(() => {
+    const handleClickAnywhere = () => {
+      setIsVisible(false);
+    };
+  
+    if (isVisible) {
+      window.addEventListener("click", handleClickAnywhere);
+    }
+  
+    return () => {
+      window.removeEventListener("click", handleClickAnywhere);
+    };
+  }, [isVisible]);
+  
+
   return (
     <div className="p-4">
       {/* Offer Popup */}
