@@ -13,7 +13,7 @@ import RefundRequests from './pages/RefundRequests';
 const App = () => {
   return (
       <Routes>
-        <Route path='/admin/login' element={<Login />} />
+        <Route path='/' element={<Login />} />
         <Route path='/admin' element={<Home />} />
         <Route path='/admin/navigation' element={<Navigation />} />
         <Route path='/admin/slider' element={<Slider />} />
