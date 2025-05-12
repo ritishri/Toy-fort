@@ -2,8 +2,10 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import React from 'react';
+import usePageTitle from "../hooks/usePageTitle";
 
 const AbuseReports = () => {
+  usePageTitle("Abuse Reports - ToyFort");
   return (
     <div className="flex">
       <Sidebar />
