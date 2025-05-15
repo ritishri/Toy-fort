@@ -124,13 +124,20 @@ function Home() {
     }));
   };
 
-  const handleDiscount = async (discount) => {
-    navigate(`/products/discount?discount=${discount}`);
-  };
-
-  const ageFilter = async (age) => {
-    navigate(`/products/age?age=${age}`);
-  };
+  useEffect(() => {
+    const handleClickAnywhere = () => {
+      setIsVisible(false);
+    };
+  
+    if (isVisible) {
+      window.addEventListener("click", handleClickAnywhere);
+    }
+  
+    return () => {
+      window.removeEventListener("click", handleClickAnywhere);
+    };
+  }, [isVisible]);
+  
 
   return (
     <div className="p-4">
