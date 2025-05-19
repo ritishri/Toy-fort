@@ -9,17 +9,33 @@ export default function usePageTitle(title) {
       case "/":
         document.title = "Home | ToyFort";
         break;
-      case "/about":
-        document.title = "About Us | ToyFort";
+      case "/admin":
+        document.title = "Admin Panel - Toyfort";
         break;
-      case "/products":
-        document.title = "Products | ToyFort";
+      case "/admin/navigation":
+        document.title = "Navigation - Toyfort";
         break;
+      case "/admin/slider":
+        document.title = "Slider Items - Toyfort";
+        break;
+      case "/admin/digital-sales":
+        document.title = "Digital Sales - Toyfort";
+        break;
+      case "/admin/quote-requests":
+        document.title = "Quote Requests - Toyfort";
+        break;
+      case "/admin/custom-fields":
+        document.title = "Custom Fields - Toyfort";
+        break;  
       case "/admin/abuse-reports":
         document.title = "Abuse Reports - Toyfort";
         break;
+      case "/admin/refund-requests":
+        document.title = "Refund Requests - Toyfort";
+        break;         
       default:
         document.title = "ToyFort";
     }
   }, [location.pathname]);
 }
+
