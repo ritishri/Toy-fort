@@ -307,9 +307,10 @@ const updateProfile = async (req, res) => {
 
 const addToWishlist = async (req, res) => {
   try {
-    const { imageUrl, title, originalPrice, discountedPrice, slug, discount } = req.body;
+    const { imageUrl, title, originalPrice, discountedPrice, slug, discount } =
+      req.body;
     const userId = req.user?.id;
-    console.log("discount",discount);
+    console.log("discount", discount);
 
     if (!userId) {
       return res
@@ -328,7 +329,7 @@ const addToWishlist = async (req, res) => {
       [userId, imageUrl, title, originalPrice, discountedPrice, slug, discount]
     );
 
-    console.log(result)
+    console.log(result);
 
     const [rows] = await db.query(
       "SELECT * FROM wishlists WHERE title = ? AND user_id = ?",
@@ -545,6 +546,123 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const sendResetPasswordLink = async (email) => {
+  try {
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (!rows || rows.length === 0) {
+      return { success: false, message: "User not found" };
+    }
+
+    const user = rows[0];
+
+    const resetToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.RESET_JWT_KEY,
+      { expiresIn: "8h" }
+    );
+    const resetLink = `http://localhost:5173/reset-password?token=${encodeURIComponent(
+      resetToken
+    )}`;
+
+    return {
+      success: true,
+      message: "Reset Password email sent successfully",
+      resetLink,
+    };
+  } catch (error) {
+    console.error("Reset link error:", error);
+    return {
+      success: false,
+      message: "Something went wrong. Please try again.",
+    };
+  }
+};
+
+const bcryptResetPassword = async (token, password) => {
+  const RESET_JWT_KEY = process.env.RESET_JWT_KEY;
+
+  try {
+    const decoded = jwt.verify(token, RESET_JWT_KEY);
+    // console.log("Decoded",decoded.id)
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const db = await connectToDatabase();
+
+    const rows = await db.query("UPDATE users SET password = ? where id=?", [
+      hashedPassword,
+      decoded.id,
+    ]);
+
+    return { success: true, message: "Password reset successfully" };
+  } catch (error) {
+    console.log("JWT error", error.message);
+
+    return {
+      success: false,
+      message: "Error in reset password, Please try again. ",
+    };
+  }
+};
+
+const forgetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const response = await sendResetPasswordLink(email);
+
+    if (response.success) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(401).json(response);
+    }
+  } catch (error) {
+    console.log("Error in user login", error);
+    res.status(500).json({
+      success: false,
+      message: "Login failed, Please try again later",
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Password is required" });
+    y;
+  }
+
+  try {
+    const response = await bcryptResetPassword(token, password);
+
+    if (response.success) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(401).json(response);
+    }
+  } catch (error) {
+    console.log("Error in reset password", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Login failed, Please try again later",
+    });
+  }
+};
+
 export {
   getAllSliders,
   booksImages,
@@ -564,4 +682,67 @@ export {
   removeFromCart,
   increaseProductQuantity,
   decreaseProductQuantity,
+  forgetPassword,
+  resetPassword,
+  bcryptResetPassword,
 };
+
+// const sendResetPasswordLink = async (email) => {
+//   try {
+//     const db = await connectToDatabase();
+
+//     await db.query("SELECT * FROM users WHERE email = ?", [email]);
+
+//     if (rows.length === 0) {
+//       return { success: false, message: "User not found" };
+//     }
+
+//     const user = rows[0];
+//     const resetToken = jwt.sign(
+//       { id: user.id, email: user.email },
+//       process.env.RESET_JWT_KEY,
+//       { expiresIn: "8h" }
+//     );
+
+//     const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
+
+//     console.log(resetLink);
+
+//     return {
+//       success: true,
+//       message: "Reset Password email sent successfully",
+//       resetLink,
+//     };
+//   } catch (error) {
+//     console.log("login error: ", error);
+//     return { success: false, message: "Login failed, Please try again. " };
+//   }
+// }
+
+// const forgetPassword = async (req,res) =>{
+//   const { email } = req.body;
+
+//   if (!email) {
+//     return res
+//       .status(400)
+//       .json({ success: false, message: "Email is required" });
+//   }
+
+//   try {
+//     const response = await sendResetPasswordLink(email);
+
+//     if (response.success) {
+//       return res.status(200).json(response);
+//     } else {
+//       return res.status(401).json(response);
+//     }
+//   } catch (error) {
+//     console.log("Error in user login", error);
+//     res
+//       .status(500)
+//       .json({
+//         success: false,
+//         message: "Login failed, Please try again later",
+//       });
+//   }
+// }

@@ -129,12 +129,6 @@ const Sidebar = () => {
     getCharactersName();
   }, []);
 
-  // const handleSidebarCategory = async(cat,category)=>{
-  //   fetchSubCategoryProduct(cat,category)
-  //   navigate(`${category}`)
-
-  // }
-
   const handleSidebarCategory = (cat, category) => {
     // console.log("Selected:", parent, subcategory);
     fetchSubCategoryProduct(cat, category);

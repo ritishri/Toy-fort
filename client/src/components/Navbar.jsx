@@ -134,8 +134,10 @@ function Navbar() {
           <input
             className="w-full border bg-gray-50 border-gray-400 rounded-md p-2 pr-10"
             type="text"
-            placeholder="Search for Toys"
-          />
+            placeholder="Search for Toys"      
+          />  
+
+          
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

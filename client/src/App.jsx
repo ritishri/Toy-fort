@@ -41,6 +41,7 @@ import CharacterProducts from "./pages/CharacterProducts";
 import InStockProduct from "./pages/InStockProduct";
 import OutOfStockProduct from "./pages/OutOfStockProduct";
 import SubCategory from "./pages/SubCategory";
+import ResetPassword from "./pages/ResetPassword"
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
         <Route path="/stock-product/in-stock" element={<InStockProduct/>}/>
         <Route path="/stock-product/out-stock" element={<OutOfStockProduct/>}/>
         <Route path="/category/:category/:subcategory" element={<SubCategory/>}/>
+        <Route path="/reset-password" element={<ResetPassword/>}/>
         
 
         
