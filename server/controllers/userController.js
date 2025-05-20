@@ -571,8 +571,9 @@ const sendResetPasswordLink = async (email) => {
 
     return {
       success: true,
-      message: "Reset Password email sent successfully",
       resetLink,
+      message: "Reset Password email sent successfully",
+      
     };
   } catch (error) {
     console.error("Reset link error:", error);

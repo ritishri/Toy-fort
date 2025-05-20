@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const ResetPassword = () => {
@@ -15,8 +15,6 @@ const ResetPassword = () => {
 
     if (token) {
       const decodedToken = decodeURIComponent(token);
-      console.log("Decoded token:", decodedToken);
-      console.log("Token length:", decodedToken.length);
       setResetToken(token);
     } else {
       alert("Reset token not found");

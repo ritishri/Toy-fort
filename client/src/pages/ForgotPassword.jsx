@@ -16,7 +16,9 @@ const ForgotPassword = () => {
         "http://localhost:5000/api/auth/forget-password",
         { email }
       );
-      console.log(response.data);
+      // console.log(response.data.message);
+
+      // console.log(response.data.resetLink);
     } catch (error) {
       console.log(error);
     }
