@@ -26,6 +26,7 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.475.0",
     "mui": "^0.0.1",
+    "nodemailer": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",

@@ -1,6 +1,7 @@
 import { connectToDatabase } from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 const getAllSliders = async (req, res) => {
   try {
@@ -546,6 +547,36 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const sendResetEmail = async (to, resetLink) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject: "Password Reset Link",
+      html: `
+    <p>Click the link below to reset your password:</p> 
+    <a href="${resetLink}">${resetLink}</a>
+    <p>This link will expire in 8 hours.</p>
+  `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    // console.log("Email sent", info.response);
+    return true;
+  } catch (error) {
+    console.log("Error sending email", error);
+    return false;
+  }
+};
+
 const sendResetPasswordLink = async (email) => {
   try {
     const db = await connectToDatabase();
@@ -569,11 +600,19 @@ const sendResetPasswordLink = async (email) => {
       resetToken
     )}`;
 
+    const emailSent = await sendResetEmail(user.email, resetLink);
+
+    if (!emailSent) {
+      return {
+        success: false,
+        message: "Failed to send reset email.Try again.",
+      };
+    }
+
     return {
       success: true,
       resetLink,
       message: "Reset Password email sent successfully",
-      
     };
   } catch (error) {
     console.error("Reset link error:", error);
@@ -687,63 +726,3 @@ export {
   resetPassword,
   bcryptResetPassword,
 };
-
-// const sendResetPasswordLink = async (email) => {
-//   try {
-//     const db = await connectToDatabase();
-
-//     await db.query("SELECT * FROM users WHERE email = ?", [email]);
-
-//     if (rows.length === 0) {
-//       return { success: false, message: "User not found" };
-//     }
-
-//     const user = rows[0];
-//     const resetToken = jwt.sign(
-//       { id: user.id, email: user.email },
-//       process.env.RESET_JWT_KEY,
-//       { expiresIn: "8h" }
-//     );
-
-//     const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
-
-//     console.log(resetLink);
-
-//     return {
-//       success: true,
-//       message: "Reset Password email sent successfully",
-//       resetLink,
-//     };
-//   } catch (error) {
-//     console.log("login error: ", error);
-//     return { success: false, message: "Login failed, Please try again. " };
-//   }
-// }
-
-// const forgetPassword = async (req,res) =>{
-//   const { email } = req.body;
-
-//   if (!email) {
-//     return res
-//       .status(400)
-//       .json({ success: false, message: "Email is required" });
-//   }
-
-//   try {
-//     const response = await sendResetPasswordLink(email);
-
-//     if (response.success) {
-//       return res.status(200).json(response);
-//     } else {
-//       return res.status(401).json(response);
-//     }
-//   } catch (error) {
-//     console.log("Error in user login", error);
-//     res
-//       .status(500)
-//       .json({
-//         success: false,
-//         message: "Login failed, Please try again later",
-//       });
-//   }
-// }
