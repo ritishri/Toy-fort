@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Slider from "./Slider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const brandImages = [
   "https://toyfort.s3.ap-south-1.amazonaws.com/smartivity-8.png",
@@ -70,6 +71,7 @@ function Home() {
 
   const [showFAQs, setShowFAQs] = useState(false);
   const [fqsa, setFaqs] = useState(false);
+  const { fetchProductByAge, fetchDiscountProduct } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -109,6 +111,16 @@ function Home() {
     sliderImages.push(brandImages[(startIndex + i) % brandImages.length]);
   }
 
+  const handleSidebarByAge = (age) => {
+    fetchProductByAge(age);
+    navigate(`/products/age?age=${age}`);
+  };
+
+  const handleSiderbarDiscount = (discount) => {
+    fetchDiscountProduct(discount);
+    navigate(`/products/discount?discount=${discount}`);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       rightSlide();
@@ -128,16 +140,15 @@ function Home() {
     const handleClickAnywhere = () => {
       setIsVisible(false);
     };
-  
+
     if (isVisible) {
       window.addEventListener("click", handleClickAnywhere);
     }
-  
+
     return () => {
       window.removeEventListener("click", handleClickAnywhere);
     };
   }, [isVisible]);
-  
 
   return (
     <div className="p-4">
@@ -202,6 +213,109 @@ function Home() {
             })}
           </div>
 
+          {/* <div className="flex">
+            <img
+              onClick={() => handleSidebarByAge("0-18M")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-500 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/smartivity-8.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("18-36M")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/scentos-2.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("3-5Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/electrobotic-9.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("5-8Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/chicco-3.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("8-12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/lego-4.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/barbie-5.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/experience-1.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/hot-wheel-6.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/smiggle-7.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/fujifilm-10.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/nua-11.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/r-for-rabbit-18.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/funskool-12.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/mustela-13.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/imc-toys-14.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/kriiddaank-15.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/imagi-make-16.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/step-2-17.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/joie-19.png"
+            />
+            <img
+              onClick={() => handleSidebarByAge("12Y")}
+              className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/graco-20.png"
+            />
+          </div> */}
+
           <button onClick={rightSlide}>
             <FontAwesomeIcon
               className="bg-slate-300 rounded-full p-2"
@@ -218,27 +332,33 @@ function Home() {
       </h1>
 
       <div className="flex flex-row">
-        <img onClick={()=>ageFilter("0-18M")}
+        <img
+          onClick={() => handleSidebarByAge("0-18M")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/1.png"
         />
-        <img onClick={()=>ageFilter("18-36M")}
+        <img
+          onClick={() => handleSidebarByAge("18-36M")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/2.png"
         />
-        <img onClick={()=>ageFilter("3-5Y")}
+        <img
+          onClick={() => handleSidebarByAge("3-5Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/3.png"
         />
-        <img onClick={()=>ageFilter("5-8Y")}
+        <img
+          onClick={() => handleSidebarByAge("5-8Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/4.png"
         />
-        <img onClick={()=>ageFilter("8-12Y")}
+        <img
+          onClick={() => handleSidebarByAge("8-12Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/5.png"
         />
-        <img onClick={()=>ageFilter("12Y")}
+        <img
+          onClick={() => handleSidebarByAge("12Y")}
           className="w-48 h-48 m-7 transform transition duration-200 hover:scale-110 cursor-pointer"
           src="https://toyfort.s3.ap-south-1.amazonaws.com/uploads/assets/6.png"
         />
@@ -255,7 +375,7 @@ function Home() {
 
       <div
         className="flex flex-row m-3"
-        onClick={() => handleDiscount("20-30")}
+        onClick={() => handleSiderbarDiscount("20-30")}
       >
         <div className="relative w-80 h-64 m-5 border-2 transition hover:scale-110 border-gray-200 rounded-lg overflow-hidden group">
           <img
@@ -269,7 +389,7 @@ function Home() {
 
         <div
           className="relative w-80 h-64 transition hover:scale-110 m-5 border-2 border-gray-200 rounded-lg overflow-hidden group"
-          onClick={() => handleDiscount("30-40")}
+          onClick={() => handleSiderbarDiscount("30-40")}
         >
           <img
             className="w-full h-full rounded-lg transition ease-in-out hover:scale-110"
@@ -282,7 +402,7 @@ function Home() {
 
         <div
           className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group"
-          onClick={() => handleDiscount("40-50")}
+          onClick={() => handleSiderbarDiscount("40-50")}
         >
           <img
             className="w-full h-full rounded-lg transition duration-200 hover:scale-110 transform "
@@ -295,7 +415,7 @@ function Home() {
 
         <div
           className="relative w-80 h-64 m-5 transition hover:scale-110 border-2 border-gray-200 rounded-lg overflow-hidden group"
-          onClick={() => handleDiscount("50-100")}
+          onClick={() => handleSiderbarDiscount("50-100")}
         >
           <img
             className="w-full h-full rounded-lg transition duration-200 hover:scale-110 transform "

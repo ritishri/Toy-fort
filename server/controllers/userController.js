@@ -122,7 +122,7 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: newUser[0].id, email: newUser[0].email },
       process.env.JWT_KEY,
-      { expiresIn: "10h" }
+      { expiresIn: "2h" }
     );
 
     // console.log(token)
@@ -169,7 +169,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_KEY,
-      { expiresIn: "8h" }
+      { expiresIn: "2h" }
     );
 
     // console.log(token);
@@ -562,9 +562,42 @@ const sendResetEmail = async (to, resetLink) => {
       to,
       subject: "Password Reset Link",
       html: `
-    <p>Click the link below to reset your password:</p> 
-    <a href="${resetLink}">${resetLink}</a>
-    <p>This link will expire in 8 hours.</p>
+  <div style="font-family: Arial, sans-serif; background-color: #FAF6E9; padding: 20px; align-item:center; justify-content:center6">
+    <div style="background-color: #F75A5A; color: white; text-align: center; padding: 20px 10px;">
+      <h2 style="margin: 0;">Please reset your password</h2>
+    </div>
+
+    <div style="padding: 30px 20px; background-color: #ffffff; border-radius: 8px;">
+      <p>Hello,</p>
+      <p>We have sent you this email in response to your request to reset your password on Toyfort.
+      </p>
+      <p>To reset your password, please click the button below:</p>
+
+      <div style="margin: 20px 0;">
+        <a href="${resetLink}" target="_blank" style="
+          background-color: #948979;
+          color: white;
+          padding: 12px 25px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-size: 16px;
+          display: inline-block;
+        ">
+          Reset Password
+        </a>
+      </div>
+
+      <p style="color: #555;">Please ignore this email if you did not request a password change.</p>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background-color: #948979; color: white; font-size: 14px;">
+      <p style="margin: 0;">Contact Us</p>
+      <p style="margin: 5px 0;">Phone: +91-93152-57050</p>
+      <p style="margin: 5px 0;">Email: <a href="mailto:support@toyfort.in" style="color: white;">support@toyfort.in</a></p>
+      <p style="margin-top: 10px;">© 2024 Toyfort - All Rights Reserved</p>
+      <p>Developed by Austere Systems / Designed by Crazzybunny</p>
+    </div>
+  </div>
   `,
     };
 
@@ -586,7 +619,7 @@ const sendResetPasswordLink = async (email) => {
     ]);
 
     if (!rows || rows.length === 0) {
-      return { success: false, message: "User not found" };
+      return { success: false, message: "We can't find a user with that e-mail address!" };
     }
 
     const user = rows[0];
@@ -594,7 +627,7 @@ const sendResetPasswordLink = async (email) => {
     const resetToken = jwt.sign(
       { id: user.id, email: user.email },
       process.env.RESET_JWT_KEY,
-      { expiresIn: "8h" }
+      { expiresIn: "2h" }
     );
     const resetLink = `http://localhost:5173/reset-password?token=${encodeURIComponent(
       resetToken
@@ -612,7 +645,8 @@ const sendResetPasswordLink = async (email) => {
     return {
       success: true,
       resetLink,
-      message: "Reset Password email sent successfully",
+      message:
+        "We've sent an email for resetting your password to your email address. Please check your email for next steps.",
     };
   } catch (error) {
     console.error("Reset link error:", error);
