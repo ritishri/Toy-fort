@@ -5,46 +5,44 @@ import Card from '../components/Card';
 import Sidebar from '../components/Sidebar';
 import Pagination from '../components/Pagination';
 
-const ProductByGender = () => {
-
+const OutdoorPlays = () => {
   const location = useLocation();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const {fetchProductByGender, productByGender} = useContext(AppContext)
-
-  const navigate = useNavigate();
-
-  const postsPerPage = 24;
-
-  const gender = new URLSearchParams(location.search).get("gender");
-
-  useEffect(() => {
-      if (gender) {
-        fetchProductByGender(gender);
-      }
-    }, [gender, fetchProductByGender]);
+    const [currentPage, setCurrentPage] = useState(1);
   
-    const handleProducts = (productSlug) => {
-      navigate(`/${productSlug}`); 
-    };
+    const {outdoorProducts, outdoorProduct} = useContext(AppContext)
   
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
-    };
+    const navigate = useNavigate();
   
-    const indexOfLastProduct = currentPage * postsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
-    const currentProduct = productByGender.slice(
-      indexOfFirstProduct,
-      indexOfLastProduct
-    );
-
+    const postsPerPage = 24;
+  
+    const toys = new URLSearchParams(location.search).get("toys");
+  
+    useEffect(() => {
+        if (toys) {
+          outdoorProducts(toys);
+        }
+      }, [toys, outdoorProducts]);
+    
+      const handleProducts = (productSlug) => {
+        navigate(`/${productSlug}`); 
+      };
+    
+      const handlePageChange = (page) => {
+        setCurrentPage(page);
+      };
+    
+      const indexOfLastProduct = currentPage * postsPerPage;
+      const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
+      const currentProduct = outdoorProduct.slice(
+        indexOfFirstProduct,
+        indexOfLastProduct
+      );
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-1">
         <Sidebar />
         <div className="p-4">
-          {Array.isArray(productByGender) && productByGender.length > 0 ? (
+          {Array.isArray(outdoorProduct) && outdoorProduct.length > 0 ? (
             <div className="w-full ml-5 mt-5">
               <div className="w-full grid grid-cols-4 gap-4">
                 {currentProduct.map((item, index) => (
@@ -73,13 +71,14 @@ const ProductByGender = () => {
       </div>
       <div className="flex justify-center mt-5 mb-5">
         <Pagination
-          totalPages={Math.ceil(productByGender.length / postsPerPage)}
+          totalPages={Math.ceil(outdoorProduct.length / postsPerPage)}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
       </div>
     </div>
   )
+
 }
 
-export default ProductByGender
+export default OutdoorPlays

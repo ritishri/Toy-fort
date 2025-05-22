@@ -71,7 +71,7 @@ function Home() {
 
   const [showFAQs, setShowFAQs] = useState(false);
   const [fqsa, setFaqs] = useState(false);
-  const { fetchProductByAge, fetchDiscountProduct } = useContext(AppContext);
+  const { fetchProductByAge, fetchDiscountProduct, outdoorProducts } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -120,6 +120,11 @@ function Home() {
     fetchDiscountProduct(discount);
     navigate(`/products/discount?discount=${discount}`);
   };
+
+  const handleBanner = (toy) =>{
+    outdoorProducts(toy)
+    navigate(`/toys/${toy}`)
+  } 
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -272,7 +277,8 @@ function Home() {
             <img
               onClick={() => handleSidebarByAge("12Y")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
-              src="https://toyfort.s3.ap-south-1.amazonaws.com/r-for-rabbit-18.png"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/r-for-ra
+            bit-18.png"
             />
             <img
               onClick={() => handleSidebarByAge("12Y")}
@@ -492,61 +498,57 @@ function Home() {
           <h1>OUTDOOR PLAY FOR KIDS</h1>
         </div>
 
-        <a>
-          <img
+        
+          <img 
+            onClick={()=>handleBanner('outdoor-play')}
             className="w-full p-4"
             src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Outdoor-Play-Toy-Fort-Banner.webp"
           />
-        </a>
 
         <div className="w-full">
           <div className="flex flex-row pt-0 ">
             <div className="ml-20 mr-32 group">
-              <a href="#">
                 <img
-                  className=""
+                  onClick={()=>handleBanner('outdoor-play')}
                   src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Play-House.webp"
                 />
                 <h6 className="text-center group-hover:text-red-600">
                   Play House
                 </h6>
-              </a>
             </div>
 
             <div className="mr-32 group">
-              <a href="#">
                 <img
-                  className=""
+                  onClick={()=>handleBanner('battery-cars-bikes')}
                   src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Battery-Ride-On.webp"
                 />
                 <h6 className="text-center group-hover:text-red-600">
                   Battery Ride On
                 </h6>
-              </a>
+              
             </div>
 
             <div className="mr-32 group">
-              <a href="#">
+              
                 <img
-                  className=""
+                 onClick={()=>handleBanner('slides-swings-rockers')}
                   src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Slides-and-Swings.webp"
                 />
                 <h6 className="text-center group-hover:text-red-600">
                   Sliding and Swings
                 </h6>
-              </a>
+              
             </div>
 
             <div className="group">
-              <a href="#">
+              
                 <img
-                  className=""
+                  onClick={()=>handleBanner('sand-water-table')}
                   src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Sand-Water-Table.webp"
                 />
                 <h6 className="text-center group-hover:text-red-600">
                   Sand water Table
                 </h6>
-              </a>
             </div>
           </div>
         </div>
