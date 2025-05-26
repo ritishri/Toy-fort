@@ -14,7 +14,7 @@ const Sidebar = () => {
   const [max, setMax] = useState(0);
   const [getCharacters, setGetCharacters] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [showCat, setShowCat] = useState(null)
+  const [showCat, setShowCat] = useState(null);
 
   const navigate = useNavigate();
 
@@ -44,9 +44,8 @@ const Sidebar = () => {
     setShowGender(e.target.checked);
   };
 
-
   const handleSidebar = (category) => {
-     setActiveCategory(category);
+    setActiveCategory(category);
 
     navigate(`/category/${category}`);
   };
@@ -125,11 +124,11 @@ const Sidebar = () => {
     // console.log("Selected:", parent, subcategory);
     fetchSubCategoryProduct(cat, category);
     navigate(`${category}`);
-  }
+  };
 
   const resetSidebar = () => {
     setActiveCategory(null);
-  }
+  };
 
   return (
     <div>
@@ -140,31 +139,30 @@ const Sidebar = () => {
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
       <div className="">
-
         {activeCategory === null && (
           <>
             <a
               href="/"
-              className="text-base pl-10 mt-5 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-base pl-10 mt-5 hover:text-red-500 hover:underline"
             >
               Home
             </a>
 
             <p
               onClick={() => handleSidebar("books")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Books
             </p>
             <p
               onClick={() => handleSidebar("infants")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Infants
             </p>
             <p
               onClick={() => handleSidebar("toys")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Toys
             </p>
@@ -174,7 +172,6 @@ const Sidebar = () => {
             >
               Sports
             </p>
-
             <p
               onClick={() => handleSidebar("school-items")}
               className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
@@ -188,12 +185,12 @@ const Sidebar = () => {
               Electronics
             </p>
 
-            <a
+            <p onClick={()=>navigate('/contact')}
               href="/contact"
-              className="text-base pl-10 pt-8 mb-4 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-base pl-10  mb-4 hover:text-red-500 hover:underline"
             >
               Contact Us
-            </a>
+            </p>
           </>
         )}
 
