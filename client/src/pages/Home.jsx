@@ -509,7 +509,7 @@ function Home() {
           <div className="flex flex-row pt-0 ">
             <div className="ml-20 mr-32 group">
                 <img
-                  onClick={()=>handleBanner('outdoor-play')}
+                  onClick={()=>handleBanner('play-house')}
                   src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Play-House.webp"
                 />
                 <h6 className="text-center group-hover:text-red-600">

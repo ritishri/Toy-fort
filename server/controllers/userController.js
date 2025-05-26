@@ -311,7 +311,7 @@ const addToWishlist = async (req, res) => {
     const { imageUrl, title, originalPrice, discountedPrice, slug, discount } =
       req.body;
     const userId = req.user?.id;
-    console.log("discount", discount);
+    // console.log("discount", discount);
 
     if (!userId) {
       return res
@@ -321,23 +321,19 @@ const addToWishlist = async (req, res) => {
 
     const db = await connectToDatabase();
 
-    // if (rows.length > 0) {
-    //   return res.status(409).json({ message: "Item already in wishlist" });
-    // }
-
     const [result] = await db.query(
       "INSERT INTO wishlists (user_id, image, title, original_price, discounted_price, slug, discount) VALUES (?,?,?,?,?,?,?)",
       [userId, imageUrl, title, originalPrice, discountedPrice, slug, discount]
     );
 
-    console.log(result);
+    // console.log(result);
 
     const [rows] = await db.query(
       "SELECT * FROM wishlists WHERE title = ? AND user_id = ?",
       [title, userId]
     );
 
-    console.log("rows", rows);
+    // console.log("rows", rows);
 
     res.status(201).json({
       message: "Product added successfully",

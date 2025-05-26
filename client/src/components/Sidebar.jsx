@@ -14,12 +14,11 @@ const Sidebar = () => {
   const [max, setMax] = useState(0);
   const [getCharacters, setGetCharacters] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [showCat, setShowCat] = useState(null);
+  const [showCat, setShowCat] = useState(null)
 
   const navigate = useNavigate();
 
   const {
-    sidebarFilter,
     fetchDiscountProduct,
     fetchProductByAge,
     fetchProductByGender,
@@ -45,14 +44,10 @@ const Sidebar = () => {
     setShowGender(e.target.checked);
   };
 
-  // const handleSidebar = (category) => {
-  //   setActiveCategory(prev => prev === category ? null : category);
-
-  //   navigate(`/category/${category}`);
-  // };
 
   const handleSidebar = (category) => {
-    setActiveCategory(category);
+     setActiveCategory(category);
+
     navigate(`/category/${category}`);
   };
 
@@ -96,6 +91,19 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
+    const getCharactersName = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/products/characters"
+        );
+
+        const characters = response.data.map((item) => item.attribute5_value);
+        console.log("characters", characters);
+        setGetCharacters(characters);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     const getBrandName = async () => {
       try {
         const response = await axios.get(
@@ -110,22 +118,6 @@ const Sidebar = () => {
       }
     };
     getBrandName();
-  }, []);
-
-  useEffect(() => {
-    const getCharactersName = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/products/characters"
-        );
-
-        const characters = response.data.map((item) => item.attribute5_value);
-        console.log("characters", characters);
-        setGetCharacters(characters);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getCharactersName();
   }, []);
 
@@ -133,11 +125,11 @@ const Sidebar = () => {
     // console.log("Selected:", parent, subcategory);
     fetchSubCategoryProduct(cat, category);
     navigate(`${category}`);
-  };
+  }
 
   const resetSidebar = () => {
     setActiveCategory(null);
-  };
+  }
 
   return (
     <div>
@@ -148,6 +140,7 @@ const Sidebar = () => {
       <p className="text-sm pl-6 mt-8 font-medium">Category</p>
 
       <div className="">
+
         {activeCategory === null && (
           <>
             <a

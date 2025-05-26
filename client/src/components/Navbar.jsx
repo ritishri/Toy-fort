@@ -18,7 +18,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
@@ -28,8 +28,12 @@ import { v4 as uuidv4 } from "uuid";
 function Navbar() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
 
-  const { user, setUser, profile, setProfile } = useContext(AppContext);
+  const dropdownRef = useRef();
+
+  const { user, setUser, profile, setProfile, fetchSubCategoryProduct } =
+    useContext(AppContext);
 
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const slug = storedUser?.slug;
@@ -43,23 +47,49 @@ function Navbar() {
     password: "",
   });
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProfile(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleChanges = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const handleSidebar = (category) => {
+    setActiveCategory(category);
+    navigate(`/category/${category}`);
+  };
+  const handleSidebarCategory = (cat, category) => {
+    // console.log("Selected:", parent, subcategory);
+    fetchSubCategoryProduct(cat, category);
+    navigate(`/category/${cat}/${category}`);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await axios.post("http://localhost:5000/api/login", values);
-  
+      const response = await axios.post(
+        "http://localhost:5000/api/login",
+        values
+      );
+
       if (response.status === 201 && response.data.user) {
         localStorage.setItem("token", response.data.token);
-  
+
         let userData = response.data.user;
-  
+
         if (!userData.uniqueId) {
           const uniqueId = uuidv4().split("-")[0];
           userData = { ...userData, uniqueId };
@@ -72,10 +102,12 @@ function Navbar() {
         setShowLoginForm(!showLoginForm);
       }
     } catch (err) {
-      console.log("Login error:", err.response ? err.response.data : err.message);
+      console.log(
+        "Login error:",
+        err.response ? err.response.data : err.message
+      );
     }
   };
-  
 
   const toggleLoginForm = () => {
     setShowLoginForm(!showLoginForm);
@@ -88,6 +120,7 @@ function Navbar() {
   };
 
   return (
+    <div className="border-b-4 sticky top-0 z-50 bg-white shadow">
     <div className="" style={{ fontFamily: "Open Sans" }}>
       <div className="bg-red-500 h-10 flex flex-row space-x-4 p-2 text-white font-semibold text-lg">
         <a className="" href="https://www.facebook.com/toyfort/">
@@ -134,10 +167,9 @@ function Navbar() {
           <input
             className="w-full border bg-gray-50 border-gray-400 rounded-md p-2 pr-10"
             type="text"
-            placeholder="Search for Toys"      
-          />  
+            placeholder="Search for Toys"
+          />
 
-          
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -187,48 +219,50 @@ function Navbar() {
                 <ExpandMoreIcon className="text-[#606060]" />
               </span>
 
-              {profile && (
-                <div className="absolute right-0 top-full bg-white border rounded-lg shadow-lg z-50">
-                  <div className="flex flex-col py-2">
-                    <Link
-                      to={`/wishlist/${slug}-${id}`}
-                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
-                    >
-                      <PersonOutlineIcon fontSize="small" />
-                      Profile
-                    </Link>
-                    <Link
-                      to="/order"
-                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
-                    >
-                      <MdOutlineReceiptLong size={24} />
-                      Orders
-                    </Link>
-                    <Link
-                      to="/refund-requests"
-                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
-                    >
-                      <FiShoppingBag size={20} />
-                      Refund
-                    </Link>
-                    <Link
-                      to="/settings/edit-profile"
-                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
-                    >
-                      <SettingsIcon fontSize="small" className="text-base" />
-                      Settings
-                      <span className="absolute left-4 bottom-0 w-[50%] h-[2px] tracking-widest bg-[#bfbdbd]"></span>
-                    </Link>
-                    <Link
-                      onClick={handleLogout}
-                      className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
-                    >
-                      <LogoutIcon fontSize="small" />
-                      Logout
-                    </Link>
+              <div ref={dropdownRef}>
+                {profile && (
+                  <div className="absolute right-0 top-full bg-white border rounded-lg shadow-lg z-50">
+                    <div className="flex flex-col py-2">
+                      <Link
+                        to={`/wishlist/${slug}-${id}`}
+                        className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      >
+                        <PersonOutlineIcon fontSize="small" />
+                        Profile
+                      </Link>
+                      <Link
+                        to="/order"
+                        className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      >
+                        <MdOutlineReceiptLong size={24} />
+                        Orders
+                      </Link>
+                      <Link
+                        to="/refund-requests"
+                        className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      >
+                        <FiShoppingBag size={20} />
+                        Refund
+                      </Link>
+                      <Link
+                        to="/settings/edit-profile"
+                        className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      >
+                        <SettingsIcon fontSize="small" className="text-base" />
+                        Settings
+                        <span className="absolute left-4 bottom-0 w-[50%] h-[2px] tracking-widest bg-[#bfbdbd]"></span>
+                      </Link>
+                      <Link
+                        onClick={handleLogout}
+                        className="px-4 py-2 flex text-center justify-center text-sm font-thin text-[#606060] hover:bg-gray-100 cursor-pointer gap-1"
+                      >
+                        <LogoutIcon fontSize="small" />
+                        Logout
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           ) : (
             <div className="flex items-center gap-1">
@@ -331,16 +365,19 @@ function Navbar() {
 
       <div className="flex justify-center gap-14 border-b-4 pb-5 border-gray-100 p-8">
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full " href="/">
+          <p className="bg-red-600 text-white px-8 py-2 rounded-full " href="/">
             Home
-          </a>
+          </p>
         </div>
 
         <div className="relative group">
           {/* Menu Button */}
-          <a className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer">
+          <p
+            onClick={() => handleSidebar("infants")}
+            className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer"
+          >
             Infants
-          </a>
+          </p>
 
           {/* Dropdown Content */}
           <div className="absolute right-1 left-0 w-[1100px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-5">
@@ -350,29 +387,57 @@ function Navbar() {
                 <ul className="space-y-2">
                   <p className="font-semibold text-black">Baby Gear</p>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-gear", "baby-carrier")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Carrier
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-gear", "baby-walker")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Walkers
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
-                      Bouncers & Rockers
-                    </a>
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "baby-gear",
+                          "bouncers-rockers-swings"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
+                      Bouncers, Rockers & Swings
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-gear", "cribs-cradles")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Cribs & Cradles
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-gear", "high-chair")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       High Chair
-                    </a>
+                    </p>
                   </li>
                   <li className="font-semibold cursor-pointer">Show All</li>
                 </ul>
@@ -380,77 +445,155 @@ function Navbar() {
                 <ul className="space-y-2">
                   <p className="font-semibold text-black">Kids Furniture</p>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("infants", "kids-bed")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Kids Bed
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("infants", "kids-table-and-chair")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Kids Table & Chair
-                    </a>
+                    </p>
                   </li>
                 </ul>
 
                 <ul className="space-y-2">
                   <p className="font-semibold text-black">Infant / Toddler</p>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "infants-toddlers",
+                          "learning-toys"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Learning Toys
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("infants-toddlers", "ball-pool")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Ball Pool
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("infants-toddlers", "gift-set")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Gift Set
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "infants-toddlers",
+                          "musical-toys"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Musical Toys
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "infants-toddlers",
+                          "play-gym-playmats"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Play Gym & Playmats
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "infants-toddlers",
+                          "push-pull-along-toys"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Push & Pull Along Toys
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p className="text-gray-600 hover:text-gray-900 cursor-pointer">
                       Show All
-                    </a>
+                    </p>
                   </li>
                 </ul>
 
                 <ul className="space-y-2">
                   <p className="font-semibold text-black">Feeding & Nursing</p>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "feeding-nursing",
+                          "baby-bottle-sterilizer"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Bottle Sterilizer
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("feeding-nursing", "breast-pump")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Breast Pump
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory(
+                          "feeding-nursing",
+                          "feed-bottle-essentials"
+                        )
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Feed Bottle & Essentials
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("feeding-nursing", "baby-soother")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Soother
-                    </a>
+                    </p>
                   </li>
                   <li className="cursor-pointer">Show All</li>
                 </ul>
@@ -458,29 +601,54 @@ function Navbar() {
                 <ul className="space-y-2">
                   <p className="font-semibold text-black">Infant Utilites</p>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-bath", "baby-monitor")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Monitor
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-bath", "baby-bath-bed-tub")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Bath Bed / Tub
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-bath", "baby-diaper")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Baby Diaper
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-bath", "bath-skin-care")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Bath & Skin Care
-                    </a>
+                    </p>
                   </li>
                   <li>
-                    <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("baby-bath", "food-container")
+                      }
+                      className="text-gray-600 hover:text-gray-900 cursor-pointer"
+                    >
                       Food Container
-                    </a>
+                    </p>
                   </li>
                   <li>
                     <a className="text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -543,12 +711,13 @@ function Navbar() {
 
         <div className="relative group">
           {/* Menu Button */}
-          <a
+          <p
+            onClick={() => handleSidebar("books")}
             className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer"
             href="/books"
           >
             Books
-          </a>
+          </p>
 
           {/* Dropdown Content */}
           <div className="absolute left-[-10] w-[1100px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-5">
@@ -614,9 +783,13 @@ function Navbar() {
         </div>
 
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full" href="#">
+          <p
+            onClick={() => handleSidebar("toys")}
+            className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
+            href="#"
+          >
             Toys
-          </a>
+          </p>
 
           <div className="absolute -left-1/3 right-1 w-[900px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-4">
             <div className="grid grid-cols-5 gap-6">
@@ -853,9 +1026,13 @@ function Navbar() {
         </div>
 
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full" href="#">
+          <p
+            onClick={() => handleSidebar("sports")}
+            className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
+            href="#"
+          >
             Sports
-          </a>
+          </p>
 
           <div className="absolute -left-96 w-[1100px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-2">
             <div className="flex">
@@ -932,9 +1109,13 @@ function Navbar() {
         </div>
 
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full" href="#">
+          <p
+            onClick={() => handleSidebar("school-items")}
+            className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
+            href="#"
+          >
             School Items
-          </a>
+          </p>
 
           {/* Dropdown Container */}
           <div className="absolute right-0 w-[900px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-4">
@@ -1015,9 +1196,13 @@ function Navbar() {
         </div>
 
         <div className="relative group">
-          <a className="bg-red-600  text-white px-8 py-2 rounded-full" href="#">
+          <p
+            onClick={() => handleSidebar("electronics")}
+            className="bg-red-600  text-white px-8 py-2 rounded-full cursor-pointer"
+            href="#"
+          >
             Electronics
-          </a>
+          </p>
 
           <div className="absolute right-0 w-[1000px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-4">
             <div className="grid grid-cols-4 gap-6">
@@ -1079,11 +1264,15 @@ function Navbar() {
         </div>
 
         <div className="relative group">
-          <a className="bg-red-600 text-white px-8 py-2 rounded-full " href="#">
+          <p
+            className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
+            href="#"
+          >
             Contact Us
-          </a>
+          </p>
         </div>
       </div>
+    </div>
     </div>
   );
 }
