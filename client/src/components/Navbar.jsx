@@ -372,8 +372,8 @@ function Navbar() {
         <div className="flex justify-center gap-14 border-b-4 pb-5 border-gray-100 p-8">
           <div className="relative group">
             <p
-              className="bg-red-600 text-white px-8 py-2 rounded-full "
-              href="/"
+              className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer "
+              onClick={() => navigate("/")}
             >
               Home
             </p>
@@ -816,7 +816,6 @@ function Navbar() {
             <p
               onClick={() => handleSidebar("toys")}
               className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
-              href="#"
             >
               Toys
             </p>
@@ -1041,109 +1040,181 @@ function Navbar() {
                   <p className="font-semibold text-black px-4 py-2">
                     Remote Control Toys
                   </p>
-                  
-                    <p onClick={() =>
-                      handleSidebarCategory("remote-control-toys", "planes-drones")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Planes & Drones
-                    </p>
-                  
-                    <p onClick={() =>
-                      handleSidebarCategory("remote-control-toys", "bike-car-trucks")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Bike, Car & Trucks
-                    </p>
-                 
 
-                  <p onClick={() =>
-                      handleSidebarCategory("toys", "soft-toys")
-                    } className="font-bold text-black px-4 py-2 cursor-pointer hover:border-b-2 border-black">Soft Toys</p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "remote-control-toys",
+                        "planes-drones"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Planes & Drones
+                  </p>
+
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "remote-control-toys",
+                        "bike-car-trucks"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Bike, Car & Trucks
+                  </p>
+
+                  <p
+                    onClick={() => handleSidebarCategory("toys", "soft-toys")}
+                    className="font-bold text-black px-4 py-2 cursor-pointer hover:border-b-2 border-black"
+                  >
+                    Soft Toys
+                  </p>
                 </div>
 
                 <div className="space-y-1">
                   <p className="font-semibold text-black px-4 py-2">
                     Toys Organiser
                   </p>
-                    <p onClick={() =>
-                      handleSidebarCategory("toys-organizer", "toys-organizer-box")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Toys Organiser Book
-                    </p>
-                 
-                    <p onClick={() =>
-                      handleSidebarCategory("toys-organizer", "toys-organizer-shelf")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Toys Organiser Shelf
-                    </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "toys-organizer",
+                        "toys-organizer-box"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Toys Organiser Book
+                  </p>
+
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "toys-organizer",
+                        "toys-organizer-shelf"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Toys Organiser Shelf
+                  </p>
                 </div>
 
                 <div className="space-y-1">
                   <p className="font-semibold text-black px-4 py-2">
                     Figure & Play Sets
                   </p>
-                  
-                    <p onClick={() =>
-                      handleSidebarCategory("figures-play-sets", "car-play-sets")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Car Play Sets
-                    </p>
-                  
-                    <p onClick={() =>
-                      handleSidebarCategory("figures-play-sets", "action-figures")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Action Figures
-                    </p>
-                    <p onClick={() =>
-                      handleSidebarCategory("figures-play-sets", "die-cast-models")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Die Cast Models
-                    </p>
-                    <p onClick={() =>
-                      handleSidebarCategory("figures-play-sets", "train-play-set")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Train Play Set
-                    </p>
+
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "figures-play-sets",
+                        "car-play-sets"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Car Play Sets
+                  </p>
+
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "figures-play-sets",
+                        "action-figures"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Action Figures
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "figures-play-sets",
+                        "die-cast-models"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Die Cast Models
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "figures-play-sets",
+                        "train-play-set"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Train Play Set
+                  </p>
                 </div>
 
                 <div className="space-y-1">
                   <p className="font-bold text-black px-4 py-2">Outdoor Play</p>
-                  
-                    <p onClick={() =>
+
+                  <p
+                    onClick={() =>
                       handleSidebarCategory("outdoor-play", "play-house")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Play House
-                    </p>
-                    <p onClick={() =>
-                      handleSidebarCategory("outdoor-play", "slides-swings-rockers")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Slides, Swings & Rockers
-                    </p>
-                  
-                    <p onClick={() =>
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Play House
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "outdoor-play",
+                        "slides-swings-rockers"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Slides, Swings & Rockers
+                  </p>
+
+                  <p
+                    onClick={() =>
                       handleSidebarCategory("outdoor-play", "battery-car-bikes")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Battery , Car & Bikes
-                    </p>
-              
-                    <p onClick={() =>
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Battery , Car & Bikes
+                  </p>
+
+                  <p
+                    onClick={() =>
                       handleSidebarCategory("outdoor-play", "sand-water-table")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Sand & Water Table
-                    </p>
-                  
-                    <p onClick={() =>
-                      handleSidebarCategory("outdoor-play", "ride-one-tricycles")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Ride on Tricycles
-                    </p>
-                 
-                  
-                    <p onClick={() =>
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Sand & Water Table
+                  </p>
+
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "outdoor-play",
+                        "ride-one-tricycles"
+                      )
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Ride on Tricycles
+                  </p>
+
+                  <p
+                    onClick={() =>
                       handleSidebarCategory("outdoor-play", "trampoline")
-                    } className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Trampoline
-                    </p>
-                
+                    }
+                    className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                  >
+                    Trampoline
+                  </p>
                 </div>
               </div>
 
@@ -1155,7 +1226,6 @@ function Navbar() {
             <p
               onClick={() => handleSidebar("sports")}
               className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
-              href="#"
             >
               Sports
             </p>
@@ -1163,72 +1233,186 @@ function Navbar() {
             <div className="absolute -left-96 w-[1100px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-2">
               <div className="flex">
                 <div className="grid grid-cols-3">
-                  <p className="font-semibold text-black py-2 ">Badminton</p>
+                  <p
+                    onClick={() => handleSidebarCategory("sports", "badminton")}
+                    className="font-semibold text-black py-2 cursor-pointer"
+                  >
+                    Badminton
+                  </p>
 
-                  <p className="font-semibold text-black  py-2">Bow & arrow</p>
-                  <p className="font-semibold text-black  py-2">Dart Board</p>
-                  <p className="font-semibold text-black  py-2">Carrom Board</p>
-                  <p className="font-semibold text-black  py-2">Boxing Kit</p>
-                  <p className="font-semibold text-black  py-2">Volley Ball</p>
-                  <p className="font-semibold text-black mr-3  py-2">
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "bow-and-arrow")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Bow & arrow
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "dart-board")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Dart Board
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "carrom-board")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Carrom Board
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "boxing-kit")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Boxing Kit
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "volley-ball")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Volley Ball
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "sports",
+                        "fitness-equipment-accessories"
+                      )
+                    }
+                    className="font-semibold text-black mr-3  py-2 cursor-pointer"
+                  >
                     Fitness Equipment & Accessories
                   </p>
-                  <p className="font-semibold text-black  py-2">Lawn Tennis</p>
-                  <p className="font-semibold text-black  py-2">Stakeboard</p>
-                  <p className="font-semibold text-black  py-2">
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "lawn-tennis")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Lawn Tennis
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "stakeboard")
+                    }
+                    className="font-semibold text-black  py-2 "
+                  >
+                    Stakeboard
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "roller-skates")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
                     Roller Stakes
                   </p>
-                  <p className="font-semibold text-black  py-2">FootBall</p>
-                  <p className="font-semibold text-black  py-2">Cricket</p>
-                  <p className="font-semibold text-black  py-2">Basket Ball</p>
-                  <p className="font-semibold text-black  py-2">Table Tennis</p>
-                  <p className="font-semibold text-black  py-2">Air Hockey</p>
+                  <p
+                    onClick={() => handleSidebarCategory("sports", "football")}
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    FootBall
+                  </p>
+                  <p
+                    onClick={() => handleSidebarCategory("sports", "cricket")}
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Cricket
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "basket-ball")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Basket Ball
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "table-tennis")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Table Tennis
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("sports", "air-hockey")
+                    }
+                    className="font-semibold text-black  py-2 cursor-pointer"
+                  >
+                    Air Hockey
+                  </p>
                 </div>
 
                 {/* right side */}
 
                 <div className="w-1/3 grid grid-cols-2 gap-2">
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("sports", "boxing-kit")
+                    }
+                    className="relative cursor-pointer"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64e7521580ee51-27478711-55016525.webp"
-                      alt="Pram & Stroller"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2d501b6c510-30420931-31142751.webp"
+                      alt="Boxing Kit"
                       className="w-40 h-28"
                     />
                     <p className="absolute inset-0 flex justify-start bg-opacity-70 text-white font-semibold text-sm text-center">
-                      Pram & Stroller
+                      Boxing Kit
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("sports", "lawn-tennis")
+                    }
+                    className="relative cursor-pointer"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f86d5e1735a0-77038825-21768230.webp"
-                      alt="Bath & Skin Care"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2d5e6293de1-07994517-95297141.webp"
+                      alt="Lawn Tennis"
                       className="w-40 h-28"
                     />
                     <p className="absolute inset-0 flex justify-start bg-opacity-70 text-white font-semibold text-sm text-center">
-                      Bath & Skin Care
+                      Lawn Tennis
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() => handleSidebarCategory("sports", "football")}
+                    className="relative cursor-pointer"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f8612b0507a0-81849579-16369615.webp"
-                      alt="Musical Toys"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2d69333f119-86216082-10248058.webp"
+                      alt="Football"
                       className="w-44 h-28"
                     />
                     <p className=" absolute inset-0 flex justify-start bg-opacity-70 text-white font-semibold text-sm text-center">
-                      Musical Toys
+                      Football
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() => handleSidebarCategory("sports", "cricket")}
+                    className="relative cursor-pointer"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64eda5751c0a73-90527865-14506973.webp"
-                      alt="Play Gym & Playmats"
+                      src="	https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2dc4a03c680-37067696-76961469.webp"
+                      alt="Cricket"
                       className="w-40 h-28 object-cover"
                     />
                     <p className=" absolute inset-0 flex justify-start bg-opacity-70 text-white font-semibold text-sm text-center">
-                      Play Gym & Playmats
+                      Cricket
                     </p>
                   </div>
                 </div>
@@ -1240,7 +1424,6 @@ function Navbar() {
             <p
               onClick={() => handleSidebar("school-items")}
               className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
-              href="#"
             >
               School Items
             </p>
@@ -1248,74 +1431,138 @@ function Navbar() {
             {/* Dropdown Container */}
             <div className="absolute right-0 w-[900px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-4">
               <div className="flex">
-                {/* Left Side - Text Section (Takes 2/3 width) */}
+                {/* Left Side  */}
                 <div className="w-2/3 grid grid-cols-3 gap-2">
-                  <p className="font-semibold text-black py-2">Lunch Box</p>
-                  <p className="font-semibold text-black py-2">Water Bottles</p>
-                  <p className="font-semibold text-black py-2">
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "lunch-box")
+                    }
+                    className="font-semibold text-black py-2"
+                  >
+                    Lunch Box
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "water-bottles")
+                    }
+                    className="font-semibold text-black py-2"
+                  >
+                    Water Bottles
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory(
+                        "school-items",
+                        "pencil-cases-and-pouches"
+                      )
+                    }
+                    className="font-semibold text-black py-2"
+                  >
                     Pencil Cases & Pouches
                   </p>
-                  <p className="font-semibold text-black py-2">Study Tables</p>
-                  <p className="font-semibold text-black py-2">Gift Sets</p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "study-table")
+                    }
+                    className="font-semibold text-black py-2"
+                  >
+                    Study Tables
+                  </p>
+                  <p
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "gift-sets")
+                    }
+                    className="font-semibold text-black py-2"
+                  >
+                    Gift Sets
+                  </p>
 
-                  <ul className="space-y-1">
+                  <div className="space-y-1">
                     <p className="font-semibold text-black py-2">Bags</p>
-                    <li>
-                      <a className="inline-block py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                        School Bags
-                      </a>
-                    </li>
-                    <li>
-                      <a className="inline-block py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                        Fancy Bags
-                      </a>
-                    </li>
-                  </ul>
+
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("school-items", "school-bags")
+                      }
+                      className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                    >
+                      School Bags
+                    </p>
+
+                    <p
+                      onClick={() =>
+                        handleSidebarCategory("school-items", "fancy-bags")
+                      }
+                      className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer"
+                    >
+                      Fancy Bags
+                    </p>
+                  </div>
                 </div>
 
-                {/* Right Side - Image Section (Takes 1/3 width) */}
+                {/* Right Side */}
                 <div className="w-1/3 grid grid-cols-2 gap-2">
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "lunch-box")
+                    }
+                    className="relative"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64e7521580ee51-27478711-55016525.webp"
-                      alt="Pram & Stroller"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2d76fd806d6-74173325-86646041.webp"
+                      alt="Lunch Box"
                       className="w-40 h-28 object-cover"
                     />
                     <p className="absolute bottom-0 w-full bg-opacity-60 text-white px-2 py-1 text-sm font-semibold text-start">
-                      Pram & Stroller
+                      Lunch Box
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "study-table")
+                    }
+                    className="relative"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f86d5e1735a0-77038825-21768230.webp"
-                      alt="Bath & Skin Care"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2d9f37e02b3-21012753-27397235.webp"
+                      alt="Study Table"
                       className="w-40 h-28 object-cover"
                     />
                     <p className="absolute bottom-0 w-full bg-opacity-60 text-white px-2 py-1 text-sm text-start">
-                      Bath & Skin Care
+                      Study Table
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "water-bottles")
+                    }
+                    className="relative"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f8612b0507a0-81849579-16369615.webp"
-                      alt="Musical Toys"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2dc359ace47-16790751-56325428.webp"
+                      alt="Bottles"
                       className="w-52 h-40 rounded-lg object-cover"
                     />
                     <p className="absolute bottom-0 w-full bg-opacity-60 text-white px-2 py-1 font-semibold text-sm text-start">
-                      Musical Toys
+                      Bottles
                     </p>
                   </div>
 
-                  <div className="relative">
+                  <div
+                    onClick={() =>
+                      handleSidebarCategory("school-items", "bags")
+                    }
+                    className="relative"
+                  >
                     <img
-                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64eda5751c0a73-90527865-14506973.webp"
-                      alt="Play Gym & Playmats"
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/upload_test/category_67bd2632b872b1-90897802-58310443.webp"
+                      alt="Bags"
                       className="w-52 h-40 object-cover"
                     />
                     <p className="absolute bottom-0 w-full bg-opacity-60 text-white font-semibold px-2 py-1 text-sm text-start">
-                      Play Gym & Playmats
+                      Bags
                     </p>
                   </div>
                 </div>
@@ -1327,66 +1574,168 @@ function Navbar() {
             <p
               onClick={() => handleSidebar("electronics")}
               className="bg-red-600  text-white px-8 py-2 rounded-full cursor-pointer"
-              href="#"
             >
               Electronics
             </p>
 
-            <div className="absolute right-0 w-[1000px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-4">
+            <div className="absolute right-0 w-[1200px] bg-white shadow-md rounded-md hidden group-hover:block z-10 p-6">
               <div className="grid grid-cols-4 gap-6">
-                <ul className="space-y-1">
-                  <p className="font-semibold text-black px-4 py-2">Camera</p>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Camera Accessories
-                    </a>
-                  </li>
-                </ul>
-                <p className="font-semibold text-black px-4 py-2">
-                  Saregama Carvan
-                </p>
+                <div>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "camera")
+                    } className="font-semibold text-black mb-2 cursor-pointer">Camera</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("camera", "print-diy-camera")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Print DIY Camera
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("camera", "camera-accessories")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Camera Accessories
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("camera", "digital-camera")
+                    }  className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Digital Camera
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("camera", "instax-camera")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Instax Camera
+                  </p>
 
-                <ul className="space-y-1">
-                  <p className="font-semibold text-black px-4 py-2">
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "led-bags")
+                    } className="mt-4 font-semibold text-black cursor-pointer">LED Bags</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "saregama-carvan")
+                    } className="mt-4 font-semibold text-black cursor-pointer">
+                    Saregama Carvan
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "telescope")
+                    }  className="mt-4 font-semibold text-black cursor-pointer">Telescope</p>
+                </div>
+
+                
+                <div>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "kids-watch")
+                    } className="font-semibold text-black mb-2 cursor-pointer">Kids Watch</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "video-games")
+                    } className="mt-4 font-semibold text-black mb-2 cursor-pointer">
                     Video Games
                   </p>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "nintendo")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Nintendo
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "tv-video-game")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    TV Video Game
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "ps4")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    PS4
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "ps5")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    PS5
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "xbox")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Xbox
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("video-games", "racing-wheels")
+                    } className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Racing Wheels
+                  </p>
+                  <p className="px-1 py-1 text-sm text-gray-500 hover:border-b border-gray-500 cursor-pointer">
+                    Show All
+                  </p>
+                </div>
+
+                
+                <div>
+                  
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "smart-watch-tracker")
+                    } className="font-semibold text-black mb-2 cursor-pointer">
+                    Smart Watch & Tracker
+                  </p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "binoculars")
+                    } className="mt-4 font-semibold text-black cursor-pointer">Binoculars</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "e-scooter")
+                    } className="mt-4 font-semibold text-black cursor-pointer">E-Scooter</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "headphones")
+                    } className="mt-4 font-semibold text-black cursor-pointer">Headphones</p>
+                  <p onClick={() =>
+                      handleSidebarCategory("electronics", "hoverboards")
+                    } className="mt-4 font-semibold text-black cursor-pointer">Hoverboards</p>
+                </div>
+
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div onClick={() =>
+                      handleSidebarCategory("electronics", "camera")
+                    } className="relative rounded overflow-hidden cursor-pointer">
+                    <img
+                      src="	https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2e02c0a8e67-62678996-32322915.webp"
+                      alt="Camera"
+                      className="w-full h-auto object-cover"
+                    />
+                    <p className="absolute bottom-2 left-2 text-white font-semibold">
+                      Camera
+                    </p>
+                  </div>
+                  <div onClick={() =>
+                      handleSidebarCategory("electronics", "saregama-carvan")
+                    } className="relative rounded overflow-hidden cursor-pointer">
+                    <img
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2e2a75b0755-71507434-19531671.webp"
+                      alt="Saregama Carvan"
+                      className="w-full h-auto object-cover"
+                    />
+                    <p className="absolute bottom-2 left-2 text-white font-semibold">
+                      Saregama Carvan
+                    </p>
+                  </div>
+                  <div onClick={() =>
+                      handleSidebarCategory("electronics", "nintendo")
+                    } className="relative rounded overflow-hidden cursor-pointer">
+                    <img
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2e5f392c101-05817668-93609295.webp"
+                      alt="Nintendo"
+                      className="w-full h-auto object-cover"
+                    />
+                    <p className="absolute bottom-2 left-2 text-white font-semibold">
                       Nintendo
-                    </a>
-                  </li>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      PS4
-                    </a>
-                  </li>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      PS5
-                    </a>
-                  </li>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
+                    </p>
+                  </div>
+                  <div onClick={() =>
+                      handleSidebarCategory("electronics", "xbox")
+                    } className="relative rounded overflow-hidden cursor-pointer">
+                    <img
+                      src="https://toyfort.s3.ap-south-1.amazonaws.com/category/category_64f2e978032926-46652292-54954022.webp"
+                      alt="Xbox"
+                      className="w-full h-auto object-cover "
+                    />
+                    <p className="absolute bottom-2 left-2 text-white font-semibold">
                       Xbox
-                    </a>
-                  </li>
-                  <li>
-                    <a className="inline-block px-4 py-1 text-sm text-gray-500 hover:border-b-2 border-gray-500 cursor-pointer">
-                      Racing Wheels
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="grid grid-cols-4 gap-6 mt-4">
-                <p className="font-semibold text-black px-4 py-2">LED Bags</p>
-
-                <p className="font-semibold text-black px-4 py-2">Telescope</p>
-
-                <p className="font-semibold text-black px-4 py-2">Robot</p>
-                <p className="font-semibold text-black px-4 py-2">
-                  Smart Watch & Trackers
-                </p>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1394,7 +1743,7 @@ function Navbar() {
           <div className="relative group">
             <p
               className="bg-red-600 text-white px-8 py-2 rounded-full cursor-pointer"
-              href="#"
+              onClick={()=>navigate('/contact')}
             >
               Contact Us
             </p>

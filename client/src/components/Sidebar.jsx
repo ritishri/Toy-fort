@@ -205,7 +205,7 @@ const Sidebar = () => {
 
             <p
               onClick={() => handleSidebarCategory("books", "colouring-books")}
-              className="pl-12 cursor-pointer  text-gray-500"
+              className="pl-12 cursor-pointer text-gray-500"
             >
               Colouring Books
             </p>
