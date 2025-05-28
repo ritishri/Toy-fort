@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import "@fontsource/open-sans";
 import Carousel from "../components/CarouselImages";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,8 +31,10 @@ const ProductDetails = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [addCart, setAddCart] = useState(false);
+  const [buyNow, setBuyNow] = useState(false)
 
   const { addToCart } = useContext(AppContext);
+  const navigate = useNavigate()
 
   const handleCountryChange = (selectedOption) => {
     setSelectedCountry(selectedOption);
@@ -59,6 +61,10 @@ const ProductDetails = () => {
       setState(state - 1);
     }
   };
+
+  const getNavigate = (cart) =>{
+    navigate(`${'/cart'}`)
+  }
 
   useEffect(() => {
     const fetchBrandProducts = async () => {
@@ -228,11 +234,32 @@ const ProductDetails = () => {
                     )}
                     Add to Cart
                   </button>
-                  <button className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center">
-                    <FontAwesomeIcon
+                  <button className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center"
+                  onClick={(e) => {
+                      addToCart(products);
+                      setBuyNow(true);
+                      setTimeout(() => {
+                        setBuyNow(false);
+                        console.log(setBuyNow);
+                        navigate('/cart')
+                        
+                      }, 2000);
+                      
+                    }}>
+
+                      {buyNow ? (
+                      <CheckIcon className="w-7 h-7 font-bold text-white" />
+                    ) : (
+                      <FontAwesomeIcon
                       className="w-5 h-5 mr-2 text-white"
                       icon={faBolt}
                     />
+                    )}
+                    {/* <FontAwesomeIcon
+                      className="w-5 h-5 mr-2 text-white"
+                      icon={faBolt}
+                    /> */}
+                    
                     Buy Now
                   </button>
                   <button className="text-gray-600 pt-3 pb-3 pl-6 pr-6 rounded-sm flex items-center">
