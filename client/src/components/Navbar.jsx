@@ -444,7 +444,7 @@ function Navbar() {
                       High Chair
                     </p>
 
-                    <li className="font-semibold cursor-pointer">Show All</li>
+                    <p className="font-semibold cursor-pointer">Show All</p>
                   </div>
 
                   <div className="space-y-2">
@@ -593,7 +593,7 @@ function Navbar() {
                       Baby Soother
                     </p>
 
-                    <li className="cursor-pointer">Show All</li>
+                    <p className="cursor-pointer">Show All</p>
                   </div>
 
                   <div className="space-y-2">
@@ -653,7 +653,7 @@ function Navbar() {
                       Food Processor
                     </p>
 
-                    <li className="cursor-pointer">Show All</li>
+                    <p className="cursor-pointer">Show All</p>
                   </div>
                 </div>
 

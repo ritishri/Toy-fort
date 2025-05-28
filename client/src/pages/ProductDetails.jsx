@@ -127,7 +127,7 @@ const ProductDetails = () => {
           <Carousel />
         </div>
 
-        {/*Right section  */}
+        {/* Right section  */}
         <div className="w-[48%]">
           {products && (
             <div>
