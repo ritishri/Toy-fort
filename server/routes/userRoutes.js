@@ -37,7 +37,7 @@ import {
   getSubCategoryProduct
   
 } from "../controllers/productController.js";
-import verifyToken from "../middlware/auth.js";
+import verifyToken from "../middleware/auth.js";
 
 const router = express.Router();
 

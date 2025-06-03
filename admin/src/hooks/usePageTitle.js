@@ -32,7 +32,10 @@ export default function usePageTitle(title) {
         break;
       case "/admin/refund-requests":
         document.title = "Refund Requests - Toyfort";
-        break;         
+        break;   
+      case "/admin/homepage-manager":
+        document.title = "Homepage Manager - Toyfort";
+        break;        
       default:
         document.title = "ToyFort";
     }

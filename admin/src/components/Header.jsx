@@ -1,5 +1,5 @@
-import React from 'react';
-import { Menu, Eye, ChevronDown, User } from 'lucide-react';
+import React from "react";
+import { Menu, Eye, ChevronDown, User } from "lucide-react";
 
 const Header = () => {
   return (
@@ -14,14 +14,15 @@ const Header = () => {
       {/* Right side: Language selector and User avatar */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-1 text-gray-600">
-          {/* Button with custom color */}
           <button
-            className="text-white flex items-center px-4 py-2 rounded"
-            style={{ backgroundColor: '#00a65a' }}
+            onClick={() => (window.location.href = "http://localhost:5173/")}
+            className="text-white flex items-center px-2 py-1 rounded"
+            style={{ backgroundColor: "#00a65a" }}
           >
             <Eye size={16} className="mr-2" />
             View Site
           </button>
+
           <ChevronDown size={16} />
           <span>English</span>
         </div>
