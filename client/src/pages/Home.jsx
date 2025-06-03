@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Slider from "./Slider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -71,7 +71,8 @@ function Home() {
 
   const [showFAQs, setShowFAQs] = useState(false);
   const [fqsa, setFaqs] = useState(false);
-  const { fetchProductByAge, fetchDiscountProduct, outdoorProducts } = useContext(AppContext);
+  const { fetchProduct, fetchDiscountProduct, outdoorProducts } =
+    useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -95,15 +96,28 @@ function Home() {
   });
 
   const [isVisible, setIsVisible] = useState(true);
+  const scrollRef = useRef(null);
+
+  // const rightSlide = () => {
+  //   setStartIndex((prevIndex) => (prevIndex + 1) % brandImages.length);
+  // };
+
+  // const leftSlide = () => {
+  //   setStartIndex(
+  //     (prevIndex) => (prevIndex - 1 + brandImages.length) % brandImages.length
+  //   );
+  // };
 
   const rightSlide = () => {
-    setStartIndex((prevIndex) => (prevIndex + 1) % brandImages.length);
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft += 230;
+    }
   };
 
   const leftSlide = () => {
-    setStartIndex(
-      (prevIndex) => (prevIndex - 1 + brandImages.length) % brandImages.length
-    );
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft -= 240;
+    }
   };
 
   const sliderImages = [];
@@ -112,8 +126,12 @@ function Home() {
   }
 
   const handleSidebarByAge = (age) => {
-    fetchProductByAge(age);
+    fetchProduct(age);
     navigate(`/products/age?age=${age}`);
+  };
+  const handleSidebarByBrand = (brand) => {
+    fetchProduct(brand);
+    navigate(`/products?brand=${brand}`);
   };
 
   const handleSiderbarDiscount = (discount) => {
@@ -121,10 +139,10 @@ function Home() {
     navigate(`/products/discount?discount=${discount}`);
   };
 
-  const handleBanner = (toy) =>{
-    outdoorProducts(toy)
-    navigate(`/toys/${toy}`)
-  } 
+  const handleBanner = (toy) => {
+    outdoorProducts(toy);
+    navigate(`/toys/${toy}`);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -202,125 +220,111 @@ function Home() {
 
           {/* Images */}
 
-          <div className="flex">
-            {sliderImages.map((img, index) => {
-              const brandName = img.split("/").pop().split("-")[0];
-
-              return (
-                <Link key={index} to={`/products?brand=${brandName}`}>
-                  <img
-                    className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
-                    src={img}
-                    alt={brandName}
-                  />
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* <div className="flex">
+          <div
+            ref={scrollRef}
+            className="flex overflow-x-scroll w-full scroll-smooth hide-scrollbar"
+          >
             <img
-              onClick={() => handleSidebarByAge("0-18M")}
+              onClick={() => handleSidebarByBrand("smartivity")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-500 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/smartivity-8.png"
             />
             <img
-              onClick={() => handleSidebarByAge("18-36M")}
+              onClick={() => handleSidebarByBrand("scentos")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/scentos-2.png"
             />
             <img
-              onClick={() => handleSidebarByAge("3-5Y")}
+              onClick={() => handleSidebarByBrand("Electrobotic")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/electrobotic-9.png"
             />
             <img
-              onClick={() => handleSidebarByAge("5-8Y")}
+              onClick={() => handleSidebarByBrand("chicco")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/chicco-3.png"
             />
             <img
-              onClick={() => handleSidebarByAge("8-12Y")}
+              onClick={() => handleSidebarByBrand("lego")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/lego-4.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("barbie")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/barbie-5.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Crayola")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/experience-1.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Hot+Wheels")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/hot-wheel-6.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Smiggle")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/smiggle-7.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Fujifilm")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/fujifilm-10.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Nuna")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/nua-11.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("R+for+Rabbit")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
-              src="https://toyfort.s3.ap-south-1.amazonaws.com/r-for-ra
-            bit-18.png"
+              src="https://toyfort.s3.ap-south-1.amazonaws.com/r-for-rabbit-18.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Funskool")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/funskool-12.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Mustela")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/mustela-13.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("IMC+Toys")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/imc-toys-14.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Kriiddaank")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/kriiddaank-15.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Imagi+Make")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/imagi-make-16.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Step+2")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/step-2-17.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Joie")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/joie-19.png"
             />
             <img
-              onClick={() => handleSidebarByAge("12Y")}
+              onClick={() => handleSidebarByBrand("Graco")}
               className="w-48 h-48 m-5 rounded-2xl transition-transform duration-4000 cursor-pointer hover:scale-105"
               src="https://toyfort.s3.ap-south-1.amazonaws.com/graco-20.png"
             />
-          </div> */}
+          </div>
 
           <button onClick={rightSlide}>
             <FontAwesomeIcon
@@ -498,57 +502,52 @@ function Home() {
           <h1>OUTDOOR PLAY FOR KIDS</h1>
         </div>
 
-        
-          <img 
-            onClick={()=>handleBanner('outdoor-play')}
-            className="w-full p-4"
-            src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Outdoor-Play-Toy-Fort-Banner.webp"
-          />
+        <img
+          onClick={() => handleBanner("outdoor-play")}
+          className="w-full p-4"
+          src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Outdoor-Play-Toy-Fort-Banner.webp"
+        />
 
         <div className="w-full">
           <div className="flex flex-row pt-0 ">
             <div className="ml-20 mr-32 group">
-                <img
-                  onClick={()=>handleBanner('play-house')}
-                  src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Play-House.webp"
-                />
-                <h6 className="text-center group-hover:text-red-600">
-                  Play House
-                </h6>
+              <img
+                onClick={() => handleBanner("play-house")}
+                src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Play-House.webp"
+              />
+              <h6 className="text-center group-hover:text-red-600">
+                Play House
+              </h6>
             </div>
 
             <div className="mr-32 group">
-                <img
-                  onClick={()=>handleBanner('battery-cars-bikes')}
-                  src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Battery-Ride-On.webp"
-                />
-                <h6 className="text-center group-hover:text-red-600">
-                  Battery Ride On
-                </h6>
-              
+              <img
+                onClick={() => handleBanner("battery-cars-bikes")}
+                src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Battery-Ride-On.webp"
+              />
+              <h6 className="text-center group-hover:text-red-600">
+                Battery Ride On
+              </h6>
             </div>
 
             <div className="mr-32 group">
-              
-                <img
-                 onClick={()=>handleBanner('slides-swings-rockers')}
-                  src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Slides-and-Swings.webp"
-                />
-                <h6 className="text-center group-hover:text-red-600">
-                  Sliding and Swings
-                </h6>
-              
+              <img
+                onClick={() => handleBanner("slides-swings-rockers")}
+                src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Slides-and-Swings.webp"
+              />
+              <h6 className="text-center group-hover:text-red-600">
+                Sliding and Swings
+              </h6>
             </div>
 
             <div className="group">
-              
-                <img
-                  onClick={()=>handleBanner('sand-water-table')}
-                  src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Sand-Water-Table.webp"
-                />
-                <h6 className="text-center group-hover:text-red-600">
-                  Sand water Table
-                </h6>
+              <img
+                onClick={() => handleBanner("sand-water-table")}
+                src="https://toyfort.s3.ap-south-1.amazonaws.com/img/OutdoorPlay/Sand-Water-Table.webp"
+              />
+              <h6 className="text-center group-hover:text-red-600">
+                Sand water Table
+              </h6>
             </div>
           </div>
         </div>

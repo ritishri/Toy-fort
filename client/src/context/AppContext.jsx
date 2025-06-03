@@ -175,7 +175,7 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  const fetchProductByAge = async (age) => {
+  const fetchProduct = async (age) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/products/age?age=${age}`
@@ -291,7 +291,7 @@ export const AppContextProvider = (props) => {
     fetchDiscountProduct,
     product,
     setProduct,
-    fetchProductByAge,
+    fetchProduct,
     productByAge,
     setProductByAge,
     fetchProductByGender,
