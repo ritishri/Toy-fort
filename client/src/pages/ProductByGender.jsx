@@ -7,12 +7,12 @@ import Pagination from '../components/Pagination';
 
 const ProductByGender = () => {
 
-    const location = useLocation();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
 
-    const {fetchProductByGender, productByGender} = useContext(AppContext)
+  const {fetchProductByGender, productByGender} = useContext(AppContext)
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const postsPerPage = 24;
 
@@ -34,7 +34,7 @@ const ProductByGender = () => {
   
     const indexOfLastProduct = currentPage * postsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - postsPerPage;
-    const currentProduct = productByPrice.slice(
+    const currentProduct = productByGender.slice(
       indexOfFirstProduct,
       indexOfLastProduct
     );

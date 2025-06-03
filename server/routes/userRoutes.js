@@ -18,7 +18,10 @@ import {
   removeFromCart,
   increaseProductQuantity,
   decreaseProductQuantity,
+  forgetPassword,
+  resetPassword
 } from "../controllers/userController.js";
+
 import {
   brandProducts,
   productsDetails,
@@ -34,7 +37,8 @@ import {
   getCharacterProduct,
   productOutOfStock,
   productInStock,
-  getSubCategoryProduct
+  getSubCategoryProduct,
+  getOutdoorProducts
   
 } from "../controllers/productController.js";
 import verifyToken from "../middleware/auth.js";
@@ -81,7 +85,9 @@ router.get('/characterProducts/products', getCharacterProduct);
 router.get('/stock-products/out-stock', productOutOfStock);
 router.get('/stock-products/in-stock', productInStock);
 router.get('/category/:category/:subcategory', getSubCategoryProduct);
-
+router.post('/auth/forget-password', forgetPassword);
+router.post('/auth/reset-password', resetPassword);
+router.get('/toys/:toys', getOutdoorProducts);
 
 
 

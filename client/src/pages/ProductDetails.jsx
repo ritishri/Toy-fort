@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import "@fontsource/open-sans";
 import Carousel from "../components/CarouselImages";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MessageModal from "../components/Message";
 import {
   faBolt,
   faStar,
@@ -23,21 +24,19 @@ import {
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 import { AppContext } from "../context/AppContext";
+// import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+
 
 const ProductDetails = () => {
   const [products, setProducts] = useState([]);
   const [state, setState] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
   const [addCart, setAddCart] = useState(false);
+  const [buyNow, setBuyNow] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { addToCart } = useContext(AppContext);
-
-  const handleCountryChange = (selectedOption) => {
-    setSelectedCountry(selectedOption);
-    setSelectedState(null);
-  };
+  const navigate = useNavigate();
 
   const [copied, setCopied] = useState(false);
   const couponCode = "TFSILVER5";
@@ -58,6 +57,10 @@ const ProductDetails = () => {
     if (state > 1) {
       setState(state - 1);
     }
+  };
+
+  const handleAskQuestion = () => {
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -127,7 +130,7 @@ const ProductDetails = () => {
           <Carousel />
         </div>
 
-        {/*Right section  */}
+        {/* Right section  */}
         <div className="w-[48%]">
           {products && (
             <div>
@@ -178,11 +181,17 @@ const ProductDetails = () => {
                   -{products.discount_rate}%
                 </span>
 
-                <span className="border border-gray-400 p-2 ml-96 text-xs">
+                <span className="border border-gray-400 p-2 ml-96 text-xs cursor-pointer">
                   {" "}
-                  <FontAwesomeIcon className="mr-2" icon={faEnvelope} />
+                  <FontAwesomeIcon className="mr-2" icon={faEnvelope}
+                  onClick={handleAskQuestion} />
                   Ask Question
                 </span>
+                <MessageModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  subject="Mattel Barbie Beach Doll Pink HPV19"
+                />
               </p>
               <div className="flex gap-x-8 mt-4">
                 <p>Status</p>
@@ -228,11 +237,25 @@ const ProductDetails = () => {
                     )}
                     Add to Cart
                   </button>
-                  <button className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center">
-                    <FontAwesomeIcon
-                      className="w-5 h-5 mr-2 text-white"
-                      icon={faBolt}
-                    />
+                  <button
+                    className="bg-red-600 hover:bg-red-500 text-white pt-3 pb-3 pl-6 pr-6 m-4 rounded-sm flex items-center"
+                    onClick={(e) => {
+                      addToCart(products);
+                      setBuyNow(true);
+                      setTimeout(() => {
+                        setBuyNow(false);
+                        navigate("/cart");
+                      }, 2000);
+                    }}
+                  >
+                    {buyNow ? (
+                      <CheckIcon className="w-7 h-7 font-bold text-white" />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        icon={faBolt}
+                      />
+                    )}
                     Buy Now
                   </button>
                   <button className="text-gray-600 pt-3 pb-3 pl-6 pr-6 rounded-sm flex items-center">

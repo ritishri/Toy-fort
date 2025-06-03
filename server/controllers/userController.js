@@ -1,6 +1,7 @@
 import { connectToDatabase } from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 const getAllSliders = async (req, res) => {
   try {
@@ -121,7 +122,7 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: newUser[0].id, email: newUser[0].email },
       process.env.JWT_KEY,
-      { expiresIn: "10h" }
+      { expiresIn: "2h" }
     );
 
     // console.log(token)
@@ -168,7 +169,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_KEY,
-      { expiresIn: "8h" }
+      { expiresIn: "2h" }
     );
 
     // console.log(token);
@@ -307,9 +308,10 @@ const updateProfile = async (req, res) => {
 
 const addToWishlist = async (req, res) => {
   try {
-    const { imageUrl, title, originalPrice, discountedPrice, slug, discount } = req.body;
+    const { imageUrl, title, originalPrice, discountedPrice, slug, discount } =
+      req.body;
     const userId = req.user?.id;
-    console.log("discount",discount);
+    // console.log("discount", discount);
 
     if (!userId) {
       return res
@@ -319,23 +321,19 @@ const addToWishlist = async (req, res) => {
 
     const db = await connectToDatabase();
 
-    // if (rows.length > 0) {
-    //   return res.status(409).json({ message: "Item already in wishlist" });
-    // }
-
     const [result] = await db.query(
       "INSERT INTO wishlists (user_id, image, title, original_price, discounted_price, slug, discount) VALUES (?,?,?,?,?,?,?)",
       [userId, imageUrl, title, originalPrice, discountedPrice, slug, discount]
     );
 
-    console.log(result)
+    // console.log(result);
 
     const [rows] = await db.query(
       "SELECT * FROM wishlists WHERE title = ? AND user_id = ?",
       [title, userId]
     );
 
-    console.log("rows", rows);
+    // console.log("rows", rows);
 
     res.status(201).json({
       message: "Product added successfully",
@@ -545,6 +543,196 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const sendResetEmail = async (to, resetLink) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject: "Password Reset Link",
+      html: `
+  <div style="font-family: Arial, sans-serif; background-color: #FAF6E9; padding: 20px; align-item:center; justify-content:center6">
+    <div style="background-color: #F75A5A; color: white; text-align: center; padding: 20px 10px;">
+      <h2 style="margin: 0;">Please reset your password</h2>
+    </div>
+
+    <div style="padding: 30px 20px; background-color: #ffffff; border-radius: 8px;">
+      <p>Hello,</p>
+      <p>We have sent you this email in response to your request to reset your password on Toyfort.
+      </p>
+      <p>To reset your password, please click the button below:</p>
+
+      <div style="margin: 20px 0;">
+        <a href="${resetLink}" target="_blank" style="
+          background-color: #948979;
+          color: white;
+          padding: 12px 25px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-size: 16px;
+          display: inline-block;
+        ">
+          Reset Password
+        </a>
+      </div>
+
+      <p style="color: #555;">Please ignore this email if you did not request a password change.</p>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background-color: #948979; color: white; font-size: 14px;">
+      <p style="margin: 0;">Contact Us</p>
+      <p style="margin: 5px 0;">Phone: +91-93152-57050</p>
+      <p style="margin: 5px 0;">Email: <a href="mailto:support@toyfort.in" style="color: white;">support@toyfort.in</a></p>
+      <p style="margin-top: 10px;">© 2024 Toyfort - All Rights Reserved</p>
+      <p>Developed by Austere Systems / Designed by Crazzybunny</p>
+    </div>
+  </div>
+  `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    // console.log("Email sent", info.response);
+    return true;
+  } catch (error) {
+    console.log("Error sending email", error);
+    return false;
+  }
+};
+
+const sendResetPasswordLink = async (email) => {
+  try {
+    const db = await connectToDatabase();
+
+    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (!rows || rows.length === 0) {
+      return { success: false, message: "We can't find a user with that e-mail address!" };
+    }
+
+    const user = rows[0];
+
+    const resetToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.RESET_JWT_KEY,
+      { expiresIn: "2h" }
+    );
+    const resetLink = `http://localhost:5173/reset-password?token=${encodeURIComponent(
+      resetToken
+    )}`;
+
+    const emailSent = await sendResetEmail(user.email, resetLink);
+
+    if (!emailSent) {
+      return {
+        success: false,
+        message: "Failed to send reset email.Try again.",
+      };
+    }
+
+    return {
+      success: true,
+      resetLink,
+      message:
+        "We've sent an email for resetting your password to your email address. Please check your email for next steps.",
+    };
+  } catch (error) {
+    console.error("Reset link error:", error);
+    return {
+      success: false,
+      message: "Something went wrong. Please try again.",
+    };
+  }
+};
+
+const bcryptResetPassword = async (token, password) => {
+  const RESET_JWT_KEY = process.env.RESET_JWT_KEY;
+
+  try {
+    const decoded = jwt.verify(token, RESET_JWT_KEY);
+    // console.log("Decoded",decoded.id)
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const db = await connectToDatabase();
+
+    const rows = await db.query("UPDATE users SET password = ? where id=?", [
+      hashedPassword,
+      decoded.id,
+    ]);
+
+    return { success: true, message: "Password reset successfully" };
+  } catch (error) {
+    console.log("JWT error", error.message);
+
+    return {
+      success: false,
+      message: "Error in reset password, Please try again. ",
+    };
+  }
+};
+
+const forgetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const response = await sendResetPasswordLink(email);
+
+    if (response.success) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(401).json(response);
+    }
+  } catch (error) {
+    console.log("Error in user login", error);
+    res.status(500).json({
+      success: false,
+      message: "Login failed, Please try again later",
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Password is required" });
+    y;
+  }
+
+  try {
+    const response = await bcryptResetPassword(token, password);
+
+    if (response.success) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(401).json(response);
+    }
+  } catch (error) {
+    console.log("Error in reset password", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Login failed, Please try again later",
+    });
+  }
+};
+
 export {
   getAllSliders,
   booksImages,
@@ -564,4 +752,7 @@ export {
   removeFromCart,
   increaseProductQuantity,
   decreaseProductQuantity,
+  forgetPassword,
+  resetPassword,
+  bcryptResetPassword,
 };

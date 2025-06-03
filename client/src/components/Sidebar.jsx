@@ -19,7 +19,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const {
-    sidebarFilter,
     fetchDiscountProduct,
     fetchProductByAge,
     fetchProductByGender,
@@ -45,14 +44,9 @@ const Sidebar = () => {
     setShowGender(e.target.checked);
   };
 
-  // const handleSidebar = (category) => {
-  //   setActiveCategory(prev => prev === category ? null : category);
-
-  //   navigate(`/category/${category}`);
-  // };
-
   const handleSidebar = (category) => {
     setActiveCategory(category);
+
     navigate(`/category/${category}`);
   };
 
@@ -96,6 +90,19 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
+    const getCharactersName = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/products/characters"
+        );
+
+        const characters = response.data.map((item) => item.attribute5_value);
+        console.log("characters", characters);
+        setGetCharacters(characters);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     const getBrandName = async () => {
       try {
         const response = await axios.get(
@@ -110,30 +117,8 @@ const Sidebar = () => {
       }
     };
     getBrandName();
-  }, []);
-
-  useEffect(() => {
-    const getCharactersName = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/products/characters"
-        );
-
-        const characters = response.data.map((item) => item.attribute5_value);
-        console.log("characters", characters);
-        setGetCharacters(characters);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getCharactersName();
   }, []);
-
-  // const handleSidebarCategory = async(cat,category)=>{
-  //   fetchSubCategoryProduct(cat,category)
-  //   navigate(`${category}`)
-
-  // }
 
   const handleSidebarCategory = (cat, category) => {
     // console.log("Selected:", parent, subcategory);
@@ -158,26 +143,26 @@ const Sidebar = () => {
           <>
             <a
               href="/"
-              className="text-base pl-10 mt-5 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-base pl-10 mt-5 hover:text-red-500 hover:underline"
             >
               Home
             </a>
 
             <p
               onClick={() => handleSidebar("books")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Books
             </p>
             <p
               onClick={() => handleSidebar("infants")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Infants
             </p>
             <p
               onClick={() => handleSidebar("toys")}
-              className="text-small pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-sm pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
             >
               Toys
             </p>
@@ -187,7 +172,6 @@ const Sidebar = () => {
             >
               Sports
             </p>
-
             <p
               onClick={() => handleSidebar("school-items")}
               className="text-base pl-10 mt-1 cursor-pointer hover:text-red-500 hover:underline"
@@ -201,12 +185,12 @@ const Sidebar = () => {
               Electronics
             </p>
 
-            <a
+            <p onClick={()=>navigate('/contact')}
               href="/contact"
-              className="text-base pl-10 pt-8 mb-4 cursor-pointer hover:text-red-500 hover:underline"
+              className="text-base pl-10  mb-4 hover:text-red-500 hover:underline"
             >
               Contact Us
-            </a>
+            </p>
           </>
         )}
 
@@ -221,7 +205,7 @@ const Sidebar = () => {
 
             <p
               onClick={() => handleSidebarCategory("books", "colouring-books")}
-              className="pl-12 cursor-pointer  text-gray-500"
+              className="pl-12 cursor-pointer text-gray-500"
             >
               Colouring Books
             </p>
